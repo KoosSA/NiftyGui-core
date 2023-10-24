@@ -6,6 +6,8 @@ package de.lessvoid.nifty.render.batch;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public class GLException extends RuntimeException {
+  
+  /** The Constant serialVersionUID. */
   private static final long serialVersionUID = 1L;
 
   /**

@@ -23,19 +23,26 @@ package org.bushe.swing.event;
  * @author Michael Bushe michael@bushe.com
  */
 public class ObjectEvent extends AbstractEventServiceEvent {
+   
+   /** The event object. */
    private Object eventObject;
 
    /**
-    * Constructor
-    *
-    * @param sourceObject the source of the event
-    * @param payload the payload or eventObject of the event
-    */
+	 * Constructor.
+	 *
+	 * @param sourceObject the source of the event
+	 * @param payload      the payload or eventObject of the event
+	 */
    public ObjectEvent(Object sourceObject, Object payload) {
       super(sourceObject);
       this.eventObject = payload;
    }
 
+   /**
+	 * Gets the event object.
+	 *
+	 * @return the event object
+	 */
    public Object getEventObject() {
       return eventObject;
    }

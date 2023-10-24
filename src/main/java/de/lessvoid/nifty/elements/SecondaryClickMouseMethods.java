@@ -11,11 +11,28 @@ import de.lessvoid.nifty.elements.events.NiftyMouseSecondaryMultiClickedEvent;
 import de.lessvoid.nifty.elements.events.NiftyMouseSecondaryReleaseEvent;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 
+/**
+ * The Class SecondaryClickMouseMethods.
+ */
 public class SecondaryClickMouseMethods extends MouseClickMethods {
+  
+  /**
+	 * Instantiates a new secondary click mouse methods.
+	 *
+	 * @param element the element
+	 */
   public SecondaryClickMouseMethods(@Nonnull final Element element) {
     super(element);
   }
 
+  /**
+	 * On click.
+	 *
+	 * @param nifty               the nifty
+	 * @param onClickAlternateKey the on click alternate key
+	 * @param inputEvent          the input event
+	 * @return true, if successful
+	 */
   @Override
   public boolean onClick(
       @Nonnull final Nifty nifty,
@@ -28,6 +45,15 @@ public class SecondaryClickMouseMethods extends MouseClickMethods {
     return super.onClick(nifty, onClickAlternateKey, inputEvent);
   }
 
+  /**
+	 * On multi click.
+	 *
+	 * @param nifty               the nifty
+	 * @param onClickAlternateKey the on click alternate key
+	 * @param inputEvent          the input event
+	 * @param clickCount          the click count
+	 * @return true, if successful
+	 */
   @Override
   public boolean onMultiClick(
           @Nonnull final Nifty nifty,
@@ -42,6 +68,13 @@ public class SecondaryClickMouseMethods extends MouseClickMethods {
     return super.onMultiClick(nifty, onClickAlternateKey, inputEvent, clickCount);
   }
 
+  /**
+	 * On click mouse move.
+	 *
+	 * @param nifty      the nifty
+	 * @param inputEvent the input event
+	 * @return true, if successful
+	 */
   @Override
   public boolean onClickMouseMove(@Nonnull final Nifty nifty, @Nonnull final NiftyMouseInputEvent inputEvent) {
     String id = element.getId();
@@ -51,6 +84,13 @@ public class SecondaryClickMouseMethods extends MouseClickMethods {
     return super.onClickMouseMove(nifty, inputEvent);
   }
 
+  /**
+	 * On release.
+	 *
+	 * @param nifty      the nifty
+	 * @param mouseEvent the mouse event
+	 * @return true, if successful
+	 */
   @Override
   public boolean onRelease(@Nonnull final Nifty nifty, @Nonnull final NiftyMouseInputEvent mouseEvent) {
     String id = element.getId();
@@ -60,6 +100,11 @@ public class SecondaryClickMouseMethods extends MouseClickMethods {
     return super.onRelease(nifty, mouseEvent);
   }
 
+  /**
+	 * Click and release.
+	 *
+	 * @param nifty the nifty
+	 */
   @Override
   public void clickAndRelease(@Nonnull final Nifty nifty) {
     String id = element.getId();

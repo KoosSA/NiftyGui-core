@@ -48,9 +48,12 @@ public class OverlayLayout implements LayoutManager {
   }
 
   /**
-   * @param children children elements of the root element
-   * @return new calculated SizeValue
-   */
+	 * Calculate constraint width.
+	 *
+	 * @param root     the root
+	 * @param children children elements of the root element
+	 * @return new calculated SizeValue
+	 */
   @Nonnull
   @Override
   public final SizeValue calculateConstraintWidth(
@@ -60,9 +63,12 @@ public class OverlayLayout implements LayoutManager {
   }
 
   /**
-   * @param children children elements of the root element
-   * @return new calculated SizeValue
-   */
+	 * Calculate constraint height.
+	 *
+	 * @param root     the root
+	 * @param children children elements of the root element
+	 * @return new calculated SizeValue
+	 */
   @Nonnull
   @Override
   public final SizeValue calculateConstraintHeight(

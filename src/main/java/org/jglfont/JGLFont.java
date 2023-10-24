@@ -41,8 +41,14 @@ public interface JGLFont {
   int getCharacterWidth(int currentCharacter, int nextCharacter);
 
   /**
-   * The same as the getCharacterWidth(int, char) method but takes a scaled size into account.
-   */
+	 * The same as the getCharacterWidth(int, char) method but takes a scaled size
+	 * into account.
+	 *
+	 * @param currentCharacter the current character
+	 * @param nextCharacter    the next character
+	 * @param size             the size
+	 * @return the character width
+	 */
   int getCharacterWidth(int currentCharacter, int nextCharacter, float size);
 
   /**
@@ -53,14 +59,20 @@ public interface JGLFont {
   int getStringWidth(String text);
 
   /**
-   * The same as the getStringWidthInternal(String) method that takes the given size into account.
-   */
+	 * The same as the getStringWidthInternal(String) method that takes the given
+	 * size into account.
+	 *
+	 * @param text the text
+	 * @param size the size
+	 * @return the string width
+	 */
   int getStringWidth(String text, float size);
 
   /**
-   * The height of the given font (the lineHeight property of the font data)
-   * @return
-   */
+	 * The height of the given font (the lineHeight property of the font data).
+	 *
+	 * @return the height
+	 */
   int getHeight();
 
   /**

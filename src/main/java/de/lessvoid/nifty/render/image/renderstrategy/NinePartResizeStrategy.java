@@ -10,17 +10,35 @@ import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderImage;
 import de.lessvoid.nifty.tools.Color;
 
+/**
+ * The Class NinePartResizeStrategy.
+ */
 public class NinePartResizeStrategy implements RenderStrategy {
+  
+  /** The Constant log. */
   private static final Logger log = Logger.getLogger(NinePartResizeStrategy.class.getName());
 
+  /** The Constant NINE_PART_RESIZE_ARGS_COUNT. */
   private static final int NINE_PART_RESIZE_ARGS_COUNT = 12;
 
+  /** The m row 0. */
   private NinePartResizeRow m_row0;
+  
+  /** The m row 1. */
   private NinePartResizeRow m_row1;
+  
+  /** The m row 2. */
   private NinePartResizeRow m_row2;
+  
+  /** The box. */
   @Nonnull
   private final Box box = new Box();
 
+  /**
+	 * Sets the parameters.
+	 *
+	 * @param parameters the new parameters
+	 */
   @Override
   public void setParameters(String parameters) {
     String[] args = getArguments(parameters);
@@ -30,6 +48,12 @@ public class NinePartResizeStrategy implements RenderStrategy {
     m_row2 = new NinePartResizeRow(args, 8);
   }
 
+  /**
+	 * Gets the arguments.
+	 *
+	 * @param parameters the parameters
+	 * @return the arguments
+	 */
   @Nullable
   private String[] getArguments(@Nullable String parameters) {
     String[] args = null;
@@ -46,6 +70,19 @@ public class NinePartResizeStrategy implements RenderStrategy {
     return args;
   }
 
+  /**
+	 * Render.
+	 *
+	 * @param device     the device
+	 * @param image      the image
+	 * @param sourceArea the source area
+	 * @param x          the x
+	 * @param y          the y
+	 * @param width      the width
+	 * @param height     the height
+	 * @param color      the color
+	 * @param scale      the scale
+	 */
   @Override
   public void render(
       @Nonnull RenderDevice device,
@@ -99,6 +136,22 @@ public class NinePartResizeStrategy implements RenderStrategy {
     renderRow(device, image, m_row2, box, x, y2, width, srcH2, color, scale, cX, cY);
   }
 
+  /**
+	 * Render row.
+	 *
+	 * @param renderDevice the render device
+	 * @param image        the image
+	 * @param row          the row
+	 * @param sourceArea   the source area
+	 * @param x            the x
+	 * @param y            the y
+	 * @param width        the width
+	 * @param height       the height
+	 * @param color        the color
+	 * @param scale        the scale
+	 * @param centerX      the center X
+	 * @param centerY      the center Y
+	 */
   private void renderRow(
       @Nonnull final RenderDevice renderDevice,
       @Nonnull final RenderImage image,
@@ -133,12 +186,29 @@ public class NinePartResizeStrategy implements RenderStrategy {
     renderDevice.renderImage(image, x2, y, srcW2, height, srcX2, srcY, srcW2, srcH, color, scale, centerX, centerY);
   }
 
+  /**
+	 * The Class NinePartResizeRow.
+	 */
   private static class NinePartResizeRow {
+    
+    /** The m left width. */
     private final int m_leftWidth;
+    
+    /** The m middle width. */
     private final int m_middleWidth;
+    
+    /** The m right width. */
     private final int m_rightWidth;
+    
+    /** The m height. */
     private final int m_height;
 
+    /**
+	 * Instantiates a new nine part resize row.
+	 *
+	 * @param data       the data
+	 * @param dataOffset the data offset
+	 */
     public NinePartResizeRow(String[] data, int dataOffset) {
       m_leftWidth = Integer.valueOf(data[dataOffset]);
       m_middleWidth = Integer.valueOf(data[dataOffset + 1]);
@@ -146,22 +216,47 @@ public class NinePartResizeStrategy implements RenderStrategy {
       m_height = Integer.valueOf(data[dataOffset + 3]);
     }
 
+    /**
+	 * Gets the left width.
+	 *
+	 * @return the left width
+	 */
     public int getLeftWidth() {
       return m_leftWidth;
     }
 
+    /**
+	 * Gets the middle width.
+	 *
+	 * @return the middle width
+	 */
     public int getMiddleWidth() {
       return m_middleWidth;
     }
 
+    /**
+	 * Gets the right width.
+	 *
+	 * @return the right width
+	 */
     public int getRightWidth() {
       return m_rightWidth;
     }
 
+    /**
+	 * Gets the width.
+	 *
+	 * @return the width
+	 */
     public int getWidth() {
       return m_leftWidth + m_middleWidth + m_rightWidth;
     }
 
+    /**
+	 * Gets the height.
+	 *
+	 * @return the height
+	 */
     public int getHeight() {
       return m_height;
     }

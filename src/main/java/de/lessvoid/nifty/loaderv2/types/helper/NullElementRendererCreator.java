@@ -6,7 +6,17 @@ import javax.annotation.Nullable;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
 
+/**
+ * The Class NullElementRendererCreator.
+ */
 public class NullElementRendererCreator implements ElementRendererCreator {
+  
+  /**
+	 * Creates the element renderer.
+	 *
+	 * @param nifty the nifty
+	 * @return the element renderer[]
+	 */
   @Override
   @Nullable
   public ElementRenderer[] createElementRenderer(@Nonnull Nifty nifty) {

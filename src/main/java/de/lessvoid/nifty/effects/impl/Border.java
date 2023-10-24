@@ -22,32 +22,65 @@ import de.lessvoid.nifty.tools.SizeValue;
  * @author void
  */
 public class Border implements EffectImpl {
+  
+  /** The Constant log. */
   private static final Logger log = Logger.getLogger(Border.class.getName());
+  
+  /** The color left. */
   @Nonnull
   private Color colorLeft = Color.WHITE;
+  
+  /** The color right. */
   @Nonnull
   private Color colorRight = Color.WHITE;
+  
+  /** The color top. */
   @Nonnull
   private Color colorTop = Color.WHITE;
+  
+  /** The color bottom. */
   @Nonnull
   private Color colorBottom = Color.WHITE;
+  
+  /** The border left. */
   @Nonnull
   private SizeValue borderLeft = SizeValue.px(1);
+  
+  /** The border right. */
   @Nonnull
   private SizeValue borderRight = SizeValue.px(1);
+  
+  /** The border top. */
   @Nonnull
   private SizeValue borderTop = SizeValue.px(1);
+  
+  /** The border bottom. */
   @Nonnull
   private SizeValue borderBottom = SizeValue.px(1);
+  
+  /** The inset left. */
   @Nonnull
   private SizeValue insetLeft = SizeValue.px(0);
+  
+  /** The inset right. */
   @Nonnull
   private SizeValue insetRight = SizeValue.px(0);
+  
+  /** The inset top. */
   @Nonnull
   private SizeValue insetTop = SizeValue.px(0);
+  
+  /** The inset bottom. */
   @Nonnull
   private SizeValue insetBottom = SizeValue.px(0);
 
+  /**
+	 * Activate.
+	 *
+	 * @param nifty     the nifty
+	 * @param element   the element
+	 * @param parameter the parameter
+	 */
   @Override
   public void activate(
       @Nonnull final Nifty nifty,
@@ -76,6 +109,14 @@ public class Border implements EffectImpl {
     }
   }
 
+  /**
+	 * Execute.
+	 *
+	 * @param element        the element
+	 * @param normalizedTime the normalized time
+	 * @param falloff        the falloff
+	 * @param r              the r
+	 */
   @Override
   public void execute(
       @Nonnull final Element element,
@@ -127,6 +168,12 @@ public class Border implements EffectImpl {
     r.restoreStates();
   }
 
+  /**
+	 * Sets the alpha save color.
+	 *
+	 * @param r     the r
+	 * @param color the color
+	 */
   private void setAlphaSaveColor(@Nonnull final NiftyRenderEngine r, @Nonnull final Color color) {
     if (r.isColorAlphaChanged()) {
       r.setColorIgnoreAlpha(color);
@@ -135,6 +182,13 @@ public class Border implements EffectImpl {
     }
   }
 
+  /**
+	 * Gets the border.
+	 *
+	 * @param element   the element
+	 * @param sizeValue the size value
+	 * @return the border
+	 */
   private int getBorder(@Nonnull final Element element, @Nonnull final SizeValue sizeValue) {
     if (!element.hasParent()) {
       return 0;
@@ -147,6 +201,9 @@ public class Border implements EffectImpl {
     }
   }
 
+  /**
+	 * Deactivate.
+	 */
   @Override
   public void deactivate() {
   }

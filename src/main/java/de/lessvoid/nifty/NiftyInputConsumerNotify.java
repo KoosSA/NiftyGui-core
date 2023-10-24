@@ -9,6 +9,24 @@ import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
  * @author void
  */
 public interface NiftyInputConsumerNotify {
+  
+  /**
+	 * Processed mouse event.
+	 *
+	 * @param mouseX     the mouse X
+	 * @param mouseY     the mouse Y
+	 * @param mouseWheel the mouse wheel
+	 * @param button     the button
+	 * @param buttonDown the button down
+	 * @param processed  the processed
+	 */
   void processedMouseEvent(int mouseX, int mouseY, int mouseWheel, int button, boolean buttonDown, boolean processed);
+  
+  /**
+	 * Process keyboard event.
+	 *
+	 * @param keyEvent  the key event
+	 * @param processed the processed
+	 */
   void processKeyboardEvent(KeyboardInputEvent keyEvent, boolean processed);
 }

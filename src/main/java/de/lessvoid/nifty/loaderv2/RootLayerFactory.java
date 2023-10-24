@@ -13,7 +13,20 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.SizeValue;
 
+/**
+ * A factory for creating RootLayer objects.
+ */
 public class RootLayerFactory {
+  
+  /**
+	 * Creates a new RootLayer object.
+	 *
+	 * @param id     the id
+	 * @param nifty  the nifty
+	 * @param screen the screen
+	 * @param time   the time
+	 * @return the element
+	 */
   @Nonnull
   public Element createRootLayer(
       @Nonnull final String id,
@@ -32,6 +45,11 @@ public class RootLayerFactory {
         createPanelRenderer());
   }
 
+  /**
+	 * Creates a new RootLayer object.
+	 *
+	 * @return the element renderer[]
+	 */
   @Nonnull
   public ElementRenderer[] createPanelRenderer() {
     ElementRenderer[] renderer = new ElementRenderer[2];
@@ -40,6 +58,12 @@ public class RootLayerFactory {
     return renderer;
   }
 
+  /**
+	 * Creates a new RootLayer object.
+	 *
+	 * @param nifty the nifty
+	 * @return the layout part
+	 */
   @Nonnull
   public LayoutPart createRootLayerLayoutPart(@Nonnull final Nifty nifty) {
     LayoutPart layerLayout = new LayoutPart();

@@ -18,12 +18,14 @@ import javax.annotation.Nullable;
  * @author void (made it a none static class)
  */
 public class NiftyResourceLoader {
-  /**
-   * The list of locations to be searched
-   */
+  
+  /** The list of locations to be searched. */
   @Nonnull
   private final List<ResourceLocation> locations;
 
+  /**
+	 * Instantiates a new nifty resource loader.
+	 */
   public NiftyResourceLoader() {
     locations = new ArrayList<ResourceLocation>();
     locations.add(new ClasspathLocation());
@@ -31,36 +33,38 @@ public class NiftyResourceLoader {
   }
 
   /**
-   * Add a location that will be searched for resources
-   *
-   * @param location The location that will be searched for resources
-   */
+	 * Add a location that will be searched for resources.
+	 *
+	 * @param location The location that will be searched for resources
+	 */
   public void addResourceLocation(@Nonnull final ResourceLocation location) {
     locations.add(location);
   }
 
   /**
-   * Remove a location that will be no longer be searched for resources
-   *
-   * @param location The location that will be removed from the search list
-   */
+	 * Remove a location that will be no longer be searched for resources.
+	 *
+	 * @param location The location that will be removed from the search list
+	 */
   public void removeResourceLocation(@Nonnull final ResourceLocation location) {
     locations.remove(location);
   }
 
   /**
-   * Remove all the locations, no resources will be found until new locations have been added
-   */
+	 * Remove all the locations, no resources will be found until new locations have
+	 * been added.
+	 */
   public void removeAllResourceLocations() {
     locations.clear();
   }
 
   /**
-   * Get a resource
-   *
-   * @param ref The reference to the resource to retrieve
-   * @return A stream from which the resource can be read or {@code null} in case the resource was not found
-   */
+	 * Get a resource.
+	 *
+	 * @param ref The reference to the resource to retrieve
+	 * @return A stream from which the resource can be read or {@code null} in case
+	 *         the resource was not found
+	 */
   @Nullable
   public InputStream getResourceAsStream(@Nonnull final String ref) {
     InputStream in = null;
@@ -81,11 +85,12 @@ public class NiftyResourceLoader {
   }
 
   /**
-   * Get a resource as a URL
-   *
-   * @param ref The reference to the resource to retrieve
-   * @return A stream from which the resource can be read or {@code null} in case the resource was not found
-   */
+	 * Get a resource as a URL.
+	 *
+	 * @param ref The reference to the resource to retrieve
+	 * @return A stream from which the resource can be read or {@code null} in case
+	 *         the resource was not found
+	 */
   @Nullable
   public URL getResource(@Nonnull final String ref) {
     URL url = null;

@@ -15,6 +15,11 @@ public class AccurateTimeProvider implements TimeProvider {
      */
     private static final long NANO_TO_MS_CONVERSION = 1000000L;
 
+    /**
+	 * Gets the ms time.
+	 *
+	 * @return the ms time
+	 */
     @Override
     public long getMsTime() {
         return System.nanoTime() / NANO_TO_MS_CONVERSION;

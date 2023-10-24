@@ -19,12 +19,27 @@ import de.lessvoid.nifty.tools.pulsate.Pulsator;
  * @author void
  */
 public class ColorPulsate implements EffectImpl {
+  
+  /** The start color. */
   private Color startColor;
+  
+  /** The end color. */
   private Color endColor;
+  
+  /** The pulsator. */
   private Pulsator pulsator;
+  
+  /** The current color. */
   @Nonnull
   private final Color currentColor = new Color("#000f");
 
+  /**
+	 * Activate.
+	 *
+	 * @param nifty     the nifty
+	 * @param element   the element
+	 * @param parameter the parameter
+	 */
   @Override
   public void activate(
       @Nonnull final Nifty nifty,
@@ -35,6 +50,14 @@ public class ColorPulsate implements EffectImpl {
     pulsator = new Pulsator(parameter, nifty.getTimeProvider());
   }
 
+  /**
+	 * Execute.
+	 *
+	 * @param element        the element
+	 * @param normalizedTime the normalized time
+	 * @param falloff        the falloff
+	 * @param r              the r
+	 */
   @Override
   public void execute(
       @Nonnull final Element element,
@@ -46,6 +69,9 @@ public class ColorPulsate implements EffectImpl {
     r.setColor(currentColor);
   }
 
+  /**
+	 * Deactivate.
+	 */
   @Override
   public void deactivate() {
   }

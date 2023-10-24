@@ -13,13 +13,19 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
  * @author void
  */
 public class ImageRenderer implements ElementRenderer {
+  
+  /** The image. */
   @Nullable
   private NiftyImage image;
+  
+  /** The inset. */
   private int inset = 0;
 
   /**
-   * Set Insert.
-   */
+	 * Set Insert.
+	 *
+	 * @param insetParam the new inset
+	 */
   public void setInset(final int insetParam) {
     inset = insetParam;
   }

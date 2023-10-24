@@ -21,20 +21,29 @@ import de.lessvoid.xml.xpp3.Attributes;
  * @author void
  */
 public class NiftyInputControl {
+  
+  /** The controller. */
   @Nonnull
   private final Controller controller;
+  
+  /** The input mapper. */
   @Nonnull
   private final NiftyInputMapping inputMapper;
 
+  /** The pre input handler. */
   @Nonnull
   private final List<KeyInputHandler> preInputHandler = new ArrayList<KeyInputHandler>();
+  
+  /** The post input handler. */
   @Nonnull
   private final List<KeyInputHandler> postInputHandler = new ArrayList<KeyInputHandler>();
 
   /**
-   * @param controllerParam  controller
-   * @param inputMapperParam input mapper
-   */
+	 * Instantiates a new nifty input control.
+	 *
+	 * @param controllerParam  controller
+	 * @param inputMapperParam input mapper
+	 */
   public NiftyInputControl(
       @Nonnull final Controller controllerParam,
       @Nonnull final NiftyInputMapping inputMapperParam) {
@@ -43,12 +52,14 @@ public class NiftyInputControl {
   }
 
   /**
-   * keyboard event.
-   *
-   * @param nifty      nifty
-   * @param inputEvent keyboard event
-   * @return return true when the input event has been processed and false when it has not been handled
-   */
+	 * keyboard event.
+	 *
+	 * @param nifty      nifty
+	 * @param inputEvent keyboard event
+	 * @param elementId  the element id
+	 * @return return true when the input event has been processed and false when it
+	 *         has not been handled
+	 */
   public boolean keyEvent(
       @Nonnull final Nifty nifty,
       @Nonnull final KeyboardInputEvent inputEvent,
@@ -78,18 +89,41 @@ public class NiftyInputControl {
     return false;
   }
 
+  /**
+	 * Adds the input handler.
+	 *
+	 * @param handler the handler
+	 */
   public void addInputHandler(@Nonnull final KeyInputHandler handler) {
     postInputHandler.add(handler);
   }
 
+  /**
+	 * Adds the pre input handler.
+	 *
+	 * @param handler the handler
+	 */
   public void addPreInputHandler(@Nonnull final KeyInputHandler handler) {
     preInputHandler.add(handler);
   }
 
+  /**
+	 * On start screen.
+	 *
+	 * @param nifty  the nifty
+	 * @param screen the screen
+	 */
   public void onStartScreen(@Nonnull final Nifty nifty, @Nonnull final Screen screen) {
     controller.onStartScreen();
   }
 
+  /**
+	 * On end screen.
+	 *
+	 * @param nifty     the nifty
+	 * @param screen    the screen
+	 * @param elementId the element id
+	 */
   public void onEndScreen(@Nonnull final Nifty nifty, @Nonnull final Screen screen, @Nullable final String elementId) {
     controller.onEndScreen();
     nifty.unsubscribeAnnotations(controller);
@@ -132,6 +166,13 @@ public class NiftyInputControl {
     return null;
   }
 
+  /**
+	 * Gets the nifty control.
+	 *
+	 * @param <T>                   the generic type
+	 * @param requestedControlClass the requested control class
+	 * @return the nifty control
+	 */
   @Nullable
   public <T extends NiftyControl> T getNiftyControl(@Nonnull final Class<T> requestedControlClass) {
     if (requestedControlClass.isInstance(controller)) {
@@ -140,6 +181,14 @@ public class NiftyInputControl {
     return null;
   }
 
+  /**
+	 * Bind control.
+	 *
+	 * @param nifty      the nifty
+	 * @param screen     the screen
+	 * @param element    the element
+	 * @param attributes the attributes
+	 */
   public void bindControl(
       @Nonnull final Nifty nifty,
       @Nonnull final Screen screen,
@@ -152,6 +201,11 @@ public class NiftyInputControl {
         new Parameters(attributes.createProperties()));
   }
 
+  /**
+	 * Inits the control.
+	 *
+	 * @param attributes the attributes
+	 */
   public void initControl(@Nonnull final Attributes attributes) {
     controller.init(new Parameters(attributes.createProperties()));
   }

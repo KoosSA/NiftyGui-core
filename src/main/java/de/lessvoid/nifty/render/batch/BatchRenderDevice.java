@@ -63,76 +63,149 @@ import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
 public class BatchRenderDevice implements RenderDevice {
+  
+  /** The log. */
   @Nonnull
   private static Logger log = Logger.getLogger(BatchRenderDevice.class.getName());
+  
+  /** The render backend. */
   @Nonnull
   private final BatchRenderBackend renderBackend;
+  
+  /** The time provider. */
   @Nonnull
   private final TimeProvider timeProvider = new AccurateTimeProvider();
+  
+  /** The viewport width. */
   private int viewportWidth = -1;
+  
+  /** The viewport height. */
   private int viewportHeight = -1;
+  
+  /** The time. */
   private long time;
+  
+  /** The frames. */
   private long frames = 0;
+  
+  /** The glyph count. */
   private int glyphCount = 0;
+  
+  /** The quad count. */
   private int quadCount = 0;
+  
+  /** The current texture id. */
   private int currentTextureId = -1;
+  
+  /** The display FPS. */
   private boolean displayFPS = false;
+  
+  /** The log FPS. */
   private boolean logFPS = false;
+  
+  /** The should start new batch. */
   private boolean shouldStartNewBatch = true;
+  
+  /** The fps font. */
   @Nullable
   private RenderFont fpsFont = null;
+  
+  /** The plain image. */
   @Nullable
   private BatchRenderImage thePlainImage = null;
+  
+  /** The current blend mode. */
   @Nonnull
   private BlendMode currentBlendMode = BlendMode.BLEND;
+  
+  /** The buffer. */
   @Nonnull
   private StringBuilder buffer = new StringBuilder();
+  
+  /** The font color. */
   @Nonnull
   private Color fontColor = new Color("#f00");
+  
+  /** The font cache. */
   @Nonnull
   private final Set<BatchRenderFont> fontCache = new HashSet<BatchRenderFont>();
+  
+  /** The clipping. */
   @Nonnull
   private final Clipping clipping = new Clipping (0, 0, 0, 0, false);
+  
+  /** The original quad. */
   // 3 re-usable Rects used to temporarily store the results of clipping calculations.
   @Nonnull
   private Rect originalQuad = new Rect(0, 0, 0, 0);
+  
+  /** The clipped quad. */
   @Nonnull
   private Rect clippedQuad = new Rect(0, 0, 0, 0);
+  
+  /** The clipped quad texture. */
   @Nonnull
   private Rect clippedQuadTexture = new Rect(0, 0, 0, 0);
+  
+  /** The texture atlas generators. */
   @Nonnull
   private final Map<Integer, TextureAtlasGenerator> textureAtlasGenerators = new HashMap<Integer, TextureAtlasGenerator>();
+  
+  /** The image cache. */
   @Nonnull
   private final Map<String, BatchRenderImage> imageCache = new HashMap<String, BatchRenderImage>();
+  
+  /** The current texture size. */
   @Nullable
   private BatchRenderImage.TextureSize currentTextureSize = null;
+  
+  /** The font renderer. */
   @Nonnull
   private final FontRenderer fontRenderer;
+  
+  /** The factory. */
   @Nonnull
   private final JGLFontFactory factory;
+  
+  /** The current atlas texture id. */
   private int currentAtlasTextureId;
+  
+  /** The resource loader. */
   @Nonnull
   private NiftyResourceLoader resourceLoader;
+  
+  /** The render config. */
   @Nonnull
   private BatchRenderConfiguration renderConfig;
+  
+  /** The atlas texture ids. */
   @Nonnull
   private List<Integer> atlasTextureIds = new ArrayList<Integer>();
+  
+  /** The atlas texture id iterator. */
   @Nonnull
   private ListIterator<Integer> atlasTextureIdIterator = atlasTextureIds.listIterator();
 
   /**
-   * This is a convenience constructor that creates a BatchRenderDevice using the default values specified in
-   * {@link de.lessvoid.nifty.render.batch.BatchRenderConfiguration}, which should be fine for simple uses (including the
-   * Nifty examples) where you don't want to have to worry about fine tuning advanced settings.
-   */
+	 * This is a convenience constructor that creates a BatchRenderDevice using the
+	 * default values specified in
+	 * {@link de.lessvoid.nifty.render.batch.BatchRenderConfiguration}, which should
+	 * be fine for simple uses (including the Nifty examples) where you don't want
+	 * to have to worry about fine tuning advanced settings.
+	 *
+	 * @param renderBackend the render backend
+	 */
   public BatchRenderDevice(@Nonnull final BatchRenderBackend renderBackend) {
     this(renderBackend, new BatchRenderConfiguration());
   }
 
   /**
-   * This constructor is for more advanced users who wish to manually tune batch rendering for absolute maximum
-   * performance.
-   */
+	 * This constructor is for more advanced users who wish to manually tune batch
+	 * rendering for absolute maximum performance.
+	 *
+	 * @param renderBackend the render backend
+	 * @param renderConfig  the render config
+	 */
   public BatchRenderDevice(@Nonnull final BatchRenderBackend renderBackend, @Nonnull final BatchRenderConfiguration renderConfig) {
     log.setLevel(Level.WARNING);
 	  this.renderBackend = renderBackend;
@@ -162,9 +235,11 @@ public class BatchRenderDevice implements RenderDevice {
   }
 
   /**
-   * Enable the drawing of frames per second on the display surface. This will impact performance. Don't use in
-   * production code.
-   */
+	 * Enable the drawing of frames per second on the display surface. This will
+	 * impact performance. Don't use in production code.
+	 *
+	 * @param newValue the new display FPS
+	 */
   public void setDisplayFPS(final boolean newValue) {
     if (newValue != displayFPS) {
       displayFPS = newValue;
@@ -174,6 +249,11 @@ public class BatchRenderDevice implements RenderDevice {
     }
   }
 
+  /**
+	 * Sets the resource loader.
+	 *
+	 * @param resourceLoader the new resource loader
+	 */
   @Override
   public void setResourceLoader(@Nonnull final NiftyResourceLoader resourceLoader) {
     log.finest("setResourceLoader()");
@@ -186,6 +266,11 @@ public class BatchRenderDevice implements RenderDevice {
     renderBackend.setResourceLoader(resourceLoader);
   }
 
+  /**
+	 * Gets the width.
+	 *
+	 * @return the width
+	 */
   @Override
   public int getWidth() {
     log.finest("getWidth()");
@@ -195,6 +280,11 @@ public class BatchRenderDevice implements RenderDevice {
     return viewportWidth;
   }
 
+  /**
+	 * Gets the height.
+	 *
+	 * @return the height
+	 */
   @Override
   public int getHeight() {
     log.finest("getHeight()");
@@ -204,11 +294,19 @@ public class BatchRenderDevice implements RenderDevice {
     return viewportHeight;
   }
 
+  /**
+	 * Gets the viewport.
+	 *
+	 * @return the viewport
+	 */
   private void getViewport() {
     viewportWidth = renderBackend.getWidth();
     viewportHeight = renderBackend.getHeight();
   }
 
+  /**
+	 * Begin frame.
+	 */
   @Override
   public void beginFrame() {
     log.finest("beginFrame()");
@@ -222,6 +320,9 @@ public class BatchRenderDevice implements RenderDevice {
     glyphCount = 0;
   }
 
+  /**
+	 * End frame.
+	 */
   @Override
   public void endFrame() {
     log.finest("endFrame");
@@ -272,12 +373,22 @@ public class BatchRenderDevice implements RenderDevice {
     viewportHeight = -1;
   }
 
+  /**
+	 * Clear.
+	 */
   @Override
   public void clear() {
     log.finest("clear()");
     renderBackend.clear();
   }
 
+  /**
+	 * Creates the image.
+	 *
+	 * @param filename     the filename
+	 * @param filterLinear the filter linear
+	 * @return the render image
+	 */
   @Nullable
   @Override
   public RenderImage createImage(@Nonnull final String filename, final boolean filterLinear) {
@@ -298,6 +409,12 @@ public class BatchRenderDevice implements RenderDevice {
     return batchRenderImage;
   }
 
+  /**
+	 * Creates the font.
+	 *
+	 * @param filename the filename
+	 * @return the render font
+	 */
   @Nonnull
   @Override
   public RenderFont createFont(@Nonnull final String filename) {
@@ -314,10 +431,24 @@ public class BatchRenderDevice implements RenderDevice {
     }
   }
 
+  /**
+	 * Dispose font.
+	 *
+	 * @param batchRenderFont the batch render font
+	 */
   public void disposeFont(final BatchRenderFont batchRenderFont) {
     fontCache.remove(batchRenderFont);
   }
 
+  /**
+	 * Render quad.
+	 *
+	 * @param x      the x
+	 * @param y      the y
+	 * @param width  the width
+	 * @param height the height
+	 * @param color  the color
+	 */
   @Override
   public void renderQuad(
       final int x,
@@ -342,6 +473,18 @@ public class BatchRenderDevice implements RenderDevice {
             plainImage.getTextureId());
   }
 
+  /**
+	 * Render quad.
+	 *
+	 * @param x           the x
+	 * @param y           the y
+	 * @param width       the width
+	 * @param height      the height
+	 * @param topLeft     the top left
+	 * @param topRight    the top right
+	 * @param bottomRight the bottom right
+	 * @param bottomLeft  the bottom left
+	 */
   @Override
   public void renderQuad(
       final int x,
@@ -370,6 +513,17 @@ public class BatchRenderDevice implements RenderDevice {
         plainImage.getTextureId());
   }
 
+  /**
+	 * Render image.
+	 *
+	 * @param image  the image
+	 * @param x      the x
+	 * @param y      the y
+	 * @param width  the width
+	 * @param height the height
+	 * @param c      the c
+	 * @param scale  the scale
+	 */
   @Override
   public void renderImage(
       @Nonnull final RenderImage image,
@@ -399,6 +553,23 @@ public class BatchRenderDevice implements RenderDevice {
     addQuad(ix, iy, iw, ih, c, c, c, c, img.getX(), img.getY(), img.getWidth(), img.getHeight(), img.getTextureId());
   }
 
+  /**
+	 * Render image.
+	 *
+	 * @param image   the image
+	 * @param x       the x
+	 * @param y       the y
+	 * @param w       the w
+	 * @param h       the h
+	 * @param srcX    the src X
+	 * @param srcY    the src Y
+	 * @param srcW    the src W
+	 * @param srcH    the src H
+	 * @param c       the c
+	 * @param scale   the scale
+	 * @param centerX the center X
+	 * @param centerY the center Y
+	 */
   @Override
   public void renderImage(
       @Nonnull final RenderImage image,
@@ -432,6 +603,17 @@ public class BatchRenderDevice implements RenderDevice {
     addQuad(ix, iy, iw, ih, c, c, c, c, img.getX() + srcX, img.getY() + srcY, srcW, srcH, img.getTextureId());
   }
 
+  /**
+	 * Render font.
+	 *
+	 * @param font  the font
+	 * @param text  the text
+	 * @param x     the x
+	 * @param y     the y
+	 * @param color the color
+	 * @param sizeX the size X
+	 * @param sizeY the size Y
+	 */
   @Override
   public void renderFont(
       @Nonnull final RenderFont font,
@@ -455,6 +637,14 @@ public class BatchRenderDevice implements RenderDevice {
         color.getAlpha());
   }
 
+  /**
+	 * Enable clip.
+	 *
+	 * @param x0 the x 0
+	 * @param y0 the y 0
+	 * @param x1 the x 1
+	 * @param y1 the y 1
+	 */
   @Override
   public void enableClip(final int x0, final int y0, final int x1, final int y1) {
     log.finest("enableClip()");
@@ -462,6 +652,9 @@ public class BatchRenderDevice implements RenderDevice {
     clipping.setBounds(x0, y0, x1, y1);
   }
 
+  /**
+	 * Disable clip.
+	 */
   @Override
   public void disableClip() {
     log.finest("disableClip()");
@@ -470,6 +663,11 @@ public class BatchRenderDevice implements RenderDevice {
     clipping.setToViewport();
   }
 
+  /**
+	 * Sets the blend mode.
+	 *
+	 * @param renderMode the new blend mode
+	 */
   @Override
   public void setBlendMode(@Nonnull final BlendMode renderMode) {
     log.finest("setBlendMode()");
@@ -480,6 +678,15 @@ public class BatchRenderDevice implements RenderDevice {
     shouldStartNewBatch = true;
   }
 
+  /**
+	 * Creates the mouse cursor.
+	 *
+	 * @param filename the filename
+	 * @param hotspotX the hotspot X
+	 * @param hotspotY the hotspot Y
+	 * @return the mouse cursor
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
   @Override
   public MouseCursor createMouseCursor(
       @Nonnull final String filename,
@@ -489,18 +696,29 @@ public class BatchRenderDevice implements RenderDevice {
     return renderBackend.createMouseCursor(filename, hotspotX, hotspotY);
   }
 
+  /**
+	 * Enable mouse cursor.
+	 *
+	 * @param mouseCursor the mouse cursor
+	 */
   @Override
   public void enableMouseCursor(@Nonnull final MouseCursor mouseCursor) {
     log.finest("enableMouseCursor()");
     renderBackend.enableMouseCursor(mouseCursor);
   }
 
+  /**
+	 * Disable mouse cursor.
+	 */
   @Override
   public void disableMouseCursor() {
     log.finest("disableMouseCursor()");
     renderBackend.disableMouseCursor();
   }
 
+  /**
+	 * Reset texture atlases.
+	 */
   public void resetTextureAtlases() {
     if (! renderConfig.disposeImagesBetweenScreens) {
       return;
@@ -516,6 +734,9 @@ public class BatchRenderDevice implements RenderDevice {
 
   // Internal implementations
 
+  /**
+	 * Creates the initial texture atlases.
+	 */
   private void createInitialTextureAtlases() {
     for (int i = 0; i < renderConfig.initialAtlasCount; ++i) {
       createTextureAtlasGenerator(createTextureAtlas());
@@ -523,6 +744,11 @@ public class BatchRenderDevice implements RenderDevice {
     resetCurrentTextureAtlas();
   }
 
+  /**
+	 * Creates the texture atlas.
+	 *
+	 * @return the int
+	 */
   private int createTextureAtlas() {
     int atlasTextureId = renderBackend.createTextureAtlas(renderConfig.atlasWidth, renderConfig.atlasHeight);
     log.info("Created a new texture atlas (atlas texture id: " + atlasTextureId + ").");
@@ -531,36 +757,67 @@ public class BatchRenderDevice implements RenderDevice {
     return atlasTextureId;
   }
 
+  /**
+	 * Creates the texture atlas generator.
+	 *
+	 * @param atlasTextureId the atlas texture id
+	 */
   private void createTextureAtlasGenerator(final int atlasTextureId) {
     textureAtlasGenerators.put(atlasTextureId, new TextureAtlasGenerator(renderConfig.atlasWidth,
             renderConfig.atlasHeight, renderConfig.atlasPadding, renderConfig.atlasTolerance));
   }
 
+  /**
+	 * Reset current texture atlas.
+	 */
   private void resetCurrentTextureAtlas() {
     rewindAtlasTextureIdIterator();
     currentAtlasTextureId = nextTextureAtlas();
   }
 
+  /**
+	 * Rewind atlas texture id iterator.
+	 */
   private void rewindAtlasTextureIdIterator() {
     while(atlasTextureIdIterator.hasPrevious()) {
       atlasTextureIdIterator.previous();
     }
   }
 
+  /**
+	 * Gets the current texture atlas generator.
+	 *
+	 * @return the current texture atlas generator
+	 */
   private TextureAtlasGenerator getCurrentTextureAtlasGenerator() {
     return textureAtlasGenerators.get(currentAtlasTextureId);
   }
 
+  /**
+	 * Gets the current atlas texture id.
+	 *
+	 * @return the current atlas texture id
+	 */
   private int getCurrentAtlasTextureId() {
     return currentAtlasTextureId;
   }
 
+  /**
+	 * Next texture atlas.
+	 *
+	 * @return the int
+	 */
   private int nextTextureAtlas() {
     currentAtlasTextureId = atlasTextureIdIterator.hasNext() ? atlasTextureIdIterator.next() : createTextureAtlas();
     log.info("Switched atlases to atlas texture with id: " + currentAtlasTextureId + ".");
     return currentAtlasTextureId;
   }
 
+  /**
+	 * Gets the plain image.
+	 *
+	 * @return the plain image
+	 */
   @Nonnull
   private BatchRenderImage getPlainImage() {
     if (thePlainImage == null) {
@@ -573,6 +830,11 @@ public class BatchRenderDevice implements RenderDevice {
     return thePlainImage;
   }
 
+  /**
+	 * Upload image internal.
+	 *
+	 * @param image the image
+	 */
   private void uploadImageInternal(final BatchRenderImage image) {
     if (image.isUploaded()) {
       return;
@@ -587,6 +849,11 @@ public class BatchRenderDevice implements RenderDevice {
     }
   }
 
+  /**
+	 * Reattempt upload.
+	 *
+	 * @param image the image
+	 */
   private void reattemptUpload(final BatchRenderImage image) {
     while (!image.isUploaded() && !image.uploadFailedPermanently()) {
       // We're still not uploaded, yet the upload has not failed permanently - there's hope!
@@ -600,12 +867,18 @@ public class BatchRenderDevice implements RenderDevice {
     resetCurrentTextureAtlas();
   }
 
+  /**
+	 * Reset texture atlas generators.
+	 */
   private void resetTextureAtlasGenerators() {
     for (TextureAtlasGenerator generator : textureAtlasGenerators.values()) {
       generator.reset();
     }
   }
 
+  /**
+	 * Clear texture atlases.
+	 */
   private void clearTextureAtlases() {
     for (int atlasTextureId : atlasTextureIds) {
       renderBackend.clearTextureAtlas(atlasTextureId);
@@ -613,6 +886,23 @@ public class BatchRenderDevice implements RenderDevice {
     resetCurrentTextureAtlas();
   }
 
+  /**
+	 * Adds the quad.
+	 *
+	 * @param x             the x
+	 * @param y             the y
+	 * @param width         the width
+	 * @param height        the height
+	 * @param color1        the color 1
+	 * @param color2        the color 2
+	 * @param color3        the color 3
+	 * @param color4        the color 4
+	 * @param textureX      the texture X
+	 * @param textureY      the texture Y
+	 * @param textureWidth  the texture width
+	 * @param textureHeight the texture height
+	 * @param textureId     the texture id
+	 */
   private void addQuad(
           final float x,
           final float y,
@@ -673,6 +963,23 @@ public class BatchRenderDevice implements RenderDevice {
         textureId);
   }
 
+  /**
+	 * Adds the quad internal.
+	 *
+	 * @param x             the x
+	 * @param y             the y
+	 * @param width         the width
+	 * @param height        the height
+	 * @param color1        the color 1
+	 * @param color2        the color 2
+	 * @param color3        the color 3
+	 * @param color4        the color 4
+	 * @param textureX      the texture X
+	 * @param textureY      the texture Y
+	 * @param textureWidth  the texture width
+	 * @param textureHeight the texture height
+	 * @param textureId     the texture id
+	 */
   private void addQuadInternal(
           final float x,
           final float y,
@@ -706,6 +1013,11 @@ public class BatchRenderDevice implements RenderDevice {
     quadCount++;
   }
 
+  /**
+	 * Check if texture changed.
+	 *
+	 * @param textureId the texture id
+	 */
   private void checkIfTextureChanged(final int textureId) {
     if (!isCurrentTexture(textureId)) {
       updateCurrentTexture(textureId);
@@ -713,6 +1025,9 @@ public class BatchRenderDevice implements RenderDevice {
     }
   }
 
+  /**
+	 * Begin new batch if required.
+	 */
   private void beginNewBatchIfRequired() {
     if (shouldStartNewBatch) {
       renderBackend.beginBatch(currentBlendMode, currentTextureId);
@@ -720,10 +1035,21 @@ public class BatchRenderDevice implements RenderDevice {
     }
   }
 
+  /**
+	 * Checks if is current texture.
+	 *
+	 * @param textureId the texture id
+	 * @return true, if is current texture
+	 */
   private boolean isCurrentTexture(final int textureId) {
     return textureId == currentTextureId;
   }
 
+  /**
+	 * Update current texture.
+	 *
+	 * @param textureId the texture id
+	 */
   private void updateCurrentTexture(final int textureId) {
     currentTextureId = textureId;
     currentTextureSize = BatchRenderImage.getTextureSize(textureId);
@@ -732,24 +1058,61 @@ public class BatchRenderDevice implements RenderDevice {
     }
   }
 
+  /**
+	 * Calc U.
+	 *
+	 * @param value the value
+	 * @param max   the max
+	 * @return the float
+	 */
   private float calcU(final int value, final int max) {
     return (0.5f / (float) max) + (value / (float) max);
   }
 
+  /**
+	 * Gets the full width of current texture.
+	 *
+	 * @return the full width of current texture
+	 */
   private int getFullWidthOfCurrentTexture() {
     return currentTextureSize != null ? currentTextureSize.getWidth() : 0;
   }
 
+  /**
+	 * Gets the full height of current texture.
+	 *
+	 * @return the full height of current texture
+	 */
   private int getFullHeightOfCurrentTexture() {
     return currentTextureSize != null ? currentTextureSize.getHeight() : 0;
   }
 
+  /**
+	 * The Class Clipping.
+	 */
   private class Clipping {
+    
+    /** The bounding box. */
     private Rect boundingBox;
+    
+    /** The clipped rect. */
     private Rect clippedRect;
+    
+    /** The is enabled. */
     private boolean isEnabled;
+    
+    /** The discard count. */
     private int discardCount;
 
+    /**
+	 * Instantiates a new clipping.
+	 *
+	 * @param x0        the x 0
+	 * @param y0        the y 0
+	 * @param x1        the x 1
+	 * @param y1        the y 1
+	 * @param isEnabled the is enabled
+	 */
     public Clipping(final int x0, final int y0, final int x1, final int y1, final boolean isEnabled) {
       boundingBox = new Rect (x0, y0, x1, y1);
       clippedRect = new Rect (0, 0, 0, 0);
@@ -757,6 +1120,14 @@ public class BatchRenderDevice implements RenderDevice {
       discardCount = 0;
     }
 
+    /**
+	 * Sets the bounds.
+	 *
+	 * @param x0 the x 0
+	 * @param y0 the y 0
+	 * @param x1 the x 1
+	 * @param y1 the y 1
+	 */
     public void setBounds(final int x0, final int y0, final int x1, final int y1) {
       boundingBox.x0 = x0;
       boundingBox.y0 = y0;
@@ -764,26 +1135,65 @@ public class BatchRenderDevice implements RenderDevice {
       boundingBox.y1 = y1;
     }
 
+    /**
+	 * Sets the enabled.
+	 *
+	 * @param isEnabled the new enabled
+	 */
     public void setEnabled(boolean isEnabled) {
       this.isEnabled = isEnabled;
     }
 
+    /**
+	 * Checks if is enabled.
+	 *
+	 * @return true, if is enabled
+	 */
     public boolean isEnabled() {
       return isEnabled;
     }
 
+    /**
+	 * Sets the to viewport.
+	 */
     public void setToViewport() {
       setBounds(0, 0, getWidth() - 1, getHeight() - 1);
     }
 
+    /**
+	 * Clip quad.
+	 *
+	 * @param quad the quad
+	 * @return the rect
+	 */
     public Rect clipQuad(final Rect quad) {
       return clipQuad(quad.x0, quad.y0, quad.getWidth(), quad.getHeight());
     }
 
+    /**
+	 * Clip quad.
+	 *
+	 * @param x0     the x 0
+	 * @param y0     the y 0
+	 * @param width  the width
+	 * @param height the height
+	 * @return the rect
+	 */
     public Rect clipQuad(final int x0, final int y0, final int width, final int height) {
       return clipQuadInternal(x0, y0, x0 + width - 1, y0 + height - 1);
     }
 
+    /**
+	 * Clip quad texture.
+	 *
+	 * @param textureX0     the texture X 0
+	 * @param textureY0     the texture Y 0
+	 * @param textureWidth  the texture width
+	 * @param textureHeight the texture height
+	 * @param originalQuad  the original quad
+	 * @param clippedQuad   the clipped quad
+	 * @return the rect
+	 */
     public Rect clipQuadTexture(final int textureX0,
                                 final int textureY0,
                                 final int textureWidth,
@@ -800,28 +1210,66 @@ public class BatchRenderDevice implements RenderDevice {
                                      clippedQuad);
     }
 
+    /**
+	 * Checks if is completely outside.
+	 *
+	 * @param x0     the x 0
+	 * @param y0     the y 0
+	 * @param width  the width
+	 * @param height the height
+	 * @return true, if is completely outside
+	 */
     public boolean isCompletelyOutside(final int x0, final int y0, final int width, final int height) {
       return isCompletelyOutsideInternal(x0, y0, x0 + width - 1, y0 + height - 1);
     }
 
+    /**
+	 * Checks if is completely inside.
+	 *
+	 * @param x0     the x 0
+	 * @param y0     the y 0
+	 * @param width  the width
+	 * @param height the height
+	 * @return true, if is completely inside
+	 */
     public boolean isCompletelyInside(final int x0, final int y0, final int width, final int height) {
       return isCompletelyInsideInternal(x0, y0, x0 + width - 1, y0 + height - 1);
     }
 
+    /**
+	 * Increment discard counter.
+	 */
     public void incrementDiscardCounter() {
       ++discardCount;
     }
 
+    /**
+	 * Gets the discard count.
+	 *
+	 * @return the discard count
+	 */
     public int getDiscardCount() {
       return discardCount;
     }
 
+    /**
+	 * Reset discard count.
+	 */
     public void resetDiscardCount() {
       discardCount = 0;
     }
 
     // Internal implementations
 
+    /**
+	 * Clip quad internal.
+	 *
+	 * @param x0 the x 0
+	 * @param y0 the y 0
+	 * @param x1 the x 1
+	 * @param y1 the y 1
+	 * @return the rect
+	 */
     private Rect clipQuadInternal(final int x0, final int y0, final int x1, final int y1) {
       if (x0 >= boundingBox.x0) {
         clippedRect.x0 = x0;
@@ -850,6 +1298,19 @@ public class BatchRenderDevice implements RenderDevice {
       return clippedRect;
     }
 
+    /**
+	 * Clip quad texture internal.
+	 *
+	 * @param textureX0     the texture X 0
+	 * @param textureY0     the texture Y 0
+	 * @param textureX1     the texture X 1
+	 * @param textureY1     the texture Y 1
+	 * @param textureWidth  the texture width
+	 * @param textureHeight the texture height
+	 * @param originalQuad  the original quad
+	 * @param clippedQuad   the clipped quad
+	 * @return the rect
+	 */
     private Rect clipQuadTextureInternal(final int textureX0,
                                          final int textureY0,
                                          final int textureX1,
@@ -888,10 +1349,28 @@ public class BatchRenderDevice implements RenderDevice {
       return this.clippedRect;
     }
 
+    /**
+	 * Checks if is completely outside internal.
+	 *
+	 * @param x0 the x 0
+	 * @param y0 the y 0
+	 * @param x1 the x 1
+	 * @param y1 the y 1
+	 * @return true, if is completely outside internal
+	 */
     private boolean isCompletelyOutsideInternal(final int x0, final int y0, final int x1, final int y1) {
       return (x0 > boundingBox.x1) || (x1 < boundingBox.x0) || (y0 > boundingBox.y1) || (y1 < boundingBox.y0);
     }
 
+    /**
+	 * Checks if is completely inside internal.
+	 *
+	 * @param x0 the x 0
+	 * @param y0 the y 0
+	 * @param x1 the x 1
+	 * @param y1 the y 1
+	 * @return true, if is completely inside internal
+	 */
     private boolean isCompletelyInsideInternal(final int x0, final int y0, final int x1, final int y1) {
       return x0 >= boundingBox.x0 && x0 <= boundingBox.x1 &&
               x1 >= boundingBox.x0 && x1 <= boundingBox.x1 &&
@@ -900,12 +1379,31 @@ public class BatchRenderDevice implements RenderDevice {
     }
   }
 
+  /**
+	 * The Class Rect.
+	 */
   private class Rect {
+    
+    /** The x 0. */
     public int x0;
+    
+    /** The y 0. */
     public int y0;
+    
+    /** The x 1. */
     public int x1;
+    
+    /** The y 1. */
     public int y1;
 
+    /**
+	 * Instantiates a new rect.
+	 *
+	 * @param x0 the x 0
+	 * @param y0 the y 0
+	 * @param x1 the x 1
+	 * @param y1 the y 1
+	 */
     public Rect (final int x0, final int y0, final int x1, final int y1) {
       this.x0 = x0;
       this.y0 = y0;
@@ -913,14 +1411,32 @@ public class BatchRenderDevice implements RenderDevice {
       this.y1 = y1;
     }
 
+    /**
+	 * Gets the width.
+	 *
+	 * @return the width
+	 */
     public int getWidth() {
       return x1 - x0 + 1;
     }
 
+    /**
+	 * Gets the height.
+	 *
+	 * @return the height
+	 */
     public int getHeight() {
       return y1 - y0 + 1;
     }
 
+    /**
+	 * Sets the.
+	 *
+	 * @param x0     the x 0
+	 * @param y0     the y 0
+	 * @param width  the width
+	 * @param height the height
+	 */
     public void set(final int x0, final int y0, final int width, final int height) {
       this.x0 = x0;
       this.y0 = y0;
@@ -928,6 +1444,11 @@ public class BatchRenderDevice implements RenderDevice {
       this.y1 = y0 + height - 1;
     }
 
+    /**
+	 * Sets the.
+	 *
+	 * @param rect the rect
+	 */
     public void set(Rect rect) {
       this.x0 = rect.x0;
       this.y0 = rect.y0;
@@ -936,23 +1457,52 @@ public class BatchRenderDevice implements RenderDevice {
     }
   }
 
+  /**
+	 * The Class FontRenderer.
+	 */
   private class FontRenderer implements JGLFontRenderer {
+    
+    /** The texture infos. */
     private final Map<String, BitmapInfo> textureInfos = new HashMap<String, BitmapInfo>();
+    
+    /** The color value parser. */
     private final ColorValueParser colorValueParser = new ColorValueParser();
+    
+    /** The batch render device. */
     private final BatchRenderDevice batchRenderDevice;
+    
+    /** The text color. */
     private final Color textColor = Color.BLACK;
+    
+    /** The has color. */
     private boolean hasColor;
 
+    /**
+	 * Instantiates a new font renderer.
+	 *
+	 * @param batchRenderDevice the batch render device
+	 */
     public FontRenderer(final BatchRenderDevice batchRenderDevice) {
       this.batchRenderDevice = batchRenderDevice;
     }
 
+    /**
+	 * Unload.
+	 */
     public void unload() {
       for (BitmapInfo info : textureInfos.values()) {
         info.unload();
       }
     }
 
+    /**
+	 * Register bitmap.
+	 *
+	 * @param bitmapId the bitmap id
+	 * @param data     the data
+	 * @param filename the filename
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
     @Override
     public void registerBitmap(
         @Nonnull final String bitmapId,
@@ -961,6 +1511,16 @@ public class BatchRenderDevice implements RenderDevice {
       textureInfos.put(bitmapId, new BitmapInfo((BatchRenderImage) batchRenderDevice.createImage(filename, true)));
     }
 
+    /**
+	 * Register bitmap.
+	 *
+	 * @param bitmapId the bitmap id
+	 * @param data     the data
+	 * @param width    the width
+	 * @param height   the height
+	 * @param filename the filename
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
     @Override
     public void registerBitmap(
             @Nonnull final String bitmapId,
@@ -983,6 +1543,20 @@ public class BatchRenderDevice implements RenderDevice {
       textureInfos.put(bitmapId, new BitmapInfo(batchRenderImage));
     }
 
+    /**
+	 * Register glyph.
+	 *
+	 * @param bitmapId the bitmap id
+	 * @param c        the c
+	 * @param xoff     the xoff
+	 * @param yoff     the yoff
+	 * @param w        the w
+	 * @param h        the h
+	 * @param u0       the u 0
+	 * @param v0       the v 0
+	 * @param u1       the u 1
+	 * @param v1       the v 1
+	 */
     @Override
     public void registerGlyph(
         final String bitmapId,
@@ -999,10 +1573,18 @@ public class BatchRenderDevice implements RenderDevice {
       textureInfo.addCharRenderInfo(c, new CharRenderInfo(xoff, yoff, w, h, u0, v0));
     }
 
+    /**
+	 * Prepare.
+	 */
     @Override
     public void prepare() {
     }
 
+    /**
+	 * Before render.
+	 *
+	 * @param customRenderState the custom render state
+	 */
     @Override
     public void beforeRender (final Object customRenderState) {
       hasColor = false;
@@ -1011,6 +1593,13 @@ public class BatchRenderDevice implements RenderDevice {
       }
     }
 
+    /**
+	 * Pre process.
+	 *
+	 * @param text   the text
+	 * @param offset the offset
+	 * @return the int
+	 */
     @Override
     public int preProcess(@Nonnull final String text, final int offset) {
       int index = offset;
@@ -1032,6 +1621,20 @@ public class BatchRenderDevice implements RenderDevice {
       return index;
     }
 
+    /**
+	 * Render.
+	 *
+	 * @param bitmapId the bitmap id
+	 * @param x        the x
+	 * @param y        the y
+	 * @param c        the c
+	 * @param sx       the sx
+	 * @param sy       the sy
+	 * @param r        the r
+	 * @param g        the g
+	 * @param b        the b
+	 * @param a        the a
+	 */
     @Override
     public void render(
         final String bitmapId,
@@ -1053,10 +1656,20 @@ public class BatchRenderDevice implements RenderDevice {
       textureInfos.get(bitmapId).renderCharacter(c, x, y, sx, sy, textColor);
     }
 
+    /**
+	 * After render.
+	 */
     @Override
     public void afterRender() {
     }
 
+    /**
+	 * Pre process for length.
+	 *
+	 * @param text   the text
+	 * @param offset the offset
+	 * @return the int
+	 */
     @Override
     public int preProcessForLength(@Nonnull final String text, final int offset) {
       int index = offset;
@@ -1072,14 +1685,39 @@ public class BatchRenderDevice implements RenderDevice {
     }
   }
 
+  /**
+	 * The Class CharRenderInfo.
+	 */
   private class CharRenderInfo {
+    
+    /** The xoff. */
     final int xoff;
+    
+    /** The yoff. */
     final int yoff;
+    
+    /** The w. */
     final int w;
+    
+    /** The h. */
     final int h;
+    
+    /** The u 0. */
     final float u0;
+    
+    /** The v 0. */
     final float v0;
 
+    /**
+	 * Instantiates a new char render info.
+	 *
+	 * @param xoff the xoff
+	 * @param yoff the yoff
+	 * @param w    the w
+	 * @param h    the h
+	 * @param u0   the u 0
+	 * @param v0   the v 0
+	 */
     public CharRenderInfo(
         final int xoff,
         final int yoff,
@@ -1095,6 +1733,20 @@ public class BatchRenderDevice implements RenderDevice {
       this.v0 = v0;
     }
 
+    /**
+	 * Render quad.
+	 *
+	 * @param x             the x
+	 * @param y             the y
+	 * @param sx            the sx
+	 * @param sy            the sy
+	 * @param textColor     the text color
+	 * @param textureX      the texture X
+	 * @param textureY      the texture Y
+	 * @param textureWidth  the texture width
+	 * @param textureHeight the texture height
+	 * @param textureId     the texture id
+	 */
     public void renderQuad(
         final int x,
         final int y,
@@ -1124,22 +1776,50 @@ public class BatchRenderDevice implements RenderDevice {
     }
   }
 
+  /**
+	 * The Class BitmapInfo.
+	 */
   private class BitmapInfo {
+    
+    /** The image. */
     private final BatchRenderImage image;
+    
+    /** The character indices. */
     private final Map<Integer, CharRenderInfo> characterIndices = new HashMap<Integer, CharRenderInfo>();
 
+    /**
+	 * Instantiates a new bitmap info.
+	 *
+	 * @param image the image
+	 */
     public BitmapInfo(final BatchRenderImage image) {
       this.image = image;
     }
 
+    /**
+	 * Upload.
+	 */
     private void upload() {
       uploadImageInternal(image);
     }
 
+    /**
+	 * Unload.
+	 */
     private void unload() {
       image.markAsUnloaded();
     }
 
+    /**
+	 * Render character.
+	 *
+	 * @param c         the c
+	 * @param x         the x
+	 * @param y         the y
+	 * @param sx        the sx
+	 * @param sy        the sy
+	 * @param textColor the text color
+	 */
     public void renderCharacter(int c, int x, int y, float sx, float sy, @Nonnull Color textColor) {
       characterIndices.get(c).renderQuad(
           x,
@@ -1154,6 +1834,12 @@ public class BatchRenderDevice implements RenderDevice {
           image.getTextureId());
     }
 
+    /**
+	 * Adds the char render info.
+	 *
+	 * @param c          the c
+	 * @param renderInfo the render info
+	 */
     public void addCharRenderInfo(final Integer c, final CharRenderInfo renderInfo) {
       this.characterIndices.put(c, renderInfo);
     }

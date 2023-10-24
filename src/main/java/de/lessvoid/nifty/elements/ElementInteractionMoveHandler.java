@@ -8,17 +8,40 @@ import de.lessvoid.nifty.elements.events.NiftyMouseMovedEvent;
 import de.lessvoid.nifty.elements.events.NiftyMouseWheelEvent;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 
+/**
+ * The Class ElementInteractionMoveHandler.
+ */
 public class ElementInteractionMoveHandler {
+  
+  /** The nifty. */
   @Nonnull
   private final Nifty nifty;
+  
+  /** The element. */
   @Nonnull
   private final Element element;
+  
+  /** The last mouse X. */
   private int lastMouseX;
+  
+  /** The last mouse Y. */
   private int lastMouseY;
+  
+  /** The last button 0 down. */
   private boolean lastButton0Down;
+  
+  /** The last button 1 down. */
   private boolean lastButton1Down;
+  
+  /** The last button 2 down. */
   private boolean lastButton2Down;
 
+  /**
+	 * Instantiates a new element interaction move handler.
+	 *
+	 * @param nifty   the nifty
+	 * @param element the element
+	 */
   public ElementInteractionMoveHandler(@Nonnull final Nifty nifty, @Nonnull final Element element) {
     this.nifty = nifty;
     this.element = element;
@@ -29,6 +52,15 @@ public class ElementInteractionMoveHandler {
     this.lastButton2Down = false;
   }
 
+  /**
+	 * Process.
+	 *
+	 * @param canHandleInteraction the can handle interaction
+	 * @param mouseInside          the mouse inside
+	 * @param hasMouseAccess       the has mouse access
+	 * @param mouseEvent           the mouse event
+	 * @return true, if successful
+	 */
   public boolean process(
       final boolean canHandleInteraction, final boolean mouseInside, final boolean hasMouseAccess,
       @Nonnull final NiftyMouseInputEvent mouseEvent) {
@@ -62,6 +94,12 @@ public class ElementInteractionMoveHandler {
     return false;
   }
 
+  /**
+	 * Handle move event.
+	 *
+	 * @param mouseEvent the mouse event
+	 * @return true, if successful
+	 */
   private boolean handleMoveEvent(@Nonnull final NiftyMouseInputEvent mouseEvent) {
     String id = element.getId();
     if (id != null && ((mouseEvent.getMouseX() != lastMouseX) || (mouseEvent.getMouseY() != lastMouseY))) {
@@ -73,6 +111,12 @@ public class ElementInteractionMoveHandler {
     return false;
   }
 
+  /**
+	 * Handle wheel event.
+	 *
+	 * @param mouseEvent the mouse event
+	 * @return true, if successful
+	 */
   private boolean handleWheelEvent(@Nonnull final NiftyMouseInputEvent mouseEvent) {
     String id = element.getId();
     if (id != null && mouseEvent.getMouseWheel() != 0) {
@@ -82,6 +126,11 @@ public class ElementInteractionMoveHandler {
     return false;
   }
 
+  /**
+	 * Handle general event.
+	 *
+	 * @param mouseEvent the mouse event
+	 */
   private void handleGeneralEvent(@Nonnull final NiftyMouseInputEvent mouseEvent) {
     String id = element.getId();
     if (id != null) {

@@ -18,6 +18,13 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
  */
 public class Nop implements EffectImpl {
 
+  /**
+	 * Activate.
+	 *
+	 * @param nifty     the nifty
+	 * @param element   the element
+	 * @param parameter the parameter
+	 */
   @Override
   public void activate(
       @Nonnull final Nifty nifty,
@@ -25,6 +32,14 @@ public class Nop implements EffectImpl {
       @Nonnull final EffectProperties parameter) {
   }
 
+  /**
+	 * Execute.
+	 *
+	 * @param element        the element
+	 * @param normalizedTime the normalized time
+	 * @param falloff        the falloff
+	 * @param r              the r
+	 */
   @Override
   public void execute(
       @Nonnull final Element element,
@@ -33,6 +48,9 @@ public class Nop implements EffectImpl {
       @Nonnull final NiftyRenderEngine r) {
   }
 
+  /**
+	 * Deactivate.
+	 */
   @Override
   public void deactivate() {
   }

@@ -88,21 +88,42 @@ import org.bushe.swing.event.ThreadSafeEventService;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface EventTopicSubscriber {
-   /** The topic to subscribe to */
+   
+   /**
+	 * The topic to subscribe to.
+	 *
+	 * @return the string
+	 */
    String topic();
 
-   /** Whether to subscribe weakly or strongly. */
+   /**
+	 * Whether to subscribe weakly or strongly.
+	 *
+	 * @return the reference strength
+	 */
    ReferenceStrength referenceStrength() default ReferenceStrength.WEAK;
 
-   /** The event service to subscribe to, default to the EventServiceLocator.SERVICE_NAME_EVENT_BUS. */
+   /**
+	 * The event service to subscribe to, default to the
+	 * EventServiceLocator.SERVICE_NAME_EVENT_BUS.
+	 *
+	 * @return the string
+	 */
    String eventServiceName() default EventServiceLocator.SERVICE_NAME_EVENT_BUS;
 
-   /** Determines the order in which this subscriber is called, default is FIFO.*/
+   /**
+	 * Determines the order in which this subscriber is called, default is FIFO.
+	 *
+	 * @return the int
+	 */
    int priority() default 0;
 
    /**
-    * Whether or not to autocreate the event service if it doesn't exist on subscription, default is true. If the
-    * service needs to be created, it must have a default constructor.
-    */
+	 * Whether or not to autocreate the event service if it doesn't exist on
+	 * subscription, default is true. If the service needs to be created, it must
+	 * have a default constructor.
+	 *
+	 * @return the class<? extends event service>
+	 */
    Class<? extends EventService> autoCreateEventServiceClass() default ThreadSafeEventService.class;
 }

@@ -6,14 +6,30 @@ import de.lessvoid.xml.lwxs.XmlType;
 import de.lessvoid.xml.xpp3.Attributes;
 import de.lessvoid.xml.xpp3.XmlParser;
 
+/**
+ * The Class XmlProcessorElement.
+ */
 public class XmlProcessorElement {
+  
+  /** The element processor. */
   @Nonnull
   private XmlProcessorType elementProcessor;
+  
+  /** The element name. */
   @Nonnull
   private String elementName;
+  
+  /** The element occurs. */
   @Nonnull
   private OccursEnum elementOccurs;
 
+  /**
+	 * Instantiates a new xml processor element.
+	 *
+	 * @param elementProcessorParam the element processor param
+	 * @param elementNameParam      the element name param
+	 * @param elementOccursParam    the element occurs param
+	 */
   public XmlProcessorElement(
       @Nonnull final XmlProcessorType elementProcessorParam,
       @Nonnull final String elementNameParam,
@@ -23,6 +39,13 @@ public class XmlProcessorElement {
     elementOccurs = elementOccursParam;
   }
 
+  /**
+	 * Process.
+	 *
+	 * @param xmlParser     the xml parser
+	 * @param xmlTypeParent the xml type parent
+	 * @throws Exception the exception
+	 */
   public void process(
       @Nonnull final XmlParser xmlParser,
       @Nonnull final XmlType xmlTypeParent) throws Exception {
@@ -41,6 +64,14 @@ public class XmlProcessorElement {
     }
   }
 
+  /**
+	 * Process subst group.
+	 *
+	 * @param xmlParser     the xml parser
+	 * @param xmlTypeParent the xml type parent
+	 * @param attributes    the attributes
+	 * @throws Exception the exception
+	 */
   public void processSubstGroup(
       @Nonnull final XmlParser xmlParser,
       @Nonnull final XmlType xmlTypeParent,

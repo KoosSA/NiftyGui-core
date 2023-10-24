@@ -6,14 +6,21 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 /**
- * Courtesy of Neil Gafter's blog.
- * Thanks to Curt Cox for the pointer.
+ * Courtesy of Neil Gafter's blog. Thanks to Curt Cox for the pointer.
+ *
+ * @param <T> the generic type
  */
 public abstract class TypeReference<T> {
 
+ /** The type. */
  private final Type type;
+ 
+ /** The constructor. */
  private volatile Constructor<?> constructor;
 
+ /**
+	 * Instantiates a new type reference.
+	 */
  protected TypeReference() {
      Type superclass = getClass().getGenericSuperclass();
      if (superclass instanceof Class) {
@@ -23,13 +30,14 @@ public abstract class TypeReference<T> {
  }
 
  /**
-  * @return a new instance of {@code T} using the default, no-arg
-  * constructor.
-  * @throws IllegalAccessException on security reflection issues
-  * @throws NoSuchMethodException there's not getRawType on the type
-  * @throws java.lang.reflect.InvocationTargetException if a reflective call causes an exception in the underlying instance
-  * @throws InstantiationException if the instance cannot be instantiated
-  */
+	 * New instance.
+	 *
+	 * @return a new instance of {@code T} using the default, no-arg constructor.
+	 * @throws NoSuchMethodException     there's not getRawType on the type
+	 * @throws IllegalAccessException    on security reflection issues
+	 * @throws InvocationTargetException the invocation target exception
+	 * @throws InstantiationException    if the instance cannot be instantiated
+	 */
  @SuppressWarnings("unchecked")
  public T newInstance()
          throws NoSuchMethodException, IllegalAccessException,
@@ -44,8 +52,10 @@ public abstract class TypeReference<T> {
  }
 
  /**
-  * @return the referenced type.
-  */
+	 * Gets the type.
+	 *
+	 * @return the referenced type.
+	 */
  public Type getType() {
      return this.type;
  }

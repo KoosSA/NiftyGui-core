@@ -63,6 +63,7 @@ public enum RenderStateType {
     return allStates;
   }
 
+  /** The Constant allStates. */
   @Nonnull
   private static final Set<RenderStateType> allStates = new HashSet<RenderStateType>();
 

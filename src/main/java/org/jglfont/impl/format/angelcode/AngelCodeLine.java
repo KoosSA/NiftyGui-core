@@ -9,12 +9,15 @@ import org.jglfont.impl.format.JGLAbstractFontData;
  * @author void
  */
 public interface AngelCodeLine {
+  
   /**
-   * Take the line which represents the current line with all data
-   * split into key/value types and fill the corresponding properties
-   * of the given JGLAbstractFontData font.
-   * @param line the line
-   * @param font the font
-   */
+	 * Take the line which represents the current line with all data split into
+	 * key/value types and fill the corresponding properties of the given
+	 * JGLAbstractFontData font.
+	 *
+	 * @param line the line
+	 * @param font the font
+	 * @return true, if successful
+	 */
   boolean process(AngelCodeLineData line, JGLAbstractFontData font);
 }

@@ -15,21 +15,29 @@ import de.lessvoid.nifty.tools.Color;
  * @author void
  */
 public class NiftyImage {
+  
+  /** The image. */
   @Nonnull
   private RenderImage image;
+  
+  /** The image mode. */
   @Nonnull
   private ImageMode imageMode;
+  
+  /** The nifty render engine. */
   @Nonnull
   private final NiftyRenderEngine niftyRenderEngine;
 
+  /** The color. */
   @Nullable
   private Color color;
 
   /**
-   * create new NiftyImage.
-   *
-   * @param createImage RenderImage
-   */
+	 * create new NiftyImage.
+	 *
+	 * @param niftyRenderEngine the nifty render engine
+	 * @param createImage       RenderImage
+	 */
   public NiftyImage(@Nonnull final NiftyRenderEngine niftyRenderEngine, @Nonnull final RenderImage createImage) {
     this.niftyRenderEngine = niftyRenderEngine;
     this.image = createImage;

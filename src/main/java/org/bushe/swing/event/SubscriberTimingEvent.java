@@ -23,26 +23,44 @@ package org.bushe.swing.event;
  * @see ThreadSafeEventService
  */
 public class SubscriberTimingEvent extends AbstractEventServiceEvent {
+   
+   /** The start. */
    private Long start;
+   
+   /** The end. */
    private Long end;
+   
+   /** The time limit milliseconds. */
    private Long timeLimitMilliseconds;
+   
+   /** The event. */
    private Object event;
+   
+   /** The subscriber. */
    private EventSubscriber subscriber;
+   
+   /** The veto event listener. */
    private VetoEventListener vetoEventListener;
+   
+   /** The stringified. */
    private String stringified;
 
    /**
-    * Create a timing event
-    *
-    * @param source event source
-    * @param start system time at start of the notification of listener
-    * @param end system time at end of the notification of listener
-    * @param timeLimitMilliseconds expected maximum time
-    * @param event the published event
-    * @param subscriber the event subscriber that went over the time limit, can be null if vetoEventListener is not
-    * null
-    * @param vetoEventListener the vetoEventListener that took too long, can be null if the eventListener is not null
-    */
+	 * Create a timing event.
+	 *
+	 * @param source                event source
+	 * @param start                 system time at start of the notification of
+	 *                              listener
+	 * @param end                   system time at end of the notification of
+	 *                              listener
+	 * @param timeLimitMilliseconds expected maximum time
+	 * @param event                 the published event
+	 * @param subscriber            the event subscriber that went over the time
+	 *                              limit, can be null if vetoEventListener is not
+	 *                              null
+	 * @param vetoEventListener     the vetoEventListener that took too long, can be
+	 *                              null if the eventListener is not null
+	 */
    public SubscriberTimingEvent(Object source, Long start, Long end, Long timeLimitMilliseconds,
            Object event, EventSubscriber subscriber, VetoEventListener vetoEventListener) {
       super(source);
@@ -67,49 +85,87 @@ public class SubscriberTimingEvent extends AbstractEventServiceEvent {
       }
    }
 
-   /** @return system time at start of the notification of listener */
+   /**
+	 * Gets the start.
+	 *
+	 * @return system time at start of the notification of listener
+	 */
    public Long getStart() {
       return start;
    }
 
-   /** @return system time at end of the notification of listener */
+   /**
+	 * Gets the end.
+	 *
+	 * @return system time at end of the notification of listener
+	 */
    public Long getEnd() {
       return end;
    }
 
-   /** @return expected maximum time */
+   /**
+	 * Gets the time limit milliseconds.
+	 *
+	 * @return expected maximum time
+	 */
    public Long getTimeLimitMilliseconds() {
       return timeLimitMilliseconds;
    }
 
-   /** @return the published event */
+   /**
+	 * Gets the event.
+	 *
+	 * @return the published event
+	 */
    public Object getEvent() {
       return event;
    }
 
    /**
-    * @return subscriber the event subscriber that went over the time limit, can be null if vetoEventListener is not
-    *         null
-    */
+	 * Gets the subscriber.
+	 *
+	 * @return subscriber the event subscriber that went over the time limit, can be
+	 *         null if vetoEventListener is not null
+	 */
    public EventSubscriber getSubscriber() {
       return subscriber;
    }
 
-   /** @return the vetoEventListener that took too long, can be null if the eventListener is not null */
+   /**
+	 * Gets the veto event listener.
+	 *
+	 * @return the vetoEventListener that took too long, can be null if the
+	 *         eventListener is not null
+	 */
    public VetoEventListener getVetoEventListener() {
       return vetoEventListener;
    }
 
-   /** @return true if a veto listener took too long, false if an EventSubscriber took took long */
+   /**
+	 * Checks if is veto exceeded.
+	 *
+	 * @return true if a veto listener took too long, false if an EventSubscriber
+	 *         took took long
+	 */
    public boolean isVetoExceeded() {
       return vetoEventListener != null;
    }
 
-   /** @return true if an EventSubscriber took too long, false if a veto listener took took long */
+   /**
+	 * Checks if is event handling exceeded.
+	 *
+	 * @return true if an EventSubscriber took too long, false if a veto listener
+	 *         took took long
+	 */
    public boolean isEventHandlingExceeded() {
       return subscriber == null;
    }
 
+   /**
+	 * To string.
+	 *
+	 * @return the string
+	 */
    public String toString() {
       return stringified;
    }

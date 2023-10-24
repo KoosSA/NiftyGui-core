@@ -9,6 +9,8 @@ import org.bushe.swing.event.VetoEventListener;
 /** A class is subscribed to an EventService on behalf of another object. */
 public class BaseProxySubscriber extends AbstractProxySubscriber
         implements org.bushe.swing.event.EventSubscriber, VetoEventListener {
+   
+   /** The subscription class. */
    private Class subscriptionClass;
 
    /**
@@ -29,17 +31,22 @@ public class BaseProxySubscriber extends AbstractProxySubscriber
    }
 
    /**
-    * Creates a proxy with a priority.  This does not subscribe it.
-    *
-    * @param proxiedSubscriber the subscriber that the proxy will call when an event is published
-    * @param subscriptionMethod the method the proxy will call, must have an Object as it's first and only parameter
-    * @param referenceStrength if the subscription is weak, the reference from the proxy to the real subscriber should
-    * be too
-    * @param es the EventService we will be subscribed to, since we may need to unsubscribe when weak refs no longer
-    * exist
-    * @param subscription the class to subscribe to, used for unsubscription only
-    * @param veto whether this is a veto subscriber
-    */
+	 * Creates a proxy with a priority. This does not subscribe it.
+	 *
+	 * @param proxiedSubscriber  the subscriber that the proxy will call when an
+	 *                           event is published
+	 * @param subscriptionMethod the method the proxy will call, must have an Object
+	 *                           as it's first and only parameter
+	 * @param referenceStrength  if the subscription is weak, the reference from the
+	 *                           proxy to the real subscriber should be too
+	 * @param priority           the priority
+	 * @param es                 the EventService we will be subscribed to, since we
+	 *                           may need to unsubscribe when weak refs no longer
+	 *                           exist
+	 * @param subscription       the class to subscribe to, used for unsubscription
+	 *                           only
+	 * @param veto               whether this is a veto subscriber
+	 */
    public BaseProxySubscriber(Object proxiedSubscriber, Method subscriptionMethod, ReferenceStrength referenceStrength,
            int priority, EventService es, Class subscription, boolean veto) {
       super(proxiedSubscriber, subscriptionMethod, referenceStrength, priority, es, veto);
@@ -76,6 +83,12 @@ public class BaseProxySubscriber extends AbstractProxySubscriber
    }
 
 
+   /**
+	 * Should veto.
+	 *
+	 * @param event the event
+	 * @return true, if successful
+	 */
    public boolean shouldVeto(Object event) {
       Object[] args = new Object[]{event};
       Method subscriptionMethod = null;
@@ -96,6 +109,12 @@ public class BaseProxySubscriber extends AbstractProxySubscriber
       }
    }
 
+   /**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
    @Override
    public boolean equals(Object obj) {
       if (obj instanceof BaseProxySubscriber) {
@@ -118,6 +137,11 @@ public class BaseProxySubscriber extends AbstractProxySubscriber
       }
    }
 
+   /**
+	 * To string.
+	 *
+	 * @return the string
+	 */
    @Override
    public String toString() {
       return "BaseProxySubscriber{" +

@@ -11,26 +11,66 @@ import de.lessvoid.nifty.NiftyMethodInvoker;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 
+/**
+ * The Class ElementInteractionClickHandler.
+ */
 public class ElementInteractionClickHandler {
+  
+  /** The Constant logger. */
   private static final Logger logger = Logger.getLogger(ElementInteractionClickHandler.class.getName());
 
+  /** The Constant REPEATED_CLICK_START_TIME_MS. */
   private static final long REPEATED_CLICK_START_TIME_MS = 100;
+  
+  /** The Constant REPEATED_CLICK_TIME_MS. */
   private static final long REPEATED_CLICK_TIME_MS = 100;
+  
+  /** The Constant CLICK_COUNT_RECORD_TIME_MS. */
   private static final int CLICK_COUNT_RECORD_TIME_MS = 500;
 
+  /** The nifty. */
   private final Nifty nifty;
+  
+  /** The element. */
   private final Element element;
+  
+  /** The mouse methods. */
   private final MouseClickMethods mouseMethods;
+  
+  /** The is mouse down. */
   private boolean isMouseDown;
+  
+  /** The on click repeat enabled. */
   private boolean onClickRepeatEnabled;
+  
+  /** The last mouse X. */
   private int lastMouseX;
+  
+  /** The last mouse Y. */
   private int lastMouseY;
+  
+  /** The delta time ms. */
   private long deltaTimeMs;
+  
+  /** The mouse down time ms. */
   private long mouseDownTimeMs;
+  
+  /** The last click time ms. */
   private long lastClickTimeMs;
+  
+  /** The last repeat start time ms. */
   private long lastRepeatStartTimeMs;
+  
+  /** The click counter. */
   private int clickCounter;
 
+  /**
+	 * Instantiates a new element interaction click handler.
+	 *
+	 * @param nifty        the nifty
+	 * @param element      the element
+	 * @param mouseMethods the mouse methods
+	 */
   public ElementInteractionClickHandler(
       final Nifty nifty,
       final Element element,
@@ -42,18 +82,47 @@ public class ElementInteractionClickHandler {
     setMouseDown(false, 0);
   }
 
+  /**
+	 * Gets the mouse methods.
+	 *
+	 * @return the mouse methods
+	 */
   public MouseClickMethods getMouseMethods() {
     return mouseMethods;
   }
 
+  /**
+	 * Sets the on click repeat enabled.
+	 *
+	 * @param onClickRepeatEnabled the new on click repeat enabled
+	 */
   public void setOnClickRepeatEnabled(final boolean onClickRepeatEnabled) {
     this.onClickRepeatEnabled = onClickRepeatEnabled;
   }
 
+  /**
+	 * Checks if is on click repeat enabled.
+	 *
+	 * @return true, if is on click repeat enabled
+	 */
   public boolean isOnClickRepeatEnabled() {
     return onClickRepeatEnabled;
   }
 
+  /**
+	 * Process.
+	 *
+	 * @param mouseEvent           the mouse event
+	 * @param isButtonDown         the is button down
+	 * @param isInitialButtonDown  the is initial button down
+	 * @param isButtonRelease      the is button release
+	 * @param eventTimeMs          the event time ms
+	 * @param mouseInside          the mouse inside
+	 * @param canHandleInteraction the can handle interaction
+	 * @param hasMouseAccess       the has mouse access
+	 * @param onClickAlternateKey  the on click alternate key
+	 * @return true, if successful
+	 */
   public boolean process(
       @Nonnull final NiftyMouseInputEvent mouseEvent,
       final boolean isButtonDown,
@@ -122,20 +191,41 @@ public class ElementInteractionClickHandler {
     return processed;
   }
 
+  /**
+	 * Sets the mouse down.
+	 *
+	 * @param newMouseDown the new mouse down
+	 * @param eventTimeMs  the event time ms
+	 */
   private void setMouseDown(final boolean newMouseDown, final long eventTimeMs) {
     this.mouseDownTimeMs = eventTimeMs;
     this.lastRepeatStartTimeMs = 0;
     this.isMouseDown = newMouseDown;
   }
 
+  /**
+	 * Reset mouse down.
+	 */
   public void resetMouseDown() {
     this.isMouseDown = false;
   }
 
+  /**
+	 * On initial click.
+	 */
   private void onInitialClick() {
     mouseMethods.onInitialClick();
   }
 
+  /**
+	 * On click mouse.
+	 *
+	 * @param elementId            the element id
+	 * @param inputEvent           the input event
+	 * @param canHandleInteraction the can handle interaction
+	 * @param onClickAlternateKey  the on click alternate key
+	 * @return true, if successful
+	 */
   private boolean onClickMouse(
       final String elementId,
       @Nonnull final NiftyMouseInputEvent inputEvent,
@@ -151,6 +241,15 @@ public class ElementInteractionClickHandler {
     return mouseMethods.onClick(nifty, onClickAlternateKey, inputEvent);
   }
 
+  /**
+	 * On multi click mouse.
+	 *
+	 * @param elementId            the element id
+	 * @param inputEvent           the input event
+	 * @param canHandleInteraction the can handle interaction
+	 * @param onClickAlternateKey  the on click alternate key
+	 * @return true, if successful
+	 */
   private boolean onMultiClickMouse(
           final String elementId,
           @Nonnull final NiftyMouseInputEvent inputEvent,
@@ -166,6 +265,12 @@ public class ElementInteractionClickHandler {
     return mouseMethods.onMultiClick(nifty, onClickAlternateKey, inputEvent, clickCounter);
   }
 
+  /**
+	 * On click mouse move.
+	 *
+	 * @param inputEvent the input event
+	 * @return true, if successful
+	 */
   private boolean onClickMouseMove(@Nonnull final NiftyMouseInputEvent inputEvent) {
     if (lastMouseX == inputEvent.getMouseX() && lastMouseY == inputEvent.getMouseY()) {
       return false;
@@ -177,27 +282,58 @@ public class ElementInteractionClickHandler {
     return mouseMethods.onClickMouseMove(nifty, inputEvent);
   }
 
+  /**
+	 * On mouse release.
+	 *
+	 * @param mouseEvent the mouse event
+	 * @return true, if successful
+	 */
   private boolean onMouseRelease(@Nonnull final NiftyMouseInputEvent mouseEvent) {
     return mouseMethods.onRelease(nifty, mouseEvent);
   }
 
+  /**
+	 * Click and release mouse.
+	 *
+	 * @param nifty the nifty
+	 */
   public void clickAndReleaseMouse(@Nonnull final Nifty nifty) {
     element.startEffectWithoutChildren(EffectEventId.onClick);
     mouseMethods.clickAndRelease(nifty);
   }
 
+  /**
+	 * Sets the on click method.
+	 *
+	 * @param onClickMethod the new on click method
+	 */
   public void setOnClickMethod(final NiftyMethodInvoker onClickMethod) {
     mouseMethods.setOnClickMethod(onClickMethod);
   }
   
+  /**
+	 * Sets the on multi click method.
+	 *
+	 * @param onMultiClickMethod the new on multi click method
+	 */
   public void setOnMultiClickMethod(final NiftyMethodInvoker onMultiClickMethod) {
     mouseMethods.setMultiClickMethod(onMultiClickMethod);
   }
 
+  /**
+	 * Sets the on click mouse move method.
+	 *
+	 * @param onClickMouseMoveMethod the new on click mouse move method
+	 */
   public void setOnClickMouseMoveMethod(final NiftyMethodInvoker onClickMouseMoveMethod) {
     mouseMethods.setOnClickMouseMoveMethod(onClickMouseMoveMethod);
   }
 
+  /**
+	 * Sets the on release method.
+	 *
+	 * @param onReleaseMethod the new on release method
+	 */
   public void setOnReleaseMethod(final NiftyMethodInvoker onReleaseMethod) {
     mouseMethods.setOnReleaseMethod(onReleaseMethod);
   }

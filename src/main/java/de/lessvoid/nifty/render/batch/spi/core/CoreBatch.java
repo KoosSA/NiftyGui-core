@@ -28,9 +28,12 @@ public interface CoreBatch {
   public void begin(@Nonnull BlendMode blendMode, final CoreTexture2D texture);
 
   /**
-   * Gets the {@link de.lessvoid.nifty.render.BlendMode} that will be used to render this batch, that was specified in
-   * {@link #begin(de.lessvoid.nifty.render.BlendMode, de.lessvoid.nifty.render.batch.core.CoreTexture2D)}.
-   */
+	 * Gets the {@link de.lessvoid.nifty.render.BlendMode} that will be used to
+	 * render this batch, that was specified in
+	 * {@link #begin(de.lessvoid.nifty.render.BlendMode, de.lessvoid.nifty.render.batch.core.CoreTexture2D)}.
+	 *
+	 * @return the blend mode
+	 */
   @Nonnull
   public BlendMode getBlendMode();
 
@@ -43,29 +46,35 @@ public interface CoreBatch {
   public void render();
 
   /**
-   * A batch can only hold so many quads. This will tell you when the batch is full. The amount of vertex data that a
-   * batch can hold is implementation-specific.
-   */
+	 * A batch can only hold so many quads. This will tell you when the batch is
+	 * full. The amount of vertex data that a batch can hold is
+	 * implementation-specific.
+	 *
+	 * @return true, if successful
+	 */
   public boolean canAddQuad();
 
   /**
-   * Adds a quad to the batch for later rendering with {@link #render()}.
-   *
-   * @see #canAddQuad()
-   *
-   * @param x The top left coordinate of the quad, in screen coordinates.
-   * @param y The top left coordinate of the quad, in screen coordinates.
-   * @param width The width of the quad, in screen coordinates.
-   * @param height The height of the quad, in screen coordinates.
-   * @param color1 The color of the quad's first (top left) vertex.
-   * @param color2 The color of the quad's second (top right) vertex.
-   * @param color3 The color of the quad's third (bottom right) vertex.
-   * @param color4 The color of the quad's fourth (bottom left) vertex.
-   * @param textureX The first (top left) texture coordinate of the texture to map onto the quad.
-   * @param textureY The first (top left) texture coordinate of the texture to map onto the quad.
-   * @param textureWidth The width of the texture to map onto the quad.
-   * @param textureHeight The width of the texture to map onto the quad.
-   */
+	 * Adds a quad to the batch for later rendering with {@link #render()}.
+	 *
+	 * @param x             The top left coordinate of the quad, in screen
+	 *                      coordinates.
+	 * @param y             The top left coordinate of the quad, in screen
+	 *                      coordinates.
+	 * @param width         The width of the quad, in screen coordinates.
+	 * @param height        The height of the quad, in screen coordinates.
+	 * @param color1        The color of the quad's first (top left) vertex.
+	 * @param color2        The color of the quad's second (top right) vertex.
+	 * @param color3        The color of the quad's third (bottom right) vertex.
+	 * @param color4        The color of the quad's fourth (bottom left) vertex.
+	 * @param textureX      The first (top left) texture coordinate of the texture
+	 *                      to map onto the quad.
+	 * @param textureY      The first (top left) texture coordinate of the texture
+	 *                      to map onto the quad.
+	 * @param textureWidth  The width of the texture to map onto the quad.
+	 * @param textureHeight The width of the texture to map onto the quad.
+	 * @see #canAddQuad()
+	 */
   public void addQuad(
           final float x,
           final float y,

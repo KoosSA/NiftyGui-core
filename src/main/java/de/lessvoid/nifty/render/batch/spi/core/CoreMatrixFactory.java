@@ -9,9 +9,16 @@ import javax.annotation.Nonnull;
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
 public class CoreMatrixFactory {
+  
   /**
-   * Creates an orthographic (2-dimensional) projection matrix.
-   */
+	 * Creates an orthographic (2-dimensional) projection matrix.
+	 *
+	 * @param left   the left
+	 * @param right  the right
+	 * @param bottom the bottom
+	 * @param top    the top
+	 * @return the core matrix 4 f
+	 */
   @Nonnull
   public static CoreMatrix4f createOrthoMatrix(
           final float left,
@@ -35,8 +42,17 @@ public class CoreMatrixFactory {
   }
 
   /**
-   * Creates a perspective projection matrix using only x, y, & z-axis frustum bounds.
-   */
+	 * Creates a perspective projection matrix using only x, y, & z-axis frustum
+	 * bounds.
+	 *
+	 * @param left   the left
+	 * @param right  the right
+	 * @param top    the top
+	 * @param bottom the bottom
+	 * @param zNear  the z near
+	 * @param zFar   the z far
+	 * @return the core matrix 4 f
+	 */
   public static CoreMatrix4f createPerspectiveMatrix(
           final float left,
           final float right,
@@ -59,8 +75,15 @@ public class CoreMatrixFactory {
   }
 
   /**
-   * Creates a perspective projection matrix using FOV (field-of-view), aspect ratio, and z-axis frustum bounds.
-   */
+	 * Creates a perspective projection matrix using FOV (field-of-view), aspect
+	 * ratio, and z-axis frustum bounds.
+	 *
+	 * @param fov         the fov
+	 * @param aspectRatio the aspect ratio
+	 * @param zNear       the z near
+	 * @param zFar        the z far
+	 * @return the core matrix 4 f
+	 */
   @Nonnull
   public static CoreMatrix4f createPerspectiveMatrix(
           final float fov,

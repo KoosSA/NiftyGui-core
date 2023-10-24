@@ -531,152 +531,180 @@ public interface EventService {
    public boolean unsubscribeVetoListener(Pattern topicPattern, VetoTopicEventListener vetoListener);
 
    /**
-    * Union of getSubscribersToClass(Class) and getSubscribersToExactClass(Class)
-    *
-    * @param eventClass the eventClass of interest
-    *
-    * @return the subscribers that will be called when an event of eventClass is published, this includes those
-    *         subscribed that match by exact class and those that match to a class and its subtypes
-    */
+	 * Union of getSubscribersToClass(Class) and getSubscribersToExactClass(Class).
+	 *
+	 * @param <T>        the generic type
+	 * @param eventClass the eventClass of interest
+	 * @return the subscribers that will be called when an event of eventClass is
+	 *         published, this includes those subscribed that match by exact class
+	 *         and those that match to a class and its subtypes
+	 */
    public <T> List<T> getSubscribers(Class<T> eventClass);
 
    /**
-    * Gets subscribers that subscribed with the given a class, but not those subscribed exactly to the class.
-    * @param eventClass the eventClass of interest
-    *
-    * @return the subscribers that are subscribed to match to a class and its subtypes, but not those subscribed by
-    *         exact class
-    */
+	 * Gets subscribers that subscribed with the given a class, but not those
+	 * subscribed exactly to the class.
+	 *
+	 * @param <T>        the generic type
+	 * @param eventClass the eventClass of interest
+	 * @return the subscribers that are subscribed to match to a class and its
+	 *         subtypes, but not those subscribed by exact class
+	 */
    public <T> List<T> getSubscribersToClass(Class<T> eventClass);
 
    /**
-    * Gets subscribers that are subscribed exactly to a class, but not those subscribed non-exactly to a class.
-    * @param eventClass the eventClass of interest
-    *
-    * @return the subscribers that are subscribed by exact class but not those subscribed to match to a class and its
-    *         subtypes
-    */
+	 * Gets subscribers that are subscribed exactly to a class, but not those
+	 * subscribed non-exactly to a class.
+	 *
+	 * @param <T>        the generic type
+	 * @param eventClass the eventClass of interest
+	 * @return the subscribers that are subscribed by exact class but not those
+	 *         subscribed to match to a class and its subtypes
+	 */
    public <T> List<T> getSubscribersToExactClass(Class<T> eventClass);
 
    /**
-    * Gets the subscribers that subscribed to a generic type.
-    *
-    * @param type the type of interest
-    *
-    * @return the subscribers that will be called when an event of eventClass is published, this includes those
-    *         subscribed that match by exact class and those that match to a class and its subtypes
-    */
+	 * Gets the subscribers that subscribed to a generic type.
+	 *
+	 * @param <T>  the generic type
+	 * @param type the type of interest
+	 * @return the subscribers that will be called when an event of eventClass is
+	 *         published, this includes those subscribed that match by exact class
+	 *         and those that match to a class and its subtypes
+	 */
    public <T> List<T> getSubscribers(Type type);
 
    /**
-    * Union of getSubscribersByPattern(String) and geSubscribersToTopic(String)
-    *
-    * @param topic the topic of interest
-    *
-    * @return the subscribers that will be called when an event is published on the topic.  This includes subscribers
-    *         subscribed to match the exact topic name and those subscribed by a RegEx Pattern that matches the topic
-    *         name.
-    */
+	 * Union of getSubscribersByPattern(String) and geSubscribersToTopic(String).
+	 *
+	 * @param <T>   the generic type
+	 * @param topic the topic of interest
+	 * @return the subscribers that will be called when an event is published on the
+	 *         topic. This includes subscribers subscribed to match the exact topic
+	 *         name and those subscribed by a RegEx Pattern that matches the topic
+	 *         name.
+	 */
    public <T> List<T> getSubscribers(String topic);
 
    /**
-    * Get the subscribers that subscribed to a topic.
-    * @param topic the topic of interest
-    *
-    * @return the subscribers that subscribed to the exact topic name.
-    */
+	 * Get the subscribers that subscribed to a topic.
+	 *
+	 * @param <T>   the generic type
+	 * @param topic the topic of interest
+	 * @return the subscribers that subscribed to the exact topic name.
+	 */
    public <T> List<T>  getSubscribersToTopic(String topic);
 
    /**
-    * Gets the subscribers that subscribed to a regular expression.
-    * @param pattern the RegEx pattern that was subscribed to
-    *
-    * @return the subscribers that were subscribed to this pattern.
-    */
+	 * Gets the subscribers that subscribed to a regular expression.
+	 *
+	 * @param <T>     the generic type
+	 * @param pattern the RegEx pattern that was subscribed to
+	 * @return the subscribers that were subscribed to this pattern.
+	 */
    public <T> List<T> getSubscribers(Pattern pattern);
 
    /**
-    * Gets the subscribers that subscribed with a Pattern that matches the given topic.
-    * @param topic a topic to match Patterns against
-    *
-    * @return the subscribers that subscribed by a RegEx Pattern that matches the topic name.
-    */
+	 * Gets the subscribers that subscribed with a Pattern that matches the given
+	 * topic.
+	 *
+	 * @param <T>   the generic type
+	 * @param topic a topic to match Patterns against
+	 * @return the subscribers that subscribed by a RegEx Pattern that matches the
+	 *         topic name.
+	 */
    public <T> List<T> getSubscribersByPattern(String topic);
 
    /**
-    * Gets veto subscribers that subscribed to a given class.
-    * @param eventClass the eventClass of interest
-    *
-    * @return the veto subscribers that will be called when an event of eventClass or its subclasses is published.
-    */
+	 * Gets veto subscribers that subscribed to a given class.
+	 *
+	 * @param <T>        the generic type
+	 * @param eventClass the eventClass of interest
+	 * @return the veto subscribers that will be called when an event of eventClass
+	 *         or its subclasses is published.
+	 */
    public <T> List<T>  getVetoSubscribers(Class<T> eventClass);
 
    /**
-    * Get veto subscribers that subscribed to a given class exactly.
-    * @param eventClass the eventClass of interest
-    *
-    * @return the veto subscribers that will be called when an event of eventClass (but not its subclasses) is
-    *         published.
-    */
+	 * Get veto subscribers that subscribed to a given class exactly.
+	 *
+	 * @param <T>        the generic type
+	 * @param eventClass the eventClass of interest
+	 * @return the veto subscribers that will be called when an event of eventClass
+	 *         (but not its subclasses) is published.
+	 */
    public <T> List<T> getVetoSubscribersToExactClass(Class<T> eventClass);
 
    /**
-    * Gets the veto subscribers that subscribed to a class.
-    * @param eventClass the eventClass of interest
-    *
-    * @return the veto subscribers that are subscribed to the eventClass and its subclasses
-    */
+	 * Gets the veto subscribers that subscribed to a class.
+	 *
+	 * @param <T>        the generic type
+	 * @param eventClass the eventClass of interest
+	 * @return the veto subscribers that are subscribed to the eventClass and its
+	 *         subclasses
+	 */
    public <T> List<T> getVetoSubscribersToClass(Class<T> eventClass);
 
    /**
-    * Union of {@link #getVetoSubscribersToTopic(String)} and {@link #getVetoSubscribersByPattern(String)}
-    * Misnamed method, should be called {@link #getVetoSubscribers(String)}. Will be deprecated in 1.5.
-    *
-    * @param topicOrPattern the topic or pattern of interest
-    *
-    * @return the veto subscribers that will be called when an event is published on the topic.
-    */
+	 * Union of {@link #getVetoSubscribersToTopic(String)} and
+	 * {@link #getVetoSubscribersByPattern(String)} Misnamed method, should be
+	 * called {@link #getVetoSubscribers(String)}. Will be deprecated in 1.5.
+	 *
+	 * @param <T>            the generic type
+	 * @param topicOrPattern the topic or pattern of interest
+	 * @return the veto subscribers that will be called when an event is published
+	 *         on the topic.
+	 */
    public <T> List<T> getVetoEventListeners(String topicOrPattern);
 
    /**
-    * Gets the veto subscribers that subscribed to a topic.
-    * @param topic the topic of interest
-    *
-    * @return the veto subscribers that will be called when an event is published on the topic.
-    */
+	 * Gets the veto subscribers that subscribed to a topic.
+	 *
+	 * @param <T>   the generic type
+	 * @param topic the topic of interest
+	 * @return the veto subscribers that will be called when an event is published
+	 *         on the topic.
+	 */
    public <T> List<T> getVetoSubscribersToTopic(String topic);
 
    /**
-    * Gets the veto subscribers that subscribed to a regular expression.
-    * @param pattern the RegEx pattern for the topic of interest
-    *
-    * @return the veto subscribers that were subscribed to this pattern.
-    */
+	 * Gets the veto subscribers that subscribed to a regular expression.
+	 *
+	 * @param <T>     the generic type
+	 * @param pattern the RegEx pattern for the topic of interest
+	 * @return the veto subscribers that were subscribed to this pattern.
+	 */
    public <T> List<T> getVetoSubscribers(Pattern pattern);
 
    /**
-    * Gets the veto subscribers that are subscribed by pattern that match the topic.
-    * @param topic the topic to match the pattern string subscribed to
-    *
-    * @return the veto subscribers that subscribed by pattern that will be called when an event is published on the topic.
-    */
+	 * Gets the veto subscribers that are subscribed by pattern that match the
+	 * topic.
+	 *
+	 * @param <T>   the generic type
+	 * @param topic the topic to match the pattern string subscribed to
+	 * @return the veto subscribers that subscribed by pattern that will be called
+	 *         when an event is published on the topic.
+	 */
    public <T> List<T> getVetoSubscribersByPattern(String topic);
 
    /**
-    * Misnamed method for backwards compatibility.
-    * Duplicate of {@link #getVetoSubscribersToTopic(String)}.
-    * Out of sync with {@link #getSubscribers(String)}.
-    * @param topic the topic exactly subscribed to
-    *
-    * @return the veto subscribers that are subscribed to the topic.
-    * @deprecated use getVetoSubscribersToTopic instead for direct replacement,
-    *             or use getVetoEventListeners to get topic and pattern matchers.
-    *             In EventBus 2.0 this name will replace getVetoEventListeners()
-    *             and have it's union functionality
-    */
+	 * Misnamed method for backwards compatibility. Duplicate of
+	 * {@link #getVetoSubscribersToTopic(String)}. Out of sync with
+	 * {@link #getSubscribers(String)}.
+	 *
+	 * @param <T>   the generic type
+	 * @param topic the topic exactly subscribed to
+	 * @return the veto subscribers that are subscribed to the topic.
+	 * @deprecated use getVetoSubscribersToTopic instead for direct replacement, or
+	 *             use getVetoEventListeners to get topic and pattern matchers. In
+	 *             EventBus 2.0 this name will replace getVetoEventListeners() and
+	 *             have it's union functionality
+	 */
    public <T> List<T> getVetoSubscribers(String topic);
       
-   /** Clears all current subscribers and veto subscribers */
+   /**
+	 * Clears all current subscribers and veto subscribers.
+	 */
    public void clearAllSubscribers();
 
    /**
@@ -694,9 +722,10 @@ public interface EventService {
    public void setDefaultCacheSizePerClassOrTopic(int defaultCacheSizePerClassOrTopic);
 
    /**
-    * The default number of events or payloads kept per event class or topic
-    * @return the default number of event payloads kept per event class or topic
-    */
+	 * The default number of events or payloads kept per event class or topic.
+	 *
+	 * @return the default number of event payloads kept per event class or topic
+	 */
    public int getDefaultCacheSizePerClassOrTopic();
 
    /**
@@ -776,19 +805,23 @@ public interface EventService {
    public int getCacheSizeForTopic(String topic);
 
    /**
-    * When caching, returns the last event publish for the type supplied.
-    * @param eventClass an index into the cache
-    *
-    * @return the last event published for this event class, or null if caching is turned off (the default)
-    */
+	 * When caching, returns the last event publish for the type supplied.
+	 *
+	 * @param <T>        the generic type
+	 * @param eventClass an index into the cache
+	 * @return the last event published for this event class, or null if caching is
+	 *         turned off (the default)
+	 */
    public <T> T getLastEvent(Class<T> eventClass);
 
    /**
-    * When caching, returns the last set of event published for the type supplied.
-    * @param eventClass an index into the cache
-    *
-    * @return the last events published for this event class, or null if caching is turned off (the default)
-    */
+	 * When caching, returns the last set of event published for the type supplied.
+	 *
+	 * @param <T>        the generic type
+	 * @param eventClass an index into the cache
+	 * @return the last events published for this event class, or null if caching is
+	 *         turned off (the default)
+	 */
    public <T> List<T> getCachedEvents(Class<T> eventClass);
 
    /**

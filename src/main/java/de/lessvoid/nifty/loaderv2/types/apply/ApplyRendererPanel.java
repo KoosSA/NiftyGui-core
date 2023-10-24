@@ -14,15 +14,35 @@ import de.lessvoid.nifty.render.image.ImageModeHelper;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 
+/**
+ * The Class ApplyRendererPanel.
+ */
 public class ApplyRendererPanel implements ApplyRenderer {
+  
+  /** The Constant log. */
   private static final Logger log = Logger.getLogger(ApplyRendererPanel.class.getName());
+  
+  /** The convert. */
   @Nonnull
   private final Convert convert;
 
+  /**
+	 * Instantiates a new apply renderer panel.
+	 *
+	 * @param convertParam the convert param
+	 */
   public ApplyRendererPanel(@Nonnull final Convert convertParam) {
     convert = convertParam;
   }
 
+  /**
+	 * Apply.
+	 *
+	 * @param screen       the screen
+	 * @param element      the element
+	 * @param attributes   the attributes
+	 * @param renderEngine the render engine
+	 */
   @Override
   public void apply(
       @Nonnull final Screen screen,

@@ -13,6 +13,8 @@ import javax.annotation.Nullable;
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
 public class CoreMatrix4f {
+  
+  /** The m 33. */
   public float m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33;
 
   /**
@@ -23,15 +25,20 @@ public class CoreMatrix4f {
   }
 
   /**
-   * Constructs a new matrix populated with the values of the specified source matrix.
-   */
+	 * Constructs a new matrix populated with the values of the specified source
+	 * matrix.
+	 *
+	 * @param src the src
+	 */
   public CoreMatrix4f(@Nonnull final CoreMatrix4f src) {
     load(src);
   }
 
   /**
-   * Returns a string representation of this matrix.
-   */
+	 * Returns a string representation of this matrix.
+	 *
+	 * @return the string
+	 */
   @Override
   @Nonnull
   public String toString() {
@@ -118,10 +125,13 @@ public class CoreMatrix4f {
   }
 
   /**
-   * Creates a translation matrix.
-   *
-   * @return The translation matrix.
-   */
+	 * Creates a translation matrix.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @param z the z
+	 * @return The translation matrix.
+	 */
   @Nonnull
   public static CoreMatrix4f createTranslation(final float x, final float y, final float z) {
     CoreMatrix4f result = new CoreMatrix4f();
@@ -134,10 +144,13 @@ public class CoreMatrix4f {
   }
 
   /**
-   * Creates a scaling matrix.
-   *
-   * @return The scaling matrix.
-   */
+	 * Creates a scaling matrix.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @param z the z
+	 * @return The scaling matrix.
+	 */
   @Nonnull
   public static CoreMatrix4f createScaling(final float x, final float y, final float z) {
     CoreMatrix4f result = new CoreMatrix4f();
@@ -150,10 +163,14 @@ public class CoreMatrix4f {
   }
 
   /**
-   * Creates a rotation matrix.
-   *
-   * @return The rotation matrix.
-   */
+	 * Creates a rotation matrix.
+	 *
+	 * @param angle the angle
+	 * @param x     the x
+	 * @param y     the y
+	 * @param z     the z
+	 * @return The rotation matrix.
+	 */
   @Nonnull
   public static CoreMatrix4f createRotation(final float angle, final float x, final float y, final float z) {
     double angleRad = angle * Math.PI / 180.;
@@ -186,23 +203,23 @@ public class CoreMatrix4f {
   }
 
   /**
-   * Populates this matrix from the specified source matrix.
-   *
-   * @return This matrix.
-   */
+	 * Populates this matrix from the specified source matrix.
+	 *
+	 * @param src the src
+	 * @return This matrix.
+	 */
   @Nonnull
   public CoreMatrix4f load(@Nonnull final CoreMatrix4f src) {
     return load(src, this);
   }
 
   /**
-   * Copies the source matrix into the destination matrix
-   *
-   * @param src  The source matrix.
-   * @param dest The destination matrix, or null to create a new matrix.
-   *
-   * @return The copied matrix.
-   */
+	 * Copies the source matrix into the destination matrix.
+	 *
+	 * @param src  The source matrix.
+	 * @param dest The destination matrix, or null to create a new matrix.
+	 * @return The copied matrix.
+	 */
   @Nonnull
   public static CoreMatrix4f load(@Nonnull final CoreMatrix4f src, @Nullable CoreMatrix4f dest) {
     if (dest == null) {
@@ -230,11 +247,12 @@ public class CoreMatrix4f {
   }
 
   /**
-   * Populates this matrix from a {@link java.nio.FloatBuffer}. The buffer stores the matrix in column major (OpenGL)
-   * order.
-   *
-   * @return This matrix.
-   */
+	 * Populates this matrix from a {@link java.nio.FloatBuffer}. The buffer stores
+	 * the matrix in column major (OpenGL) order.
+	 *
+	 * @param buffer the buffer
+	 * @return This matrix.
+	 */
   @Nonnull
   public CoreMatrix4f load(@Nonnull final FloatBuffer buffer) {
     m00 = buffer.get();
@@ -258,11 +276,12 @@ public class CoreMatrix4f {
   }
 
   /**
-   * Populates this matrix from a {@link java.nio.FloatBuffer}. The buffer stores the matrix in row major (maths)
-   * order.
-   *
-   * @return This matrix.
-   */
+	 * Populates this matrix from a {@link java.nio.FloatBuffer}. The buffer stores
+	 * the matrix in row major (maths) order.
+	 *
+	 * @param buffer the buffer
+	 * @return This matrix.
+	 */
   @Nonnull
   public CoreMatrix4f loadTransposed(@Nonnull final FloatBuffer buffer) {
     m00 = buffer.get();
@@ -286,10 +305,12 @@ public class CoreMatrix4f {
   }
 
   /**
-   * Store this matrix in a {@link java.nio.FloatBuffer}. The matrix is stored in column major (OpenGL) order.
-   *
-   * @return This matrix.
-   */
+	 * Store this matrix in a {@link java.nio.FloatBuffer}. The matrix is stored in
+	 * column major (OpenGL) order.
+	 *
+	 * @param buffer the buffer
+	 * @return This matrix.
+	 */
   @Nonnull
   public CoreMatrix4f store(@Nonnull final FloatBuffer buffer) {
     buffer.put(m00);
@@ -313,10 +334,12 @@ public class CoreMatrix4f {
   }
 
   /**
-   * Store this matrix in a {@link java.nio.FloatBuffer}. The matrix is stored in row major (maths) order.
-   *
-   * @return This matrix.
-   */
+	 * Store this matrix in a {@link java.nio.FloatBuffer}. The matrix is stored in
+	 * row major (maths) order.
+	 *
+	 * @param buffer the buffer
+	 * @return This matrix.
+	 */
   @Nonnull
   public CoreMatrix4f storeTransposed(@Nonnull final FloatBuffer buffer) {
     buffer.put(m00);
@@ -340,11 +363,12 @@ public class CoreMatrix4f {
   }
 
   /**
-   * Stores the rotation portion of this matrix in a {@link java.nio.FloatBuffer}. The matrix is stored in column major
-   * (OpenGL) order.
-   *
-   * @return This matrix.
-   */
+	 * Stores the rotation portion of this matrix in a {@link java.nio.FloatBuffer}.
+	 * The matrix is stored in column major (OpenGL) order.
+	 *
+	 * @param buffer the buffer
+	 * @return This matrix.
+	 */
   @Nonnull
   public CoreMatrix4f store3f(@Nonnull final FloatBuffer buffer) {
     buffer.put(m00);
@@ -580,8 +604,10 @@ public class CoreMatrix4f {
   }
 
   /**
-   * Calculates and returns the determinant of this matrix.
-   */
+	 * Calculates and returns the determinant of this matrix.
+	 *
+	 * @return the float
+	 */
   public float determinant() {
     float f =
         m00
@@ -821,6 +847,20 @@ public class CoreMatrix4f {
 
   // Internal implementations
 
+  /**
+	 * Determinant 3 x 3.
+	 *
+	 * @param t00 the t 00
+	 * @param t01 the t 01
+	 * @param t02 the t 02
+	 * @param t10 the t 10
+	 * @param t11 the t 11
+	 * @param t12 the t 12
+	 * @param t20 the t 20
+	 * @param t21 the t 21
+	 * @param t22 the t 22
+	 * @return the float
+	 */
   // Calculates and returns the determinant of the specified 3x3 matrix.
   private static float determinant3x3(
           float t00, float t01, float t02,
@@ -831,6 +871,13 @@ public class CoreMatrix4f {
            t02 * (t10 * t21 - t11 * t20);
   }
 
+  /**
+	 * Equals.
+	 *
+	 * @param a the a
+	 * @param b the b
+	 * @return true, if successful
+	 */
   private boolean equals(final float a, final float b) {
     return Math.abs(a - b) < 0.00000001f;
   }

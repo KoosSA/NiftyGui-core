@@ -8,46 +8,86 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.SizeValue;
 
 /**
+ * The Class Falloff.
+ *
  * @author void
  */
 public class Falloff {
+  
+  /** The Constant HOVER_FALLOFF_TYPE. */
   @Nonnull
   public static final String HOVER_FALLOFF_TYPE = "hoverFalloffType";
+  
+  /** The Constant HOVER_FALLOFF_CONSTRAINT. */
   @Nonnull
   public static final String HOVER_FALLOFF_CONSTRAINT = "hoverFalloffConstraint";
+  
+  /** The Constant HOVER_WIDTH. */
   @Nonnull
   public static final String HOVER_WIDTH = "hoverWidth";
+  
+  /** The Constant HOVER_HEIGHT. */
   @Nonnull
   public static final String HOVER_HEIGHT = "hoverHeight";
 
   /**
-   * @author void
-   */
+	 * The Enum HoverFalloffType.
+	 *
+	 * @author void
+	 */
   public enum HoverFalloffType {
-    none, // default
+    
+    /** The none. */
+    none, 
+ /** The linear. */
+ // default
     linear
   }
 
   /**
-   * @author void
-   */
+	 * The Enum HoverFalloffConstraint.
+	 *
+	 * @author void
+	 */
   public enum HoverFalloffConstraint {
-    none, // default
+    
+    /** The none. */
+    none, 
+ /** The vertical. */
+ // default
     vertical,
+    
+    /** The horizontal. */
     horizontal,
+    
+    /** The both. */
     both
   }
 
+  /** The falloff constraint. */
   @Nonnull
   private final HoverFalloffConstraint falloffConstraint;
+  
+  /** The falloff type. */
   @Nonnull
   private final HoverFalloffType falloffType;
+  
+  /** The hover width. */
   @Nonnull
   private final SizeValue hoverWidth;
+  
+  /** The hover height. */
   @Nonnull
   private final SizeValue hoverHeight;
+  
+  /** The falloff value. */
   private float falloffValue;
 
+  /**
+	 * Instantiates a new falloff.
+	 *
+	 * @param properties the properties
+	 */
   public Falloff(@Nonnull final Properties properties) {
     String falloffTypeString = properties.getProperty(Falloff.HOVER_FALLOFF_TYPE);
     if (falloffTypeString != null) {
@@ -67,9 +107,22 @@ public class Falloff {
     hoverHeight = new SizeValue(properties.getProperty(Falloff.HOVER_HEIGHT));
   }
 
+  /**
+	 * Apply properties.
+	 *
+	 * @param properties the properties
+	 */
   public void applyProperties(final Properties properties) {
   }
 
+  /**
+	 * Checks if is inside.
+	 *
+	 * @param element the element
+	 * @param x       the x
+	 * @param y       the y
+	 * @return true, if is inside
+	 */
   public final boolean isInside(@Nonnull final Element element, final int x, final int y) {
     int centerX = element.getX() + element.getWidth() / 2;
     int centerY = element.getY() + element.getHeight() / 2;
@@ -83,14 +136,33 @@ public class Falloff {
         y <= (centerY + verticalHover / 2);
   }
 
+  /**
+	 * Gets the vertical hover.
+	 *
+	 * @param element the element
+	 * @return the vertical hover
+	 */
   private int getVerticalHover(@Nonnull Element element) {
     return hoverHeight.hasValue() ? hoverHeight.getValueAsInt(element.getHeight()) : element.getHeight();
   }
 
+  /**
+	 * Gets the horizontal hover.
+	 *
+	 * @param element the element
+	 * @return the horizontal hover
+	 */
   private int getHorizontalHover(@Nonnull Element element) {
     return hoverWidth.hasValue() ? hoverWidth.getValueAsInt(element.getWidth()) : element.getWidth();
   }
 
+  /**
+	 * Update falloff value.
+	 *
+	 * @param element the element
+	 * @param mouseX  the mouse X
+	 * @param mouseY  the mouse Y
+	 */
   public void updateFalloffValue(@Nonnull final Element element, final int mouseX, final int mouseY) {
     if (falloffConstraint == HoverFalloffConstraint.none || falloffType == HoverFalloffType.none) {
       falloffValue = 1.0f;
@@ -146,10 +218,20 @@ public class Falloff {
     falloffValue = Math.abs(1.0f - d / falloff);
   }
 
+  /**
+	 * Gets the falloff value.
+	 *
+	 * @return the falloff value
+	 */
   public float getFalloffValue() {
     return falloffValue;
   }
 
+  /**
+	 * Gets the falloff constraint.
+	 *
+	 * @return the falloff constraint
+	 */
   @Nonnull
   public HoverFalloffConstraint getFalloffConstraint() {
     return falloffConstraint;

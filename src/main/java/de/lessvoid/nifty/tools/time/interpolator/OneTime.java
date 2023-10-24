@@ -13,16 +13,31 @@ public class OneTime implements Interpolator {
    */
   private boolean hasRun;
 
+  /**
+	 * Initialize.
+	 *
+	 * @param parameter the parameter
+	 */
   @Override
   public final void initialize(@Nonnull final Properties parameter) {
     hasRun = false;
   }
 
+  /**
+	 * Start.
+	 */
   @Override
   public void start() {
     hasRun = false;
   }
 
+  /**
+	 * Gets the value.
+	 *
+	 * @param lengthParam the length param
+	 * @param timePassed  the time passed
+	 * @return the value
+	 */
   @Override
   public final float getValue(final long lengthParam, final long timePassed) {
     if (!hasRun) {

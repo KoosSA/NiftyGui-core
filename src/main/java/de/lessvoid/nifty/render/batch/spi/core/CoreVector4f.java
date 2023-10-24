@@ -13,6 +13,8 @@ import javax.annotation.Nullable;
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
 public class CoreVector4f {
+  
+  /** The w. */
   public float x, y, z, w;
 
   /**
@@ -26,62 +28,131 @@ public class CoreVector4f {
   }
 
   /**
-   * Constructs a new vector populated with the values of the specified source matrix.
-   */
+	 * Constructs a new vector populated with the values of the specified source
+	 * matrix.
+	 *
+	 * @param src the src
+	 */
   public CoreVector4f(@Nonnull CoreVector4f src) {
     set(src);
   }
 
   /**
-   * Constructs a new vector populated with the specified values.
-   */
+	 * Constructs a new vector populated with the specified values.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @param z the z
+	 * @param w the w
+	 */
   public CoreVector4f(float x, float y, float z, float w) {
     set(x, y, z, w);
   }
 
+  /**
+	 * Gets the x.
+	 *
+	 * @return the x
+	 */
   public float getX() {
     return x;
   }
 
+  /**
+	 * Gets the y.
+	 *
+	 * @return the y
+	 */
   public float getY() {
     return y;
   }
 
+  /**
+	 * Gets the z.
+	 *
+	 * @return the z
+	 */
   public float getZ() {
     return z;
   }
 
+  /**
+	 * Gets the w.
+	 *
+	 * @return the w
+	 */
   public float getW() {
     return w;
   }
 
+  /**
+	 * Sets the x.
+	 *
+	 * @param x the new x
+	 */
   public void setX(final float x) {
     this.x = x;
   }
 
+  /**
+	 * Sets the y.
+	 *
+	 * @param y the new y
+	 */
   public void setY(final float y) {
     this.y = y;
   }
 
+  /**
+	 * Sets the z.
+	 *
+	 * @param z the new z
+	 */
   public void setZ(final float z) {
     this.z = z;
   }
 
+  /**
+	 * Sets the w.
+	 *
+	 * @param w the new w
+	 */
   public void setW(final float w) {
     this.w = w;
   }
 
+  /**
+	 * Sets the.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 */
   public void set(final float x, final float y) {
     this.x = x;
     this.y = y;
   }
 
+  /**
+	 * Sets the.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @param z the z
+	 */
   public void set(final float x, final float y, final float z) {
     this.x = x;
     this.y = y;
     this.z = z;
   }
 
+  /**
+	 * Sets the.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @param z the z
+	 * @param w the w
+	 */
   public void set(final float x, final float y, final float z, final float w) {
     this.x = x;
     this.y = y;
@@ -90,10 +161,11 @@ public class CoreVector4f {
   }
 
   /**
-   * Populates this vector with the values from the specified source vector.
-   *
-   * @return This vector.
-   */
+	 * Populates this vector with the values from the specified source vector.
+	 *
+	 * @param src the src
+	 * @return This vector.
+	 */
   @Nonnull
   public CoreVector4f set(@Nonnull final CoreVector4f src) {
     x = src.getX();
@@ -105,24 +177,32 @@ public class CoreVector4f {
   }
 
   /**
-   * Calculates and returns the length squared of this vector.
-   */
+	 * Calculates and returns the length squared of this vector.
+	 *
+	 * @return the float
+	 */
   public float lengthSquared() {
     return x * x + y * y + z * z + w * w;
   }
 
   /**
-   * Calculates and returns the length of this vector.
-   */
+	 * Calculates and returns the length of this vector.
+	 *
+	 * @return the float
+	 */
   public float length() {
     return (float) Math.sqrt(lengthSquared());
   }
 
   /**
-   * Translate this vector by the specified x, y, z, & w values.
-   *
-   * @return This vector.
-   */
+	 * Translate this vector by the specified x, y, z, & w values.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @param z the z
+	 * @param w the w
+	 * @return This vector.
+	 */
   @Nonnull
   public CoreVector4f translate(final float x, final float y, final float z, final float w) {
     this.x += x;
@@ -181,10 +261,10 @@ public class CoreVector4f {
   }
 
   /**
-   * Negates this vector
-   *
-   * @return This vector.
-   */
+	 * Negates this vector.
+	 *
+	 * @return This vector.
+	 */
   @Nonnull
   public CoreVector4f negate() {
     x = -x;
@@ -270,10 +350,11 @@ public class CoreVector4f {
   }
 
   /**
-   * Populates this vector from the specified {@link java.nio.FloatBuffer}.
-   *
-   * @return This vector.
-   */
+	 * Populates this vector from the specified {@link java.nio.FloatBuffer}.
+	 *
+	 * @param buffer the buffer
+	 * @return This vector.
+	 */
   @Nonnull
   public CoreVector4f load(@Nonnull final FloatBuffer buffer) {
     x = buffer.get();
@@ -285,10 +366,11 @@ public class CoreVector4f {
   }
 
   /**
-   * Scales this vector by the specified scale.
-   *
-   * @return This vector.
-   */
+	 * Scales this vector by the specified scale.
+	 *
+	 * @param scale the scale
+	 * @return This vector.
+	 */
   @Nonnull
   public CoreVector4f scale(final float scale) {
     x *= scale;
@@ -300,10 +382,12 @@ public class CoreVector4f {
   }
 
   /**
-   * Stores the x, y, z, & w values of this vector in the specified {@link java.nio.FloatBuffer}.
-   *
-   * @return This vector.
-   */
+	 * Stores the x, y, z, & w values of this vector in the specified
+	 * {@link java.nio.FloatBuffer}.
+	 *
+	 * @param buffer the buffer
+	 * @return This vector.
+	 */
   @Nonnull
   public CoreVector4f store(@Nonnull final FloatBuffer buffer) {
     buffer.put(x);
@@ -314,6 +398,11 @@ public class CoreVector4f {
     return this;
   }
 
+  /**
+	 * To string.
+	 *
+	 * @return the string
+	 */
   @Override
   @Nonnull
   public String toString() {

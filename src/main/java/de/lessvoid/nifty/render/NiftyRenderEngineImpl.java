@@ -24,6 +24,8 @@ import de.lessvoid.nifty.tools.Color;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public class NiftyRenderEngineImpl implements NiftyRenderEngine {
+  
+  /** The Constant log. */
   @Nonnull
   private static final Logger log = Logger.getLogger(NiftyRenderEngineImpl.class.getName());
 
@@ -37,19 +39,33 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    * Display width and height. This is always the base resolution (when scaling is enabled).
    */
   private int displayWidth;
+  
+  /** The display height. */
   private int displayHeight;
 
   /**
    * This is always the native display resolution.
    */
   private int nativeDisplayWidth;
+  
+  /** The native display height. */
   private int nativeDisplayHeight;
+  
+  /** The auto scaling. */
   private boolean autoScaling = false;
+  
+  /** The auto scaling scale X. */
   @Nullable
   private Float autoScalingScaleX = null;
+  
+  /** The auto scaling scale Y. */
   @Nullable
   private Float autoScalingScaleY = null;
+  
+  /** The auto scaling offset X. */
   private float autoScalingOffsetX = 0;
+  
+  /** The auto scaling offset Y. */
   private float autoScalingOffsetY = 0;
 
   /**
@@ -115,18 +131,30 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
    */
   @Nonnull
   private final Deque<SavedRenderState> stack = new ArrayDeque<SavedRenderState>(20);
+  
+  /** The white color. */
   @Nonnull
   private final Color whiteColor = new Color("#ffff");
 
+  /** The clip enabled. */
   private boolean clipEnabled;
+  
+  /** The clip. */
   @Nonnull
   private final Clip clip = new Clip(0, 0, 0, 0);
+  
+  /** The absolute clip. */
   private final Clip absoluteClip = new Clip(0, 0, 0, 0);
+  
+  /** The blend mode. */
   @Nonnull
   private BlendMode blendMode = BlendMode.BLEND;
+  
+  /** The image manager. */
   @Nonnull
   private final NiftyImageManager imageManager;
 
+  /** The absolute clip enabled. */
   private boolean absoluteClipEnabled;
 
   /**
@@ -147,32 +175,59 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     absoluteClip.y1 = displayHeight;
   }
 
+  /**
+	 * Gets the width.
+	 *
+	 * @return the width
+	 */
   @Override
   public int getWidth() {
     return displayWidth;
   }
 
+  /**
+	 * Gets the height.
+	 *
+	 * @return the height
+	 */
   @Override
   public int getHeight() {
     return displayHeight;
   }
 
+  /**
+	 * Begin frame.
+	 */
   @Override
   public void beginFrame() {
     renderDevice.beginFrame();
     colorChanged = false;
   }
 
+  /**
+	 * End frame.
+	 */
   @Override
   public void endFrame() {
     renderDevice.endFrame();
   }
 
+  /**
+	 * Clear.
+	 */
   @Override
   public void clear() {
     renderDevice.clear();
   }
 
+  /**
+	 * Creates the image.
+	 *
+	 * @param screen       the screen
+	 * @param filename     the filename
+	 * @param filterLinear the filter linear
+	 * @return the nifty image
+	 */
   @Nullable
   @Override
   public NiftyImage createImage(
@@ -186,6 +241,12 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     return new NiftyImage(this, image);
   }
 
+  /**
+	 * Creates the font.
+	 *
+	 * @param filename the filename
+	 * @return the render font
+	 */
   @Override
   @Nullable
   public RenderFont createFont(@Nonnull final String filename) {
@@ -200,6 +261,12 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     }
   }
 
+  /**
+	 * Gets the fontname.
+	 *
+	 * @param font the font
+	 * @return the fontname
+	 */
   @Nonnull
   @Override
   public String getFontname(@Nonnull final RenderFont font) {
@@ -212,11 +279,31 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
         " engine?");
   }
 
+  /**
+	 * Render quad.
+	 *
+	 * @param x      the x
+	 * @param y      the y
+	 * @param width  the width
+	 * @param height the height
+	 */
   @Override
   public void renderQuad(final int x, final int y, final int width, final int height) {
     renderDevice.renderQuad(x + getX(), y + getY(), width, height, color);
   }
 
+  /**
+	 * Render quad.
+	 *
+	 * @param x           the x
+	 * @param y           the y
+	 * @param width       the width
+	 * @param height      the height
+	 * @param topLeft     the top left
+	 * @param topRight    the top right
+	 * @param bottomRight the bottom right
+	 * @param bottomLeft  the bottom left
+	 */
   @Override
   public void renderQuad(
       final int x,
@@ -417,6 +504,11 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     return this.font;
   }
 
+  /**
+	 * Sets the color.
+	 *
+	 * @param colorParam the new color
+	 */
   @Override
   public void setColor(@Nonnull final Color colorParam) {
     color.setRed(colorParam.getRed());
@@ -466,23 +558,48 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     return colorChanged;
   }
 
+  /**
+	 * Checks if is color alpha changed.
+	 *
+	 * @return true, if is color alpha changed
+	 */
   @Override
   public boolean isColorAlphaChanged() {
     return colorAlphaChanged;
   }
 
+  /**
+	 * Move to.
+	 *
+	 * @param xParam the x param
+	 * @param yParam the y param
+	 */
   @Override
   public void moveTo(final float xParam, final float yParam) {
     this.currentX = xParam;
     this.currentY = yParam;
   }
 
+  /**
+	 * Move to relative.
+	 *
+	 * @param xParam the x param
+	 * @param yParam the y param
+	 */
   @Override
   public void moveToRelative(final float xParam, final float yParam) {
     currentX = currentX + xParam;
     currentY = currentY + yParam;
   }
 
+  /**
+	 * Sets the absolute clip.
+	 *
+	 * @param x0 the x 0
+	 * @param y0 the y 0
+	 * @param x1 the x 1
+	 * @param y1 the y 1
+	 */
   @Override 
   public void setAbsoluteClip(int x0, int y0, int x1, int y1) {
     absoluteClipEnabled = true;
@@ -492,6 +609,9 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     absoluteClip.y1 = y1;
   }
 
+  /**
+	 * Apply absolute clip.
+	 */
   @Override
   public void applyAbsoluteClip() {
     if (absoluteClipEnabled) {
@@ -499,11 +619,22 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     }
   }
 
+  /**
+	 * Disable absolute clip.
+	 */
   @Override
   public void disableAbsoluteClip() {
     absoluteClipEnabled = false;
   }
 
+  /**
+	 * Enable clip.
+	 *
+	 * @param cx0 the cx 0
+	 * @param cy0 the cy 0
+	 * @param cx1 the cx 1
+	 * @param cy1 the cy 1
+	 */
   @Override
   public void enableClip(final int cx0, final int cy0, final int cx1, final int cy1) {
     // Issue #138:
@@ -538,11 +669,23 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     updateClip(true, x0, y0, x1, y1);
   }
 
+  /**
+	 * Disable clip.
+	 */
   @Override
   public void disableClip() {
     updateClip(false, 0, 0, 0, 0);
   }
 
+  /**
+	 * Update clip.
+	 *
+	 * @param enabled the enabled
+	 * @param x0      the x 0
+	 * @param y0      the y 0
+	 * @param x1      the x 1
+	 * @param y1      the y 1
+	 */
   void updateClip(final boolean enabled, final int x0, final int y0, final int x1, final int y1) {
     clipEnabled = enabled;
     clip.init(x0, y0, x1, y1);
@@ -553,23 +696,42 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     }
   }
 
+  /**
+	 * Sets the render text size.
+	 *
+	 * @param size the new render text size
+	 */
   @Override
   public void setRenderTextSize(final float size) {
     this.textScale = size;
   }
 
+  /**
+	 * Sets the image scale.
+	 *
+	 * @param scale the new image scale
+	 */
   @Override
   public void setImageScale(final float scale) {
     this.imageScale = scale;
   }
 
 
+  /**
+	 * Sets the global position.
+	 *
+	 * @param xPos the x pos
+	 * @param yPos the y pos
+	 */
   @Override
   public void setGlobalPosition(final float xPos, final float yPos) {
     globalPosX = xPos;
     globalPosY = yPos;
   }
 
+  /**
+	 * Display resolution changed.
+	 */
   @Override
   public void displayResolutionChanged() {
     if (!autoScaling) {
@@ -609,6 +771,9 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     return !(selectionStart == -1 && selectionEnd == -1);
   }
 
+  /**
+	 * Save states.
+	 */
   @Override
   public void saveStates() {
     SavedRenderState savedRenderState = new SavedRenderState();
@@ -616,63 +781,117 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     stack.push(savedRenderState);
   }
 
+  /**
+	 * Restore states.
+	 */
   @Override
   public void restoreStates() {
     SavedRenderState restored = stack.pop();
     restored.restore();
   }
 
+  /**
+	 * Sets the blend mode.
+	 *
+	 * @param blendModeParam the new blend mode
+	 */
   @Override
   public void setBlendMode(@Nonnull final BlendMode blendModeParam) {
     blendMode = blendModeParam;
     renderDevice.setBlendMode(blendModeParam);
   }
 
+  /**
+	 * Gets the render device.
+	 *
+	 * @return the render device
+	 */
   @Override
   @Nonnull
   public RenderDevice getRenderDevice() {
     return renderDevice;
   }
 
+  /**
+	 * Dispose image.
+	 *
+	 * @param image the image
+	 */
   @Override
   public void disposeImage(@Nonnull final RenderImage image) {
     imageManager.unregisterImage(image);
   }
 
+  /**
+	 * Reload.
+	 *
+	 * @param image the image
+	 * @return the render image
+	 */
   @Override
   @Nonnull
   public RenderImage reload(@Nonnull final RenderImage image) {
     return imageManager.reload(image);
   }
 
+  /**
+	 * The Class SavedRenderState.
+	 */
   private class SavedRenderState {
+    
+    /** The x. */
     private float x;
+    
+    /** The y. */
     private float y;
 
+    /** The color R. */
     private float colorR;
+    
+    /** The color G. */
     private float colorG;
+    
+    /** The color B. */
     private float colorB;
+    
+    /** The color changed. */
     private boolean colorChanged;
 
+    /** The color alpha. */
     private float colorAlpha;
+    
+    /** The color alpha changed. */
     private boolean colorAlphaChanged;
 
+    /** The font. */
     @Nullable
     private RenderFont font;
 
+    /** The text size. */
     private float textSize;
 
+    /** The image scale. */
     private float imageScale;
 
+    /** The clip enabled. */
     private boolean clipEnabled;
+    
+    /** The clip. */
     @Nonnull
     private final Clip clip = new Clip(0, 0, 0, 0);
 
+    /** The blend mode. */
     private BlendMode blendMode;
 
+    /**
+	 * Instantiates a new saved render state.
+	 */
     public SavedRenderState() {
     }
 
+    /**
+	 * Save.
+	 */
     public void save() {
       savePosition();
       saveColor();
@@ -684,6 +903,9 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
       saveBlendMode();
     }
 
+    /**
+	 * Restore.
+	 */
     public void restore() {
       restorePosition();
       restoreColor();
@@ -695,33 +917,54 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
       restoreBlend();
     }
 
+    /**
+	 * Save blend mode.
+	 */
     private void saveBlendMode() {
       blendMode = NiftyRenderEngineImpl.this.blendMode;
     }
 
+    /**
+	 * Save clip enabled.
+	 */
     private void saveClipEnabled() {
       clipEnabled = NiftyRenderEngineImpl.this.clipEnabled;
       clip.init(NiftyRenderEngineImpl.this.clip.x0, NiftyRenderEngineImpl.this.clip.y0,
           NiftyRenderEngineImpl.this.clip.x1, NiftyRenderEngineImpl.this.clip.y1);
     }
 
+    /**
+	 * Save font.
+	 */
     private void saveFont() {
       font = NiftyRenderEngineImpl.this.font;
     }
 
+    /**
+	 * Save image size.
+	 */
     private void saveImageSize() {
       imageScale = NiftyRenderEngineImpl.this.imageScale;
     }
 
+    /**
+	 * Save text size.
+	 */
     private void saveTextSize() {
       textSize = NiftyRenderEngineImpl.this.textScale;
     }
 
+    /**
+	 * Save color alpha.
+	 */
     private void saveColorAlpha() {
       colorAlpha = NiftyRenderEngineImpl.this.color.getAlpha();
       colorAlphaChanged = NiftyRenderEngineImpl.this.colorAlphaChanged;
     }
 
+    /**
+	 * Save color.
+	 */
     private void saveColor() {
       colorR = NiftyRenderEngineImpl.this.color.getRed();
       colorG = NiftyRenderEngineImpl.this.color.getGreen();
@@ -729,36 +972,60 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
       colorChanged = NiftyRenderEngineImpl.this.colorChanged;
     }
 
+    /**
+	 * Save position.
+	 */
     private void savePosition() {
       x = NiftyRenderEngineImpl.this.currentX;
       y = NiftyRenderEngineImpl.this.currentY;
     }
 
+    /**
+	 * Restore blend.
+	 */
     private void restoreBlend() {
       NiftyRenderEngineImpl.this.setBlendMode(blendMode);
     }
 
+    /**
+	 * Restore clip.
+	 */
     private void restoreClip() {
       NiftyRenderEngineImpl.this.updateClip(clipEnabled, clip.x0, clip.y0, clip.x1, clip.y1);
     }
 
+    /**
+	 * Restore image scale.
+	 */
     private void restoreImageScale() {
       NiftyRenderEngineImpl.this.imageScale = this.imageScale;
     }
 
+    /**
+	 * Restore text size.
+	 */
     private void restoreTextSize() {
       NiftyRenderEngineImpl.this.textScale = this.textSize;
     }
 
+    /**
+	 * Restore font.
+	 */
     private void restoreFont() {
       NiftyRenderEngineImpl.this.font = font;
     }
 
+    /**
+	 * Restore alpha.
+	 */
     private void restoreAlpha() {
       NiftyRenderEngineImpl.this.color.setAlpha(colorAlpha);
       NiftyRenderEngineImpl.this.colorAlphaChanged = colorAlphaChanged;
     }
 
+    /**
+	 * Restore color.
+	 */
     private void restoreColor() {
       NiftyRenderEngineImpl.this.color.setRed(colorR);
       NiftyRenderEngineImpl.this.color.setGreen(colorG);
@@ -766,22 +1033,52 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
       NiftyRenderEngineImpl.this.colorChanged = colorChanged;
     }
 
+    /**
+	 * Restore position.
+	 */
     private void restorePosition() {
       NiftyRenderEngineImpl.this.currentX = this.x;
       NiftyRenderEngineImpl.this.currentY = this.y;
     }
   }
 
+  /**
+	 * The Class Clip.
+	 */
   public class Clip {
+    
+    /** The x 0. */
     private int x0;
+    
+    /** The y 0. */
     private int y0;
+    
+    /** The x 1. */
     private int x1;
+    
+    /** The y 1. */
     private int y1;
 
+    /**
+	 * Instantiates a new clip.
+	 *
+	 * @param x0 the x 0
+	 * @param y0 the y 0
+	 * @param x1 the x 1
+	 * @param y1 the y 1
+	 */
     public Clip(final int x0, final int y0, final int x1, final int y1) {
       init(x0, y0, x1, y1);
     }
 
+    /**
+	 * Inits the.
+	 *
+	 * @param x0 the x 0
+	 * @param y0 the y 0
+	 * @param x1 the x 1
+	 * @param y1 the y 1
+	 */
     public void init(final int x0, final int y0, final int x1, final int y1) {
       this.x0 = x0;
       this.y0 = y0;
@@ -789,61 +1086,127 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
       this.y1 = y1;
     }
 
+    /**
+	 * Apply.
+	 */
     public void apply() {
       renderDevice.enableClip(x0, y0, x1, y1);
     }
   }
 
+  /**
+	 * Gets the native width.
+	 *
+	 * @return the native width
+	 */
   @Override
   public int getNativeWidth() {
     return nativeDisplayWidth;
   }
 
+  /**
+	 * Gets the native height.
+	 *
+	 * @return the native height
+	 */
   @Override
   public int getNativeHeight() {
     return nativeDisplayHeight;
   }
 
+  /**
+	 * Convert to native X.
+	 *
+	 * @param x the x
+	 * @return the int
+	 */
   @Override
   public int convertToNativeX(final int x) {
     return (int) Math.floor(x * getScaleX() + autoScalingOffsetX);
   }
 
+  /**
+	 * Convert to native Y.
+	 *
+	 * @param y the y
+	 * @return the int
+	 */
   @Override
   public int convertToNativeY(final int y) {
     return (int) Math.floor(y * getScaleY() + autoScalingOffsetY);
   }
 
+  /**
+	 * Convert to native width.
+	 *
+	 * @param x the x
+	 * @return the int
+	 */
   @Override
   public int convertToNativeWidth(final int x) {
     return (int) Math.ceil(x * getScaleX());
   }
 
+  /**
+	 * Convert to native height.
+	 *
+	 * @param y the y
+	 * @return the int
+	 */
   @Override
   public int convertToNativeHeight(final int y) {
     return (int) Math.ceil(y * getScaleY());
   }
 
+  /**
+	 * Convert from native X.
+	 *
+	 * @param x the x
+	 * @return the int
+	 */
   @Override
   public int convertFromNativeX(final int x) {
     return (int) Math.ceil((x - autoScalingOffsetX) * (1.0f / getScaleX()));
   }
 
+  /**
+	 * Convert from native Y.
+	 *
+	 * @param y the y
+	 * @return the int
+	 */
   @Override
   public int convertFromNativeY(final int y) {
     return (int) Math.ceil((y - autoScalingOffsetY) * (1.0f / getScaleY()));
   }
 
+  /**
+	 * Convert to native text size X.
+	 *
+	 * @param size the size
+	 * @return the float
+	 */
   @Override
   public float convertToNativeTextSizeX(final float size) {
     return size * getScaleX();
   }
 
+  /**
+	 * Convert to native text size Y.
+	 *
+	 * @param size the size
+	 * @return the float
+	 */
   @Override
   public float convertToNativeTextSizeY(final float size) {
     return size * getScaleY();
   }
 
+  /**
+	 * Gets the scale X.
+	 *
+	 * @return the scale X
+	 */
   private float getScaleX() {
     if (autoScalingScaleX != null) {
       return autoScalingScaleX;
@@ -851,6 +1214,11 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     return (float) getNativeWidth() / getWidth();
   }
 
+  /**
+	 * Gets the scale Y.
+	 *
+	 * @return the scale Y
+	 */
   private float getScaleY() {
     if (autoScalingScaleY != null) {
       return autoScalingScaleY;
@@ -858,6 +1226,12 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     return (float) getNativeHeight() / getHeight();
   }
 
+  /**
+	 * Enable auto scaling.
+	 *
+	 * @param baseResolutionX the base resolution X
+	 * @param baseResolutionY the base resolution Y
+	 */
   @Override
   public void enableAutoScaling(final int baseResolutionX, final int baseResolutionY) {
     autoScaling = true;
@@ -869,6 +1243,14 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     autoScalingOffsetY = 0;
   }
 
+  /**
+	 * Enable auto scaling.
+	 *
+	 * @param baseResolutionX the base resolution X
+	 * @param baseResolutionY the base resolution Y
+	 * @param scaleX          the scale X
+	 * @param scaleY          the scale Y
+	 */
   @Override
   public void enableAutoScaling(
       final int baseResolutionX,
@@ -884,6 +1266,9 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     autoScalingOffsetY = getNativeHeight() / 2 - getNativeHeight() / 2 * scaleY;
   }
 
+  /**
+	 * Disable auto scaling.
+	 */
   @Override
   public void disableAutoScaling() {
     autoScaling = false;
@@ -895,16 +1280,31 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     autoScalingOffsetY = 0;
   }
 
+  /**
+	 * Screen started.
+	 *
+	 * @param screen the screen
+	 */
   @Override
   public void screenStarted(@Nonnull final Screen screen) {
     imageManager.uploadScreenImages(screen);
   }
 
+  /**
+	 * Screen ended.
+	 *
+	 * @param screen the screen
+	 */
   @Override
   public void screenEnded(@Nonnull final Screen screen) {
     imageManager.unloadScreenImages(screen);
   }
 
+  /**
+	 * Screens clear.
+	 *
+	 * @param screens the screens
+	 */
   @Override
   public void screensClear(@Nonnull final Collection<Screen> screens) {
     for (Screen screen : screens) {
@@ -913,16 +1313,35 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     }
   }
 
+  /**
+	 * Screen added.
+	 *
+	 * @param screen the screen
+	 */
   @Override
   public void screenAdded(@Nonnull final Screen screen) {
     imageManager.screenAdded(screen);
   }
 
+  /**
+	 * Screen removed.
+	 *
+	 * @param screen the screen
+	 */
   @Override
   public void screenRemoved(@Nonnull final Screen screen) {
     imageManager.screenRemoved(screen);
   }
 
+  /**
+	 * Checks if is outside clipping rectangle.
+	 *
+	 * @param x0 the x 0
+	 * @param y0 the y 0
+	 * @param x1 the x 1
+	 * @param y1 the y 1
+	 * @return true, if is outside clipping rectangle
+	 */
   private boolean isOutsideClippingRectangle(final int x0, final int y0, final int x1, final int y1) {
     if (x0 > clip.x1) {
       return true;
@@ -939,6 +1358,15 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
     return false;
   }
 
+  /**
+	 * Checks if is inside clipping rectangle.
+	 *
+	 * @param x0 the x 0
+	 * @param y0 the y 0
+	 * @param x1 the x 1
+	 * @param y1 the y 1
+	 * @return true, if is inside clipping rectangle
+	 */
   private boolean isInsideClippingRectangle(final int x0, final int y0, final int x1, final int y1) {
     if (x0 >= clip.x0 &&
         x0 <= clip.x1 &&

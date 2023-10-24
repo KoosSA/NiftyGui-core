@@ -23,15 +23,33 @@ import de.lessvoid.nifty.tools.StopWatch;
 import de.lessvoid.nifty.tools.StringHelper;
 import de.lessvoid.xml.tools.ClassHelper;
 
+/**
+ * The Class ScreenType.
+ */
 public class ScreenType extends XmlBaseType {
+  
+  /** The Constant log. */
   private static final Logger log = Logger.getLogger(ScreenType.class.getName());
+  
+  /** The layers. */
   @Nonnull
   private final Collection<LayerType> layers = new ArrayList<LayerType>();
 
+  /**
+	 * Adds the layer.
+	 *
+	 * @param layer the layer
+	 */
   public void addLayer(final LayerType layer) {
     layers.add(layer);
   }
 
+  /**
+	 * Output.
+	 *
+	 * @param offset the offset
+	 * @return the string
+	 */
   @Override
   @Nonnull
   public String output(final int offset) {
@@ -42,6 +60,13 @@ public class ScreenType extends XmlBaseType {
             + "\n" + CollectionLogger.out(offset + 1, layers, "layers");
   }
 
+  /**
+	 * Creates the.
+	 *
+	 * @param nifty        the nifty
+	 * @param niftyType    the nifty type
+	 * @param timeProvider the time provider
+	 */
   public void create(
       @Nonnull final Nifty nifty,
       @Nonnull final NiftyType niftyType,
@@ -116,6 +141,13 @@ public class ScreenType extends XmlBaseType {
     nifty.addScreen(id, screen);
   }
 
+  /**
+	 * Resolve screen controller.
+	 *
+	 * @param nifty      the nifty
+	 * @param controller the controller
+	 * @return the screen controller
+	 */
   @Nullable
   private ScreenController resolveScreenController(@Nonnull final Nifty nifty, @Nullable final String controller) {
     ScreenController screenController = null;

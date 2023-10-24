@@ -11,16 +11,29 @@ import de.lessvoid.nifty.screen.Screen;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public class ElementRemoveAction implements Action {
+  
+  /** The screen. */
   @Nonnull
   private final Screen screen;
+  
+  /** The removed element. */
   @Nonnull
   private final Element removedElement;
 
+  /**
+	 * Instantiates a new element remove action.
+	 *
+	 * @param screen         the screen
+	 * @param removedElement the removed element
+	 */
   public ElementRemoveAction(@Nonnull final Screen screen, @Nonnull final Element removedElement) {
     this.screen = screen;
     this.removedElement = removedElement;
   }
 
+  /**
+	 * Perform.
+	 */
   @Override
   public void perform() {
     removedElement.removeFromFocusHandler();
@@ -41,6 +54,11 @@ public class ElementRemoveAction implements Action {
     }
   }
 
+  /**
+	 * Removes the single element.
+	 *
+	 * @param element the element
+	 */
   private void removeSingleElement(@Nonnull final Element element) {
     element.internalRemoveElementWithChildren();
   }

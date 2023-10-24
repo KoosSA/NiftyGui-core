@@ -20,15 +20,32 @@ import de.lessvoid.nifty.tools.SizeValue;
  * @author void
  */
 public class FadeMusic implements EffectImpl {
+  
+  /** The Constant log. */
   @Nonnull
   private static final Logger log = Logger.getLogger(FadeMusic.class.getName());
+  
+  /** The nifty. */
   @Nullable
   private Nifty nifty;
+  
+  /** The from volume. */
   private float fromVolume;
+  
+  /** The to volume. */
   private float toVolume;
+  
+  /** The music. */
   @Nullable
   private SoundHandle music;
 
+  /**
+	 * Activate.
+	 *
+	 * @param niftyParam the nifty param
+	 * @param element    the element
+	 * @param parameter  the parameter
+	 */
   @Override
   public void activate(
       @Nonnull final Nifty niftyParam,
@@ -44,6 +61,14 @@ public class FadeMusic implements EffectImpl {
     }
   }
 
+  /**
+	 * Execute.
+	 *
+	 * @param element        the element
+	 * @param normalizedTime the normalized time
+	 * @param falloff        the falloff
+	 * @param r              the r
+	 */
   @Override
   public void execute(
       @Nonnull final Element element,
@@ -61,6 +86,9 @@ public class FadeMusic implements EffectImpl {
     }
   }
 
+  /**
+	 * Deactivate.
+	 */
   @Override
   public void deactivate() {
   }

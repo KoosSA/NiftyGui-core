@@ -20,40 +20,87 @@ import java.util.Map;
  * anything else is used by reflection to avoid NoClassDefFound errors on class load.
  */
 public class Logger {
+   
+   /** The util logger. */
    private java.util.logging.Logger utilLogger;
+   
+   /** The commons logger. */
    private /*Untyped to avoid java.lang.NoClassDefFoundError
    org.apache.commons.logging.Log*/ Object commonsLogger;
+   
+   /** The method cache no params. */
    private Map<String, Method> METHOD_CACHE_NO_PARAMS;
+   
+   /** The method cache one param. */
    private Map<String, Method> METHOD_CACHE_ONE_PARAM;
+   
+   /** The method cache two params. */
    private Map<String, Method> METHOD_CACHE_TWO_PARAMS;
+   
+   /** The log factory class. */
    private static Class<?> logFactoryClass;
+   
+   /** The log class. */
    private static Class<?> logClass;
+   
+   /** The get log method. */
    private static Method getLogMethod;
+   
+   /** The Constant EMPTY_ARGS. */
    private static final Object[] EMPTY_ARGS = new Object[0];
+   
+   /** The Constant CLASS_ARGS_EMPTY. */
    private static final Class[] CLASS_ARGS_EMPTY = new Class[0];
+   
+   /** The Constant CLASS_ARGS_ONE. */
    private static final Class[] CLASS_ARGS_ONE = new Class[]{Object.class};
+   
+   /** The Constant CLASS_ARGS_TWO. */
    private static final Class[] CLASS_ARGS_TWO = new Class[]{Object.class, Throwable.class};
 
    /** Allows switching between Java and Commons logging.*/
    public static enum LoggerType {
+      
+      /** The java. */
       /*java.util.logging*/
       JAVA,
+      
+      /** The commons. */
       /*org.apache.commons.logging*/
       COMMONS
    }
 
    /** Standardized logging levels. */
    public static enum Level {
+      
+      /** The fatal. */
       FATAL,
+      
+      /** The error. */
       ERROR,
+      
+      /** The warn. */
       WARN,
+      
+      /** The info. */
       INFO,
+      
+      /** The debug. */
       DEBUG,
+      
+      /** The trace. */
       TRACE
    }
 
+   /** The logger type. */
    public static LoggerType LOGGER_TYPE= null;
 
+   /**
+	 * Gets the logger.
+	 *
+	 * @param name the name
+	 * @return the logger
+	 */
    public static Logger getLogger(String name) {
       if (LOGGER_TYPE == null) {
          LOGGER_TYPE = getLoggerType();
@@ -72,9 +119,10 @@ public class Logger {
    }
 
    /**
-    * This method should only be called once in a JVM run.
-    * @return
-    */
+	 * This method should only be called once in a JVM run.
+	 *
+	 * @return the logger type
+	 */
    private static LoggerType getLoggerType() {
       LoggerType result = null;
       //See if apache commons is available
@@ -88,10 +136,20 @@ public class Logger {
       return LoggerType.JAVA;
    }
 
+   /**
+	 * Instantiates a new logger.
+	 *
+	 * @param utilLogger the util logger
+	 */
    public Logger(java.util.logging.Logger utilLogger) {
       this.utilLogger = utilLogger;
    }
 
+   /**
+	 * Instantiates a new logger.
+	 *
+	 * @param commonsLogger the commons logger
+	 */
    public Logger(Object commonsLogger) {
       this.commonsLogger = commonsLogger;
    }
@@ -119,6 +177,12 @@ public class Logger {
       return false;
    }
 
+   /**
+	 * Gets the java level for.
+	 *
+	 * @param level the level
+	 * @return the java level for
+	 */
    private java.util.logging.Level getJavaLevelFor(Level level) {
       switch (level) {
          case FATAL: return java.util.logging.Level.SEVERE;
@@ -131,14 +195,32 @@ public class Logger {
       return null;
    }
 
+   /**
+	 * Debug.
+	 *
+	 * @param message the message
+	 */
    public void debug(String message) {
       log(Level.DEBUG, message);
    }
 
+   /**
+	 * Log.
+	 *
+	 * @param level   the level
+	 * @param message the message
+	 */
    public void log(Level level, String message) {
       log(level, message, null);
    }
 
+   /**
+	 * Log.
+	 *
+	 * @param level     the level
+	 * @param message   the message
+	 * @param throwable the throwable
+	 */
    public void log(Level level, String message, Throwable throwable) {
       if (!isLoggable(level)) {
          return;
@@ -173,6 +255,12 @@ public class Logger {
       }
    }
 
+   /**
+	 * Call commons logger.
+	 *
+	 * @param methodName the method name
+	 * @return the object
+	 */
    private Object callCommonsLogger(String methodName) {
       if (METHOD_CACHE_NO_PARAMS == null) {
          METHOD_CACHE_NO_PARAMS = new HashMap<String, Method>();
@@ -180,6 +268,13 @@ public class Logger {
       return callCommonsLogger(METHOD_CACHE_NO_PARAMS, methodName, CLASS_ARGS_EMPTY, EMPTY_ARGS);
    }
 
+   /**
+	 * Call commons logger.
+	 *
+	 * @param methodName the method name
+	 * @param message    the message
+	 * @return the object
+	 */
    private Object callCommonsLogger(String methodName, String message) {
       if (METHOD_CACHE_ONE_PARAM == null) {
          METHOD_CACHE_ONE_PARAM = new HashMap<String, Method>();
@@ -187,6 +282,14 @@ public class Logger {
       return callCommonsLogger(METHOD_CACHE_ONE_PARAM, methodName, CLASS_ARGS_ONE, new Object[]{message});
    }
 
+   /**
+	 * Call commons logger.
+	 *
+	 * @param methodName the method name
+	 * @param message    the message
+	 * @param throwable  the throwable
+	 * @return the object
+	 */
    private Object callCommonsLogger(String methodName, String message, Throwable throwable) {
       if (METHOD_CACHE_TWO_PARAMS == null) {
          METHOD_CACHE_TWO_PARAMS = new HashMap<String, Method>();
@@ -194,6 +297,15 @@ public class Logger {
       return callCommonsLogger(METHOD_CACHE_TWO_PARAMS, methodName, CLASS_ARGS_TWO, new Object[]{message, throwable});
    }
 
+   /**
+	 * Call commons logger.
+	 *
+	 * @param cache       the cache
+	 * @param methodName  the method name
+	 * @param classOfArgs the class of args
+	 * @param args        the args
+	 * @return the object
+	 */
    private Object callCommonsLogger(Map<String, Method> cache, String methodName, Class[] classOfArgs, Object[] args) {
       Method method = cache.get(methodName);
       if (method == null) {

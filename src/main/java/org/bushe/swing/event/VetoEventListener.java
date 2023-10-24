@@ -16,9 +16,11 @@
 package org.bushe.swing.event;
 
 /**
- * Interface for classes that can veto class-based event publication from the {@link EventService}.
+ * Interface for classes that can veto class-based event publication from the
+ * {@link EventService}.
  *
  * @author Michael Bushe michael@bushe.com
+ * @param <T> the generic type
  */
 public interface VetoEventListener<T> {
 

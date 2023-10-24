@@ -114,17 +114,24 @@ public class TextRenderer implements ElementRenderer, EventSubscriber<NiftyLocal
   @Nonnull
   private SizeValue textMinHeight = SizeValue.def();
 
+  /** The nifty. */
   @Nonnull
   private final Nifty nifty;
 
   // in case we use word wrapping and are changing the elements width/height constraints we'll
+  /** The is calculated line wrapping. */
   // remember the original values in here
   private boolean isCalculatedLineWrapping = false;
+  
+  /** The original constraint width. */
   @Nonnull
   private SizeValue originalConstraintWidth = SizeValue.def();
+  
+  /** The original constraint height. */
   @Nonnull
   private SizeValue originalConstraintHeight = SizeValue.def();
 
+  /** The has been layouted element. */
   /*
    * When the element this TextRenderer belongs to as been layouted at least once we remember the attached element
    * here so that we can later automatically relayout ourself correctly when someone changed this text.
@@ -132,11 +139,14 @@ public class TextRenderer implements ElementRenderer, EventSubscriber<NiftyLocal
   @Nullable
   private Element hasBeenLayoutedElement;
 
+  /** The original text before special values. */
   private String originalTextBeforeSpecialValues;
 
   /**
-   * default constructor.
-   */
+	 * default constructor.
+	 *
+	 * @param nifty the nifty
+	 */
   public TextRenderer(@Nonnull final Nifty nifty) {
     this.nifty = nifty;
     this.nifty.getEventService().subscribe(NiftyLocaleChangedEvent.class, this);
@@ -144,11 +154,12 @@ public class TextRenderer implements ElementRenderer, EventSubscriber<NiftyLocal
   }
 
   /**
-   * create new renderer with the given font and text.
-   *
-   * @param newFont the font to use
-   * @param newText the text to use
-   */
+	 * create new renderer with the given font and text.
+	 *
+	 * @param nifty   the nifty
+	 * @param newFont the font to use
+	 * @param newText the text to use
+	 */
   public TextRenderer(@Nonnull final Nifty nifty, @Nonnull final RenderFont newFont, @Nullable final String newText) {
     this.nifty = nifty;
     this.nifty.getEventService().subscribe(NiftyLocaleChangedEvent.class, this);
@@ -176,8 +187,11 @@ public class TextRenderer implements ElementRenderer, EventSubscriber<NiftyLocal
   }
 
   /**
-   * @param text the text that is supposed to be used
-   */
+	 * Inits the text.
+	 *
+	 * @param text               the text that is supposed to be used
+	 * @param changeExistingText the change existing text
+	 */
   private void initText(@Nullable final String text, final boolean changeExistingText) {
     this.originalTextBeforeSpecialValues = text;
 
@@ -218,6 +232,13 @@ public class TextRenderer implements ElementRenderer, EventSubscriber<NiftyLocal
     renderLines(w, r, textLines);
   }
 
+  /**
+	 * Render lines.
+	 *
+	 * @param w     the w
+	 * @param r     the r
+	 * @param lines the lines
+	 */
   private void renderLines(@Nonnull final Element w, @Nonnull final NiftyRenderEngine r, @Nonnull String... lines) {
     RenderFont font = ensureFont(r);
 
@@ -246,6 +267,13 @@ public class TextRenderer implements ElementRenderer, EventSubscriber<NiftyLocal
     restoreRenderEngine(r, stateSaved);
   }
 
+  /**
+	 * Prepare render engine.
+	 *
+	 * @param r    the r
+	 * @param font the font
+	 * @return true, if successful
+	 */
   private boolean prepareRenderEngine(@Nonnull final NiftyRenderEngine r, RenderFont font) {
     if (!r.isColorChanged()) {
       if (r.isColorAlphaChanged()) {
@@ -263,12 +291,24 @@ public class TextRenderer implements ElementRenderer, EventSubscriber<NiftyLocal
     return stateSaved;
   }
 
+  /**
+	 * Restore render engine.
+	 *
+	 * @param r          the r
+	 * @param stateSaved the state saved
+	 */
   private void restoreRenderEngine(@Nonnull final NiftyRenderEngine r, final boolean stateSaved) {
     if (stateSaved) {
       r.restoreStates();
     }
   }
 
+  /**
+	 * Ensure font.
+	 *
+	 * @param r the r
+	 * @return the render font
+	 */
   @Nullable
   private RenderFont ensureFont(@Nonnull final NiftyRenderEngine r) {
     if (this.font == null) {
@@ -463,6 +503,11 @@ public class TextRenderer implements ElementRenderer, EventSubscriber<NiftyLocal
     return originalText;
   }
 
+  /**
+	 * Gets the wrapped text.
+	 *
+	 * @return the wrapped text
+	 */
   @Nonnull
   public String getWrappedText() {
     StringBuilder result = new StringBuilder();
@@ -475,14 +520,32 @@ public class TextRenderer implements ElementRenderer, EventSubscriber<NiftyLocal
     return result.toString();
   }
 
+  /**
+	 * Sets the text line height.
+	 *
+	 * @param textLineHeight the new text line height
+	 */
   public void setTextLineHeight(@Nonnull final SizeValue textLineHeight) {
     this.textLineHeight = textLineHeight;
   }
 
+  /**
+	 * Sets the text min height.
+	 *
+	 * @param textMinHeight the new text min height
+	 */
   public void setTextMinHeight(@Nonnull final SizeValue textMinHeight) {
     this.textMinHeight = textMinHeight;
   }
 
+  /**
+	 * Wrap text.
+	 *
+	 * @param width     the width
+	 * @param r         the r
+	 * @param textLines the text lines
+	 * @return the string[]
+	 */
   @Nonnull
   private String[] wrapText(final int width, @Nonnull final NiftyRenderEngine r, @Nonnull final String... textLines) {
     RenderFont font = ensureFont(r);
@@ -501,6 +564,14 @@ public class TextRenderer implements ElementRenderer, EventSubscriber<NiftyLocal
     return lines.toArray(new String[lines.size()]);
   }
 
+  /**
+	 * Sets the width constraint.
+	 *
+	 * @param element                the element
+	 * @param elementConstraintWidth the element constraint width
+	 * @param parentWidth            the parent width
+	 * @param renderEngine           the render engine
+	 */
   public void setWidthConstraint(
       @Nonnull final Element element,
       @Nonnull final SizeValue elementConstraintWidth,
@@ -539,29 +610,59 @@ public class TextRenderer implements ElementRenderer, EventSubscriber<NiftyLocal
     element.setConstraintHeight(SizeValue.px(getTextHeight()));
   }
 
+  /**
+	 * Sets the line wrapping.
+	 *
+	 * @param lineWrapping the new line wrapping
+	 */
   public void setLineWrapping(final boolean lineWrapping) {
     this.lineWrapping = lineWrapping;
   }
 
+  /**
+	 * Checks if is line wrapping.
+	 *
+	 * @return true, if is line wrapping
+	 */
   public boolean isLineWrapping() {
     return lineWrapping;
   }
 
+  /**
+	 * Gets the text V align.
+	 *
+	 * @return the text V align
+	 */
   @Nonnull
   public VerticalAlign getTextVAlign() {
     return textVAlign;
   }
 
+  /**
+	 * Gets the text H align.
+	 *
+	 * @return the text H align
+	 */
   @Nonnull
   public HorizontalAlign getTextHAlign() {
     return textHAlign;
   }
 
+  /**
+	 * Gets the color.
+	 *
+	 * @return the color
+	 */
   @Nonnull
   public Color getColor() {
     return color;
   }
 
+  /**
+	 * Reset layout.
+	 *
+	 * @param element the element
+	 */
   public void resetLayout(@Nonnull final Element element) {
     if (isCalculatedLineWrapping) {
       isCalculatedLineWrapping = false;
@@ -571,11 +672,21 @@ public class TextRenderer implements ElementRenderer, EventSubscriber<NiftyLocal
     }
   }
 
+  /**
+	 * Gets the text selection color.
+	 *
+	 * @return the text selection color
+	 */
   @Nonnull
   public Color getTextSelectionColor() {
     return textSelectionColor;
   }
 
+  /**
+	 * On event.
+	 *
+	 * @param event the event
+	 */
   @Override
   public void onEvent(final NiftyLocaleChangedEvent event) {
     setText(originalTextBeforeSpecialValues);

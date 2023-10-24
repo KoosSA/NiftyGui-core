@@ -39,146 +39,258 @@ import org.bushe.swing.exception.SwingException;
 
 /**
  * A thread-safe EventService implementation.
- * <h2>Multithreading</h2> 
+ * <h2>Multithreading</h2>
  * <p/>
- * This implementation is <b>not Swing thread-safe</b>.  If publication occurs on a thread other than the Swing
- * EventDispatchThread, subscribers will receive the event on the calling thread, and not the EDT.  Swing components
- * should use the SwingEventService instead, which is the implementation used by the EventBus.
+ * This implementation is <b>not Swing thread-safe</b>. If publication occurs on
+ * a thread other than the Swing EventDispatchThread, subscribers will receive
+ * the event on the calling thread, and not the EDT. Swing components should use
+ * the SwingEventService instead, which is the implementation used by the
+ * EventBus.
  * <p/>
- * Two threads may be accessing the ThreadSafeEventService at the same time, one unsubscribing a
- * listener for topic "A" and the other publishing on topic "A".  If the unsubscribing thread gets the lock first,
- * then it is unsubscribed, end of story.  If the publisher gets the lock first, then a snapshot copy of the current
- * subscribers is made during the publication, the lock is released and the subscribers are called.  Between the time
- * the lock is released and the time that the listener is called, the unsubscribing thread can unsubscribe, resulting
- * in an unsubscribed object receiving notification of the event after it was unsubscribed (but just once).
+ * Two threads may be accessing the ThreadSafeEventService at the same time, one
+ * unsubscribing a listener for topic "A" and the other publishing on topic "A".
+ * If the unsubscribing thread gets the lock first, then it is unsubscribed, end
+ * of story. If the publisher gets the lock first, then a snapshot copy of the
+ * current subscribers is made during the publication, the lock is released and
+ * the subscribers are called. Between the time the lock is released and the
+ * time that the listener is called, the unsubscribing thread can unsubscribe,
+ * resulting in an unsubscribed object receiving notification of the event after
+ * it was unsubscribed (but just once).
  * <p/>
- * On event publication, subscribers are called in the order in which they subscribed.
+ * On event publication, subscribers are called in the order in which they
+ * subscribed.
  * <p/>
- * Events and/or topic data can be cached, but are not by default.  To cache events or topic data, call
- * {@link #setDefaultCacheSizePerClassOrTopic(int)}, {@link #setCacheSizeForEventClass(Class, int)}, or
- * {@link #setCacheSizeForTopic(String, int)}, {@link #setCacheSizeForTopic(Pattern, int)}.  Retrieve cached values
- * with {@link #getLastEvent(Class)}, {@link #getLastTopicData(String)}, {@link #getCachedEvents(Class)}, or
- * {@link #getCachedTopicData(String)}.  Using caching while subscribing
- * is most likely to make sense only if you subscribe and publish on the same thread (so caching is very useful for
- * Swing applications since both happen on the EDT in a single-threaded manner). In multithreaded applications, you
- * never know if your subscriber has handled an event while it was being subscribed (before the subscribe() method
- * returned) that is newer or older than the retrieved cached value (taken before or after subscribe() respectively).
+ * Events and/or topic data can be cached, but are not by default. To cache
+ * events or topic data, call {@link #setDefaultCacheSizePerClassOrTopic(int)},
+ * {@link #setCacheSizeForEventClass(Class, int)}, or
+ * {@link #setCacheSizeForTopic(String, int)},
+ * {@link #setCacheSizeForTopic(Pattern, int)}. Retrieve cached values with
+ * {@link #getLastEvent(Class)}, {@link #getLastTopicData(String)},
+ * {@link #getCachedEvents(Class)}, or {@link #getCachedTopicData(String)}.
+ * Using caching while subscribing is most likely to make sense only if you
+ * subscribe and publish on the same thread (so caching is very useful for Swing
+ * applications since both happen on the EDT in a single-threaded manner). In
+ * multithreaded applications, you never know if your subscriber has handled an
+ * event while it was being subscribed (before the subscribe() method returned)
+ * that is newer or older than the retrieved cached value (taken before or after
+ * subscribe() respectively).
  * <p/>
- * To deal with subscribers that take too long (a concern in Swing applications), the EventService can be made to issue
- * {@link SubscriberTimingEvent}s when subscribers exceed a certain time.  This does not interrupt subscriber processing
- * and is published after the subscriber finishes.  The service can log a warning for SubscriberTimingEvents, see the
- * constructor {@link ThreadSafeEventService (long, boolean)}.  The timing is checked for veto subscribers too.
+ * To deal with subscribers that take too long (a concern in Swing
+ * applications), the EventService can be made to issue
+ * {@link SubscriberTimingEvent}s when subscribers exceed a certain time. This
+ * does not interrupt subscriber processing and is published after the
+ * subscriber finishes. The service can log a warning for
+ * SubscriberTimingEvents, see the constructor {@link ThreadSafeEventService
+ * (long, boolean)}. The timing is checked for veto subscribers too.
  * <p/>
- * <h2>Logging</h2> 
- * <p/>                       
- * All logging goes through the {@link Logger}.  The Logger is configurable and supports multiple logging systems.
+ * <h2>Logging</h2>
  * <p/>
- * Exceptions are logged by default, override {@link #handleException(String,Object,String,Object,Throwable,
- * StackTraceElement[],String)} to handleException exceptions in another way.  Each call to a subscriber is wrapped in
- * a try block to ensure one listener does not interfere with another.
+ * All logging goes through the {@link Logger}. The Logger is configurable and
+ * supports multiple logging systems.
  * <p/>
- * <h2>Cleanup of Stale WeakReferences and Stale Annotation Proxies</h2> 
+ * Exceptions are logged by default, override
+ * {@link #handleException(String,Object,String,Object,Throwable, StackTraceElement[],String)}
+ * to handleException exceptions in another way. Each call to a subscriber is
+ * wrapped in a try block to ensure one listener does not interfere with
+ * another.
  * <p/>
- * The EventService may need to clean up stale WeakReferences and ProxySubscribers created for EventBus annotations.  (Aside: EventBus 
- * Annotations are handled by the creation of proxies to the annotated objects.  Since the annotations create weak references 
- * by default, annotation proxies must held strongly by the EventService, otherwise the proxy is garbage collected.)  When 
- * a WeakReference's referent or an ProxySubscriber's proxiedObject (the annotated object) is claimed by the garbage collector, 
- * the EventService still holds onto the actual WeakReference or ProxySubscriber subscribed to the EventService (which are pretty tiny).  
+ * <h2>Cleanup of Stale WeakReferences and Stale Annotation Proxies</h2>
  * <p/>
- * There are two ways that these stale WeakReferences and ProxySubscribers are cleaned up.  
+ * The EventService may need to clean up stale WeakReferences and
+ * ProxySubscribers created for EventBus annotations. (Aside: EventBus
+ * Annotations are handled by the creation of proxies to the annotated objects.
+ * Since the annotations create weak references by default, annotation proxies
+ * must held strongly by the EventService, otherwise the proxy is garbage
+ * collected.) When a WeakReference's referent or an ProxySubscriber's
+ * proxiedObject (the annotated object) is claimed by the garbage collector, the
+ * EventService still holds onto the actual WeakReference or ProxySubscriber
+ * subscribed to the EventService (which are pretty tiny).
+ * <p/>
+ * There are two ways that these stale WeakReferences and ProxySubscribers are
+ * cleaned up.
  * <ol>
- * <li>On every publish, subscribe and unsubscribe, every subscriber and veto subscriber to a class or topic is checked to see 
- * if it is a stale WeakReference or a stale ProxySubscriber (one whose getProxySubscriber() returns null).  If the subscriber 
- * is stale, it is unsubscribed from the EventService  immediately.  If it is a ProxySubscriber, it's  proxyUnsubscribed() 
- * method is called after it is unsubscribed.  (This isn't as expensive as it sounds, since checks to avoid double subscription is
+ * <li>On every publish, subscribe and unsubscribe, every subscriber and veto
+ * subscriber to a class or topic is checked to see if it is a stale
+ * WeakReference or a stale ProxySubscriber (one whose getProxySubscriber()
+ * returns null). If the subscriber is stale, it is unsubscribed from the
+ * EventService immediately. If it is a ProxySubscriber, it's
+ * proxyUnsubscribed() method is called after it is unsubscribed. (This isn't as
+ * expensive as it sounds, since checks to avoid double subscription is
  * necessary anyway).
- * <li>Another cleanup thread may get started to clean up remaining stale subscribers.  This cleanup thread only comes into
- * play for subscribers to topic or classes that haven't been used (published/subscribed/unsibscribed to).  A detailed description
- * of the cleanup thread follows.
+ * <li>Another cleanup thread may get started to clean up remaining stale
+ * subscribers. This cleanup thread only comes into play for subscribers to
+ * topic or classes that haven't been used (published/subscribed/unsibscribed
+ * to). A detailed description of the cleanup thread follows.
  * </ol>
- * <h3>The Cleanup Thread</h3>
- * If a topic or class is never published to again, WeakReferences and ProxySubscribers can be left behind if they 
- * are not cleaned up.  To prevent loitering stale subscribers, the ThreadSafeEventService may periodically run through 
- * all the EventSubscribers and VetoSubscribers for all topics and classes and clean up stale proxies.  Proxies for 
- * Annotations that have a ReferenceStrength.STRONG are never cleaned up in normal usage.   (By specifying 
- * ReferenceStrength.STRONG, the programmer is buying into unsubscribing annotated objects themselves.  There is 
- * one caveat: If getProxiedSubscriber() returns null, even for a ProxySubscriber with a STRONG reference strength, that proxy 
- * is cleaned up as it is assumed it is stale or just wrong.  This would not occur normally in EventBus usage, but only 
- * if someone is implementing their own custom ProxySubscriber and/or AnnotationProcessor.)
+ * <h3>The Cleanup Thread</h3> If a topic or class is never published to again,
+ * WeakReferences and ProxySubscribers can be left behind if they are not
+ * cleaned up. To prevent loitering stale subscribers, the
+ * ThreadSafeEventService may periodically run through all the EventSubscribers
+ * and VetoSubscribers for all topics and classes and clean up stale proxies.
+ * Proxies for Annotations that have a ReferenceStrength.STRONG are never
+ * cleaned up in normal usage. (By specifying ReferenceStrength.STRONG, the
+ * programmer is buying into unsubscribing annotated objects themselves. There
+ * is one caveat: If getProxiedSubscriber() returns null, even for a
+ * ProxySubscriber with a STRONG reference strength, that proxy is cleaned up as
+ * it is assumed it is stale or just wrong. This would not occur normally in
+ * EventBus usage, but only if someone is implementing their own custom
+ * ProxySubscriber and/or AnnotationProcessor.)
  * <p/>
- * Cleanup is pretty rare in general.  Not only are stale subscribers cleaned up with regular usage, stale 
- * subscribers on abandoned topics and classes do not take up a lot of memory, hence, they are allowed to build up to a certain degree.
- * Cleanup does not occur until the number of WeakReferences and SubscriptionsProxy's with WeakReference strength
- * subscribed to an EventService for all the EventService's subscriptions in total exceed the <tt>cleanupStartThreshhold</tt>, 
- * which is set to <tt>CLEANUP_START_THRESHOLD_DEFAULT</tt> (500) by default.  The default is overridable in the constructor 
- * or via #setCleanupStartThreshhold(Integer).  If set to null, cleanup will never start.  
+ * Cleanup is pretty rare in general. Not only are stale subscribers cleaned up
+ * with regular usage, stale subscribers on abandoned topics and classes do not
+ * take up a lot of memory, hence, they are allowed to build up to a certain
+ * degree. Cleanup does not occur until the number of WeakReferences and
+ * SubscriptionsProxy's with WeakReference strength subscribed to an
+ * EventService for all the EventService's subscriptions in total exceed the
+ * <tt>cleanupStartThreshhold</tt>, which is set to
+ * <tt>CLEANUP_START_THRESHOLD_DEFAULT</tt> (500) by default. The default is
+ * overridable in the constructor or via #setCleanupStartThreshhold(Integer). If
+ * set to null, cleanup will never start.
  * <p/>
- * Once the cleanup start threshold is exceeded, a <tt>java.util.Timer</tt> is started to clean up stale subscribers periodically 
- * in another thread.  The timer will fire every <tt>cleanupPeriodMS</tt> milliseconds, which is set to the 
+ * Once the cleanup start threshold is exceeded, a <tt>java.util.Timer</tt> is
+ * started to clean up stale subscribers periodically in another thread. The
+ * timer will fire every <tt>cleanupPeriodMS</tt> milliseconds, which is set to
+ * the
  * <tt>CLEANUP_PERIOD_MS_DEFAULT<tt> (20 minutes) by default.  The default is overridable in the constructor or 
  * via #setCleanupPeriodMS(Integer).  If set to null, cleanup will not start.  This is implemented with a <tt>java.util.Timer</tt>,
- * so Timer's warnings apply - setting this too low will cause cleanups to bunch up and hog the cleanup thread.
+ * so Timer's warnings apply - setting this too low will cause cleanups to bunch
+ * up and hog the cleanup thread.
  * <p/>
- * After a cleanup cycle completes, if the number of stale subscribers falls at or below the <tt>cleanupStopThreshhold</tt> 
- * cleanup stops until the <tt>cleanupStartThreshhold</tt> is exceeded again. The <tt>cleanupStopThreshhold</tt> is set 
- * to <tt>CLEANUP_STOP_THRESHOLD_DEFAULT</tt> (100) by default.  The default is overridable in the constructor or via 
- * #setCleanupStopThreshhold(Integer).  If set to null or 0, cleanup will not stop if it is ever started.  
+ * After a cleanup cycle completes, if the number of stale subscribers falls at
+ * or below the <tt>cleanupStopThreshhold</tt> cleanup stops until the
+ * <tt>cleanupStartThreshhold</tt> is exceeded again. The
+ * <tt>cleanupStopThreshhold</tt> is set to
+ * <tt>CLEANUP_STOP_THRESHOLD_DEFAULT</tt> (100) by default. The default is
+ * overridable in the constructor or via #setCleanupStopThreshhold(Integer). If
+ * set to null or 0, cleanup will not stop if it is ever started.
  * <p/>
- * Cleanup can be monitored by subscribing to the {@link CleanupEvent} class. 
+ * Cleanup can be monitored by subscribing to the {@link CleanupEvent} class.
  * <p/>
- * All cleanup parameters are tunable "live" and checked after each subscription and after each cleanup cycle.
- * To make cleanup never run, set cleanupStartThreshhold to Integer.MAX_VALUE and cleanupPeriodMS to null.
- * To get cleanup to run continuously, set set cleanupStartThreshhold to 0 and cleanupPeriodMS to some reasonable value,
- * perhaps 1000 (1 second) or so (not recommended, cleanup is conducted with regular usage and the cleanup thread is
- * rarely created or invoked).
+ * All cleanup parameters are tunable "live" and checked after each subscription
+ * and after each cleanup cycle. To make cleanup never run, set
+ * cleanupStartThreshhold to Integer.MAX_VALUE and cleanupPeriodMS to null. To
+ * get cleanup to run continuously, set set cleanupStartThreshhold to 0 and
+ * cleanupPeriodMS to some reasonable value, perhaps 1000 (1 second) or so (not
+ * recommended, cleanup is conducted with regular usage and the cleanup thread
+ * is rarely created or invoked).
  * <p/>
- * Cleanup is not run in a daemon thread, and thus will not stop the JVM from exiting.
+ * Cleanup is not run in a daemon thread, and thus will not stop the JVM from
+ * exiting.
  * <p/>
- * 
+ *
  * @author Michael Bushe michael@bushe.com
- * @todo (param) a JMS-like selector (can be done in base classes by implements like a commons filter
  * @see EventService for a complete description of the API
+ * @todo (param) a JMS-like selector (can be done in base classes by implements
+ *       like a commons filter
  */
 @SuppressWarnings({"unchecked", "ForLoopReplaceableByForEach"})
 public class ThreadSafeEventService implements EventService {
+   
+   /** The Constant CLEANUP_START_THRESHOLD_DEFAULT. */
    public static final Integer CLEANUP_START_THRESHOLD_DEFAULT = 250;
+   
+   /** The Constant CLEANUP_STOP_THRESHOLD_DEFAULT. */
    public static final Integer CLEANUP_STOP_THRESHOLD_DEFAULT = 100;
+   
+   /** The Constant CLEANUP_PERIOD_MS_DEFAULT. */
    public static final Long CLEANUP_PERIOD_MS_DEFAULT = 20L*60L*1000L;
 
+   /** The Constant LOG. */
    protected static final Logger LOG = Logger.getLogger(EventService.class.getName());
 
    //Making these generic collections is a bad idea, it doesn't compile since it's better to have all the maps
+   /** The subscribers by event type. */
    //go through the same set of code to do all the real publish and subscribe work
    private Map subscribersByEventType = new HashMap();
+   
+   /** The subscribers by event class. */
    private Map subscribersByEventClass = new HashMap();
+   
+   /** The subscribers by exact event class. */
    private Map subscribersByExactEventClass = new HashMap();
+   
+   /** The subscribers by topic. */
    private Map subscribersByTopic = new HashMap();
+   
+   /** The subscribers by topic pattern. */
    private Map subscribersByTopicPattern = new HashMap();
+   
+   /** The veto listeners by class. */
    private Map vetoListenersByClass = new HashMap();
+   
+   /** The veto listeners by exact class. */
    private Map vetoListenersByExactClass = new HashMap();
+   
+   /** The veto listeners by topic. */
    private Map vetoListenersByTopic = new HashMap();
+   
+   /** The veto listeners by topic pattern. */
    private Map vetoListenersByTopicPattern = new HashMap();
+   
+   /** The listener lock. */
    private final Object listenerLock = new Object();
+   
+   /** The cache lock. */
    private final Object cacheLock = new Object();
+   
+   /** The time threshold for event timing event publication. */
    private Long timeThresholdForEventTimingEventPublication;
+   
+   /** The cache by event. */
    private Map<Class, List> cacheByEvent = new HashMap<Class, List>();
+   
+   /** The default cache size per class or topic. */
    private int defaultCacheSizePerClassOrTopic = 0;
+   
+   /** The cache sizes for event class. */
    private Map<Class, Integer> cacheSizesForEventClass;
+   
+   /** The raw cache sizes for event class. */
    private Map<Class, Integer> rawCacheSizesForEventClass;
+   
+   /** The raw cache sizes for event class changed. */
    private boolean rawCacheSizesForEventClassChanged;
+   
+   /** The cache by topic. */
    private Map<String, List> cacheByTopic = new HashMap<String, List>();
+   
+   /** The cache sizes for topic. */
    private Map<String, Integer> cacheSizesForTopic;
+   
+   /** The raw cache sizes for topic. */
    private Map<String, Integer> rawCacheSizesForTopic;
+   
+   /** The raw cache sizes for topic changed. */
    private boolean rawCacheSizesForTopicChanged;
+   
+   /** The raw cache sizes for pattern. */
    private Map<PatternWrapper, Integer> rawCacheSizesForPattern;
+   
+   /** The raw cache sizes for pattern changed. */
    private boolean rawCacheSizesForPatternChanged;
+   
+   /** The cleanup start threshhold. */
    private Integer cleanupStartThreshhold;
+   
+   /** The cleanup stop threshold. */
    private Integer cleanupStopThreshold;
+   
+   /** The cleanup period MS. */
    private Long cleanupPeriodMS;
+   
+   /** The weak ref plus proxy subscriber count. */
    private int weakRefPlusProxySubscriberCount;
+   
+   /** The cleanup timer. */
    private Timer cleanupTimer;
+   
+   /** The cleanup timer task. */
    private TimerTask cleanupTimerTask;
+   
+   /** The Constant PRIORITIZED_SUBSCRIBER_COMPARATOR. */
    private static final Comparator PRIORITIZED_SUBSCRIBER_COMPARATOR = new PrioritizedSubscriberComparator();
+   
+   /** The has ever used prioritized. */
    private boolean hasEverUsedPrioritized;
 
    /** Creates a ThreadSafeEventService that does not monitor timing of handlers. */
@@ -334,7 +446,14 @@ public class ThreadSafeEventService implements EventService {
       }
    }
 
-   /** @see EventService#subscribe(Class,EventSubscriber) */
+   /**
+	 * Subscribe.
+	 *
+	 * @param cl the cl
+	 * @param eh the eh
+	 * @return true, if successful
+	 * @see EventService#subscribe(Class,EventSubscriber)
+	 */
    public boolean subscribe(Class cl, EventSubscriber eh) {
       if (cl == null) {
          throw new IllegalArgumentException("Event class must not be null");
@@ -348,12 +467,26 @@ public class ThreadSafeEventService implements EventService {
       return subscribe(cl, subscribersByEventClass, new WeakReference<EventSubscriber>(eh));
    }
 
-   /** @see EventService#subscribe(java.lang.reflect.Type, EventSubscriber) */
+   /**
+	 * Subscribe.
+	 *
+	 * @param type the type
+	 * @param eh   the eh
+	 * @return true, if successful
+	 * @see EventService#subscribe(java.lang.reflect.Type, EventSubscriber)
+	 */
    public boolean subscribe(Type type, EventSubscriber eh) {
       return subscribe(type, subscribersByEventType, new WeakReference<EventSubscriber>(eh));
    }
 
-   /** @see EventService#subscribeExactly(Class,EventSubscriber) */
+   /**
+	 * Subscribe exactly.
+	 *
+	 * @param cl the cl
+	 * @param eh the eh
+	 * @return true, if successful
+	 * @see EventService#subscribeExactly(Class,EventSubscriber)
+	 */
    public boolean subscribeExactly(Class cl, EventSubscriber eh) {
       if (cl == null) {
          throw new IllegalArgumentException("Event class must not be null");
@@ -367,7 +500,14 @@ public class ThreadSafeEventService implements EventService {
       return subscribe(cl, subscribersByExactEventClass, new WeakReference<EventSubscriber>(eh));
    }
 
-   /** @see EventService#subscribe(String,EventTopicSubscriber) */
+   /**
+	 * Subscribe.
+	 *
+	 * @param topic the topic
+	 * @param eh    the eh
+	 * @return true, if successful
+	 * @see EventService#subscribe(String,EventTopicSubscriber)
+	 */
    public boolean subscribe(String topic, EventTopicSubscriber eh) {
       if (topic == null) {
          throw new IllegalArgumentException("Topic must not be null");
@@ -381,7 +521,14 @@ public class ThreadSafeEventService implements EventService {
       return subscribe(topic, subscribersByTopic, new WeakReference<EventTopicSubscriber>(eh));
    }
 
-   /** @see EventService#subscribe(Pattern,EventTopicSubscriber) */
+   /**
+	 * Subscribe.
+	 *
+	 * @param pat the pat
+	 * @param eh  the eh
+	 * @return true, if successful
+	 * @see EventService#subscribe(Pattern,EventTopicSubscriber)
+	 */
    public boolean subscribe(Pattern pat, EventTopicSubscriber eh) {
       if (pat == null) {
          throw new IllegalArgumentException("Pattern must not be null");
@@ -396,7 +543,14 @@ public class ThreadSafeEventService implements EventService {
       return subscribe(patternWrapper, subscribersByTopicPattern, new WeakReference<EventTopicSubscriber>(eh));
    }
 
-   /** @see EventService#subscribeStrongly(Class,EventSubscriber) */
+   /**
+	 * Subscribe strongly.
+	 *
+	 * @param cl the cl
+	 * @param eh the eh
+	 * @return true, if successful
+	 * @see EventService#subscribeStrongly(Class,EventSubscriber)
+	 */
    public boolean subscribeStrongly(Class cl, EventSubscriber eh) {
       if (LOG.isLoggable(Level.DEBUG)) {
          LOG.debug("Subscribing weakly by class, class:" + cl + ", subscriber:" + eh);
@@ -407,7 +561,14 @@ public class ThreadSafeEventService implements EventService {
       return subscribe(cl, subscribersByEventClass, eh);
    }
 
-   /** @see EventService#subscribeExactlyStrongly(Class,EventSubscriber) */
+   /**
+	 * Subscribe exactly strongly.
+	 *
+	 * @param cl the cl
+	 * @param eh the eh
+	 * @return true, if successful
+	 * @see EventService#subscribeExactlyStrongly(Class,EventSubscriber)
+	 */
    public boolean subscribeExactlyStrongly(Class cl, EventSubscriber eh) {
       if (cl == null) {
          throw new IllegalArgumentException("Event class must not be null");
@@ -421,7 +582,14 @@ public class ThreadSafeEventService implements EventService {
       return subscribe(cl, subscribersByExactEventClass, eh);
    }
 
-   /** @see EventService#subscribeStrongly(String,EventTopicSubscriber) */
+   /**
+	 * Subscribe strongly.
+	 *
+	 * @param name the name
+	 * @param eh   the eh
+	 * @return true, if successful
+	 * @see EventService#subscribeStrongly(String,EventTopicSubscriber)
+	 */
    public boolean subscribeStrongly(String name, EventTopicSubscriber eh) {
       if (LOG.isLoggable(Level.DEBUG)) {
          LOG.debug("Subscribing weakly by topic name, name:" + name + ", subscriber:" + eh);
@@ -432,7 +600,14 @@ public class ThreadSafeEventService implements EventService {
       return subscribe(name, subscribersByTopic, eh);
    }
 
-   /** @see EventService#subscribeStrongly(Pattern,EventTopicSubscriber) */
+   /**
+	 * Subscribe strongly.
+	 *
+	 * @param pat the pat
+	 * @param eh  the eh
+	 * @return true, if successful
+	 * @see EventService#subscribeStrongly(Pattern,EventTopicSubscriber)
+	 */
    public boolean subscribeStrongly(Pattern pat, EventTopicSubscriber eh) {
       if (pat == null) {
          throw new IllegalArgumentException("Pattern must not be null");
@@ -448,7 +623,11 @@ public class ThreadSafeEventService implements EventService {
    }
 
 
-   /** @see org.bushe.swing.event.EventService#clearAllSubscribers() */
+   /**
+	 * Clear all subscribers.
+	 *
+	 * @see org.bushe.swing.event.EventService#clearAllSubscribers()
+	 */
    public void clearAllSubscribers() {
       synchronized (listenerLock) {
          unsubscribeAllInMap(subscribersByEventType);
@@ -463,6 +642,11 @@ public class ThreadSafeEventService implements EventService {
       }
    }
    
+   /**
+	 * Unsubscribe all in map.
+	 *
+	 * @param subscriberMap the subscriber map
+	 */
    private void unsubscribeAllInMap(Map subscriberMap) {
       synchronized (listenerLock) {
          Set subscriptionKeys = subscriberMap.keySet();
@@ -475,7 +659,14 @@ public class ThreadSafeEventService implements EventService {
       }      
    }
  
-   /** @see EventService#subscribeVetoListener(Class,VetoEventListener) */
+   /**
+	 * Subscribe veto listener.
+	 *
+	 * @param eventClass   the event class
+	 * @param vetoListener the veto listener
+	 * @return true, if successful
+	 * @see EventService#subscribeVetoListener(Class,VetoEventListener)
+	 */
    public boolean subscribeVetoListener(Class eventClass, VetoEventListener vetoListener) {
       if (vetoListener == null) {
          throw new IllegalArgumentException("VetoEventListener cannot be null.");
@@ -486,7 +677,14 @@ public class ThreadSafeEventService implements EventService {
       return subscribeVetoListener(eventClass, vetoListenersByClass, new WeakReference<VetoEventListener>(vetoListener));
    }
 
-   /** @see EventService#subscribeVetoListenerExactly(Class,VetoEventListener) */
+   /**
+	 * Subscribe veto listener exactly.
+	 *
+	 * @param eventClass   the event class
+	 * @param vetoListener the veto listener
+	 * @return true, if successful
+	 * @see EventService#subscribeVetoListenerExactly(Class,VetoEventListener)
+	 */
    public boolean subscribeVetoListenerExactly(Class eventClass, VetoEventListener vetoListener) {
       if (vetoListener == null) {
          throw new IllegalArgumentException("VetoEventListener cannot be null.");
@@ -497,7 +695,14 @@ public class ThreadSafeEventService implements EventService {
       return subscribeVetoListener(eventClass, vetoListenersByExactClass, new WeakReference<VetoEventListener>(vetoListener));
    }
 
-   /** @see EventService#subscribeVetoListener(String,VetoTopicEventListener) */
+   /**
+	 * Subscribe veto listener.
+	 *
+	 * @param topic        the topic
+	 * @param vetoListener the veto listener
+	 * @return true, if successful
+	 * @see EventService#subscribeVetoListener(String,VetoTopicEventListener)
+	 */
    public boolean subscribeVetoListener(String topic, VetoTopicEventListener vetoListener) {
       if (vetoListener == null) {
          throw new IllegalArgumentException("VetoEventListener cannot be null.");
@@ -508,7 +713,14 @@ public class ThreadSafeEventService implements EventService {
       return subscribeVetoListener(topic, vetoListenersByTopic, new WeakReference<VetoTopicEventListener>(vetoListener));
    }
 
-   /** @see EventService#subscribeVetoListener(Pattern,VetoTopicEventListener) */
+   /**
+	 * Subscribe veto listener.
+	 *
+	 * @param topicPattern the topic pattern
+	 * @param vetoListener the veto listener
+	 * @return true, if successful
+	 * @see EventService#subscribeVetoListener(Pattern,VetoTopicEventListener)
+	 */
    public boolean subscribeVetoListener(Pattern topicPattern, VetoTopicEventListener vetoListener) {
       if (vetoListener == null) {
          throw new IllegalArgumentException("VetoEventListener cannot be null.");
@@ -520,7 +732,14 @@ public class ThreadSafeEventService implements EventService {
       return subscribeVetoListener(patternWrapper, vetoListenersByTopicPattern, new WeakReference<VetoTopicEventListener>(vetoListener));
    }
 
-   /** @see EventService#subscribeVetoListenerStrongly(Class,VetoEventListener) */
+   /**
+	 * Subscribe veto listener strongly.
+	 *
+	 * @param eventClass   the event class
+	 * @param vetoListener the veto listener
+	 * @return true, if successful
+	 * @see EventService#subscribeVetoListenerStrongly(Class,VetoEventListener)
+	 */
    public boolean subscribeVetoListenerStrongly(Class eventClass, VetoEventListener vetoListener) {
       if (vetoListener == null) {
          throw new IllegalArgumentException("VetoEventListener cannot be null.");
@@ -531,7 +750,14 @@ public class ThreadSafeEventService implements EventService {
       return subscribeVetoListener(eventClass, vetoListenersByClass, vetoListener);
    }
 
-   /** @see EventService#subscribeVetoListenerExactlyStrongly(Class,VetoEventListener) */
+   /**
+	 * Subscribe veto listener exactly strongly.
+	 *
+	 * @param eventClass   the event class
+	 * @param vetoListener the veto listener
+	 * @return true, if successful
+	 * @see EventService#subscribeVetoListenerExactlyStrongly(Class,VetoEventListener)
+	 */
    public boolean subscribeVetoListenerExactlyStrongly(Class eventClass, VetoEventListener vetoListener) {
       if (vetoListener == null) {
          throw new IllegalArgumentException("VetoEventListener cannot be null.");
@@ -542,7 +768,14 @@ public class ThreadSafeEventService implements EventService {
       return subscribeVetoListener(eventClass, vetoListenersByExactClass, vetoListener);
    }
 
-   /** @see EventService#subscribeVetoListenerStrongly(String,VetoTopicEventListener) */
+   /**
+	 * Subscribe veto listener strongly.
+	 *
+	 * @param topic        the topic
+	 * @param vetoListener the veto listener
+	 * @return true, if successful
+	 * @see EventService#subscribeVetoListenerStrongly(String,VetoTopicEventListener)
+	 */
    public boolean subscribeVetoListenerStrongly(String topic, VetoTopicEventListener vetoListener) {
       if (vetoListener == null) {
          throw new IllegalArgumentException("VetoListener cannot be null.");
@@ -553,7 +786,14 @@ public class ThreadSafeEventService implements EventService {
       return subscribeVetoListener(topic, vetoListenersByTopic, vetoListener);
    }
 
-   /** @see EventService#subscribeVetoListenerStrongly(Pattern,VetoTopicEventListener) */
+   /**
+	 * Subscribe veto listener strongly.
+	 *
+	 * @param topicPattern the topic pattern
+	 * @param vetoListener the veto listener
+	 * @return true, if successful
+	 * @see EventService#subscribeVetoListenerStrongly(Pattern,VetoTopicEventListener)
+	 */
    public boolean subscribeVetoListenerStrongly(Pattern topicPattern, VetoTopicEventListener vetoListener) {
       if (vetoListener == null) {
          throw new IllegalArgumentException("VetoTopicEventListener cannot be null.");
@@ -675,28 +915,63 @@ public class ThreadSafeEventService implements EventService {
       }
    }
 
-   /** @see EventService#unsubscribe(Class,EventSubscriber) */
+   /**
+	 * Unsubscribe.
+	 *
+	 * @param cl the cl
+	 * @param eh the eh
+	 * @return true, if successful
+	 * @see EventService#unsubscribe(Class,EventSubscriber)
+	 */
    public boolean unsubscribe(Class cl, EventSubscriber eh) {
       return unsubscribe(cl, subscribersByEventClass, eh);
    }
 
-   /** @see EventService#unsubscribeExactly(Class,EventSubscriber) */
+   /**
+	 * Unsubscribe exactly.
+	 *
+	 * @param cl the cl
+	 * @param eh the eh
+	 * @return true, if successful
+	 * @see EventService#unsubscribeExactly(Class,EventSubscriber)
+	 */
    public boolean unsubscribeExactly(Class cl, EventSubscriber eh) {
       return unsubscribe(cl, subscribersByExactEventClass, eh);
    }
 
-   /** @see EventService#unsubscribe(String,EventTopicSubscriber) */
+   /**
+	 * Unsubscribe.
+	 *
+	 * @param name the name
+	 * @param eh   the eh
+	 * @return true, if successful
+	 * @see EventService#unsubscribe(String,EventTopicSubscriber)
+	 */
    public boolean unsubscribe(String name, EventTopicSubscriber eh) {
       return unsubscribe(name, subscribersByTopic, eh);
    }
 
-   /** @see EventService#unsubscribe(String,EventTopicSubscriber) */
+   /**
+	 * Unsubscribe.
+	 *
+	 * @param topicPattern the topic pattern
+	 * @param eh           the eh
+	 * @return true, if successful
+	 * @see EventService#unsubscribe(String,EventTopicSubscriber)
+	 */
    public boolean unsubscribe(Pattern topicPattern, EventTopicSubscriber eh) {
       PatternWrapper patternWrapper = new PatternWrapper(topicPattern);
       return unsubscribe(patternWrapper, subscribersByTopicPattern, eh);
    }
 
-   /** @see EventService#unsubscribe(Class,Object) */
+   /**
+	 * Unsubscribe.
+	 *
+	 * @param eventClass        the event class
+	 * @param subscribedByProxy the subscribed by proxy
+	 * @return true, if successful
+	 * @see EventService#unsubscribe(Class,Object)
+	 */
    public boolean unsubscribe(Class eventClass, Object subscribedByProxy) {
       EventSubscriber subscriber = (EventSubscriber) getProxySubscriber(eventClass, subscribedByProxy);
       if (subscriber == null) {
@@ -706,7 +981,14 @@ public class ThreadSafeEventService implements EventService {
       }
    }
 
-   /** @see EventService#unsubscribeExactly(Class,Object) */
+   /**
+	 * Unsubscribe exactly.
+	 *
+	 * @param eventClass        the event class
+	 * @param subscribedByProxy the subscribed by proxy
+	 * @return true, if successful
+	 * @see EventService#unsubscribeExactly(Class,Object)
+	 */
    public boolean unsubscribeExactly(Class eventClass, Object subscribedByProxy) {
       EventSubscriber subscriber = (EventSubscriber) getProxySubscriber(eventClass, subscribedByProxy);
       if (subscriber == null) {
@@ -716,7 +998,14 @@ public class ThreadSafeEventService implements EventService {
       }
    }
 
-   /** @see EventService#unsubscribe(String,Object) */
+   /**
+	 * Unsubscribe.
+	 *
+	 * @param topic             the topic
+	 * @param subscribedByProxy the subscribed by proxy
+	 * @return true, if successful
+	 * @see EventService#unsubscribe(String,Object)
+	 */
    public boolean unsubscribe(String topic, Object subscribedByProxy) {
       EventTopicSubscriber subscriber = (EventTopicSubscriber) getProxySubscriber(topic, subscribedByProxy);
       if (subscriber == null) {
@@ -726,7 +1015,14 @@ public class ThreadSafeEventService implements EventService {
       }
    }
 
-   /** @see EventService#unsubscribe(java.util.regex.Pattern,Object) */
+   /**
+	 * Unsubscribe.
+	 *
+	 * @param pattern           the pattern
+	 * @param subscribedByProxy the subscribed by proxy
+	 * @return true, if successful
+	 * @see EventService#unsubscribe(java.util.regex.Pattern,Object)
+	 */
    public boolean unsubscribe(Pattern pattern, Object subscribedByProxy) {
       EventTopicSubscriber subscriber = (EventTopicSubscriber) getProxySubscriber(pattern, subscribedByProxy);
       if (subscriber == null) {
@@ -762,7 +1058,14 @@ public class ThreadSafeEventService implements EventService {
       }
    }
 
-   /** @see EventService#unsubscribeVeto(Class,Object) */
+   /**
+	 * Unsubscribe veto.
+	 *
+	 * @param eventClass        the event class
+	 * @param subscribedByProxy the subscribed by proxy
+	 * @return true, if successful
+	 * @see EventService#unsubscribeVeto(Class,Object)
+	 */
    public boolean unsubscribeVeto(Class eventClass, Object subscribedByProxy) {
       VetoEventListener subscriber = (VetoEventListener) getVetoProxySubscriber(eventClass, subscribedByProxy);
       if (subscriber == null) {
@@ -772,7 +1075,14 @@ public class ThreadSafeEventService implements EventService {
       }
    }
 
-   /** @see EventService#unsubscribeVetoExactly(Class,Object) */
+   /**
+	 * Unsubscribe veto exactly.
+	 *
+	 * @param eventClass        the event class
+	 * @param subscribedByProxy the subscribed by proxy
+	 * @return true, if successful
+	 * @see EventService#unsubscribeVetoExactly(Class,Object)
+	 */
    public boolean unsubscribeVetoExactly(Class eventClass, Object subscribedByProxy) {
       VetoEventListener subscriber = (VetoEventListener) getVetoProxySubscriber(eventClass, subscribedByProxy);
       if (subscriber == null) {
@@ -782,7 +1092,14 @@ public class ThreadSafeEventService implements EventService {
       }
    }
 
-   /** @see EventService#unsubscribeVeto(String,Object) */
+   /**
+	 * Unsubscribe veto.
+	 *
+	 * @param topic             the topic
+	 * @param subscribedByProxy the subscribed by proxy
+	 * @return true, if successful
+	 * @see EventService#unsubscribeVeto(String,Object)
+	 */
    public boolean unsubscribeVeto(String topic, Object subscribedByProxy) {
       VetoTopicEventListener subscriber = (VetoTopicEventListener) getVetoProxySubscriber(topic, subscribedByProxy);
       if (subscriber == null) {
@@ -792,7 +1109,14 @@ public class ThreadSafeEventService implements EventService {
       }
    }
 
-   /** @see EventService#unsubscribeVeto(java.util.regex.Pattern,Object) */
+   /**
+	 * Unsubscribe veto.
+	 *
+	 * @param pattern           the pattern
+	 * @param subscribedByProxy the subscribed by proxy
+	 * @return true, if successful
+	 * @see EventService#unsubscribeVeto(java.util.regex.Pattern,Object)
+	 */
    public boolean unsubscribeVeto(Pattern pattern, Object subscribedByProxy) {
       VetoTopicEventListener subscriber = (VetoTopicEventListener) getVetoProxySubscriber(pattern, subscribedByProxy);
       if (subscriber == null) {
@@ -802,22 +1126,50 @@ public class ThreadSafeEventService implements EventService {
       }
    }
 
-   /** @see EventService#unsubscribeVetoListener(Class,VetoEventListener) */
+   /**
+	 * Unsubscribe veto listener.
+	 *
+	 * @param eventClass   the event class
+	 * @param vetoListener the veto listener
+	 * @return true, if successful
+	 * @see EventService#unsubscribeVetoListener(Class,VetoEventListener)
+	 */
    public boolean unsubscribeVetoListener(Class eventClass, VetoEventListener vetoListener) {
       return unsubscribeVetoListener(eventClass, vetoListenersByClass, vetoListener);
    }
 
-   /** @see EventService#unsubscribeVetoListenerExactly(Class,VetoEventListener) */
+   /**
+	 * Unsubscribe veto listener exactly.
+	 *
+	 * @param eventClass   the event class
+	 * @param vetoListener the veto listener
+	 * @return true, if successful
+	 * @see EventService#unsubscribeVetoListenerExactly(Class,VetoEventListener)
+	 */
    public boolean unsubscribeVetoListenerExactly(Class eventClass, VetoEventListener vetoListener) {
       return unsubscribeVetoListener(eventClass, vetoListenersByExactClass, vetoListener);
    }
 
-   /** @see EventService#unsubscribeVetoListener(String,VetoTopicEventListener) */
+   /**
+	 * Unsubscribe veto listener.
+	 *
+	 * @param topic        the topic
+	 * @param vetoListener the veto listener
+	 * @return true, if successful
+	 * @see EventService#unsubscribeVetoListener(String,VetoTopicEventListener)
+	 */
    public boolean unsubscribeVetoListener(String topic, VetoTopicEventListener vetoListener) {
       return unsubscribeVetoListener(topic, vetoListenersByTopic, vetoListener);
    }
 
-   /** @see EventService#unsubscribeVetoListener(Pattern,VetoTopicEventListener) */
+   /**
+	 * Unsubscribe veto listener.
+	 *
+	 * @param topicPattern the topic pattern
+	 * @param vetoListener the veto listener
+	 * @return true, if successful
+	 * @see EventService#unsubscribeVetoListener(Pattern,VetoTopicEventListener)
+	 */
    public boolean unsubscribeVetoListener(Pattern topicPattern, VetoTopicEventListener vetoListener) {
       PatternWrapper patternWrapper = new PatternWrapper(topicPattern);
       return unsubscribeVetoListener(patternWrapper, vetoListenersByTopicPattern, vetoListener);
@@ -848,36 +1200,85 @@ public class ThreadSafeEventService implements EventService {
       }
    }
 
+   /**
+	 * Gets the proxy subscriber.
+	 *
+	 * @param eventClass        the event class
+	 * @param subscribedByProxy the subscribed by proxy
+	 * @return the proxy subscriber
+	 */
    private ProxySubscriber getProxySubscriber(Class eventClass, Object subscribedByProxy) {
       List subscribers = getSubscribers(eventClass);
       return getProxySubscriber(subscribers, subscribedByProxy);
    }
 
+   /**
+	 * Gets the proxy subscriber.
+	 *
+	 * @param topic             the topic
+	 * @param subscribedByProxy the subscribed by proxy
+	 * @return the proxy subscriber
+	 */
    private ProxySubscriber getProxySubscriber(String topic, Object subscribedByProxy) {
       List subscribers = getSubscribers(topic);
       return getProxySubscriber(subscribers, subscribedByProxy);
    }
 
+   /**
+	 * Gets the proxy subscriber.
+	 *
+	 * @param pattern           the pattern
+	 * @param subscribedByProxy the subscribed by proxy
+	 * @return the proxy subscriber
+	 */
    private ProxySubscriber getProxySubscriber(Pattern pattern, Object subscribedByProxy) {
       List subscribers = getSubscribersToPattern(pattern);
       return getProxySubscriber(subscribers, subscribedByProxy);
    }
 
+   /**
+	 * Gets the veto proxy subscriber.
+	 *
+	 * @param eventClass        the event class
+	 * @param subscribedByProxy the subscribed by proxy
+	 * @return the veto proxy subscriber
+	 */
    private ProxySubscriber getVetoProxySubscriber(Class eventClass, Object subscribedByProxy) {
       List subscribers = getVetoSubscribers(eventClass);
       return getProxySubscriber(subscribers, subscribedByProxy);
    }
 
+   /**
+	 * Gets the veto proxy subscriber.
+	 *
+	 * @param topic             the topic
+	 * @param subscribedByProxy the subscribed by proxy
+	 * @return the veto proxy subscriber
+	 */
    private ProxySubscriber getVetoProxySubscriber(String topic, Object subscribedByProxy) {
       List subscribers = getVetoSubscribers(topic);
       return getProxySubscriber(subscribers, subscribedByProxy);
    }
 
+   /**
+	 * Gets the veto proxy subscriber.
+	 *
+	 * @param pattern           the pattern
+	 * @param subscribedByProxy the subscribed by proxy
+	 * @return the veto proxy subscriber
+	 */
    private ProxySubscriber getVetoProxySubscriber(Pattern pattern, Object subscribedByProxy) {
       List subscribers = getVetoSubscribers(pattern);
       return getProxySubscriber(subscribers, subscribedByProxy);
    }
 
+   /**
+	 * Gets the proxy subscriber.
+	 *
+	 * @param subscribers       the subscribers
+	 * @param subscribedByProxy the subscribed by proxy
+	 * @return the proxy subscriber
+	 */
    private ProxySubscriber getProxySubscriber(List subscribers, Object subscribedByProxy) {
       for (Iterator iter = subscribers.iterator(); iter.hasNext();) {
          Object subscriber = iter.next();
@@ -896,7 +1297,12 @@ public class ThreadSafeEventService implements EventService {
       return null;
    }
 
-   /** @see EventService#publish(Object) */
+   /**
+	 * Publish.
+	 *
+	 * @param event the event
+	 * @see EventService#publish(Object)
+	 */
    public void publish(Object event) {
       if (event == null) {
          throw new IllegalArgumentException("Cannot publish null event.");
@@ -904,7 +1310,13 @@ public class ThreadSafeEventService implements EventService {
       publish(event, null, null, getSubscribers(event.getClass()), getVetoSubscribers(event.getClass()), null);
    }
 
-   /** @see EventService#publish(java.lang.reflect.Type, Object)  */
+   /**
+	 * Publish.
+	 *
+	 * @param genericType the generic type
+	 * @param event       the event
+	 * @see EventService#publish(java.lang.reflect.Type, Object)
+	 */
    public void publish(Type genericType, Object event) {
       if (genericType == null) {
          throw new IllegalArgumentException("genericType must not be null.");
@@ -915,7 +1327,13 @@ public class ThreadSafeEventService implements EventService {
       publish(event, null, null, getSubscribers(genericType), null/*getVetoSubscribers(genericType)*/, null);
    }
 
-   /** @see EventService#publish(String,Object) */
+   /**
+	 * Publish.
+	 *
+	 * @param topicName the topic name
+	 * @param eventObj  the event obj
+	 * @see EventService#publish(String,Object)
+	 */
    public void publish(String topicName, Object eventObj) {
       publish(null, topicName, eventObj, getSubscribers(topicName), getVetoEventListeners(topicName), null);
    }
@@ -1057,6 +1475,16 @@ public class ThreadSafeEventService implements EventService {
       }
    }
 
+   /**
+	 * Check veto subscribers.
+	 *
+	 * @param event           the event
+	 * @param topic           the topic
+	 * @param eventObj        the event obj
+	 * @param vetoSubscribers the veto subscribers
+	 * @param callingStack    the calling stack
+	 * @return true, if successful
+	 */
    private boolean checkVetoSubscribers(Object event, String topic, Object eventObj, List vetoSubscribers,
            StackTraceElement[] callingStack) {
       if (vetoSubscribers != null && !vetoSubscribers.isEmpty()) {
@@ -1094,6 +1522,13 @@ public class ThreadSafeEventService implements EventService {
       return false;
    }
 
+   /**
+	 * Log event.
+	 *
+	 * @param event    the event
+	 * @param topic    the topic
+	 * @param eventObj the event obj
+	 */
    private void logEvent(Object event, String topic, Object eventObj) {
       if (LOG.isLoggable(Level.DEBUG)) {
          if (event != null) {
@@ -1159,7 +1594,14 @@ public class ThreadSafeEventService implements EventService {
       }
    }
 
-   /** @see EventService#getSubscribers(Class) */
+   /**
+	 * Gets the subscribers.
+	 *
+	 * @param <T>        the generic type
+	 * @param eventClass the event class
+	 * @return the subscribers
+	 * @see EventService#getSubscribers(Class)
+	 */
    public <T> List<T> getSubscribers(Class<T> eventClass) {
       List hierarchyMatches;
       List exactMatches;
@@ -1181,7 +1623,14 @@ public class ThreadSafeEventService implements EventService {
 
    }
 
-   /** @see EventService#getSubscribersToClass(Class) */
+   /**
+	 * Gets the subscribers to class.
+	 *
+	 * @param <T>        the generic type
+	 * @param eventClass the event class
+	 * @return the subscribers to class
+	 * @see EventService#getSubscribersToClass(Class)
+	 */
    public <T> List<T> getSubscribersToClass(Class<T> eventClass) {
       synchronized (listenerLock) {
          Map classMap = subscribersByEventClass;
@@ -1193,14 +1642,28 @@ public class ThreadSafeEventService implements EventService {
       }
    }
 
-   /** @see EventService#getSubscribersToExactClass(Class) */
+   /**
+	 * Gets the subscribers to exact class.
+	 *
+	 * @param <T>        the generic type
+	 * @param eventClass the event class
+	 * @return the subscribers to exact class
+	 * @see EventService#getSubscribersToExactClass(Class)
+	 */
    public <T> List<T> getSubscribersToExactClass(Class<T> eventClass) {
       synchronized (listenerLock) {
          return getSubscribers(eventClass, subscribersByExactEventClass);
       }
    }
 
-   /** @see EventService#getSubscribers(Type) */
+   /**
+	 * Gets the subscribers.
+	 *
+	 * @param <T>       the generic type
+	 * @param eventType the event type
+	 * @return the subscribers
+	 * @see EventService#getSubscribers(Type)
+	 */
    public <T> List<T> getSubscribers(Type eventType) {
       List result;
       synchronized (listenerLock) {
@@ -1212,7 +1675,14 @@ public class ThreadSafeEventService implements EventService {
       return result;
    }
 
-   /** @see EventService#getSubscribers(String) */
+   /**
+	 * Gets the subscribers.
+	 *
+	 * @param <T>   the generic type
+	 * @param topic the topic
+	 * @return the subscribers
+	 * @see EventService#getSubscribers(String)
+	 */
    public <T> List<T> getSubscribers(String topic) {
       List result = new ArrayList();
       List exactMatches;
@@ -1233,26 +1703,54 @@ public class ThreadSafeEventService implements EventService {
       return result;
    }
 
-   /** @see EventService#getSubscribersToTopic(String)  */
+   /**
+	 * Gets the subscribers to topic.
+	 *
+	 * @param <T>   the generic type
+	 * @param topic the topic
+	 * @return the subscribers to topic
+	 * @see EventService#getSubscribersToTopic(String)
+	 */
    public <T> List<T> getSubscribersToTopic(String topic) {
       synchronized (listenerLock) {
          return getSubscribers(topic, subscribersByTopic);
       }
    }
 
-   /** @see EventService#getSubscribers(Pattern)  */
+   /**
+	 * Gets the subscribers.
+	 *
+	 * @param <T>     the generic type
+	 * @param pattern the pattern
+	 * @return the subscribers
+	 * @see EventService#getSubscribers(Pattern)
+	 */
    public <T> List<T> getSubscribers(Pattern pattern) {
       synchronized (listenerLock) {
          return getSubscribers(pattern, subscribersByTopicPattern);
       }
    }
 
-   /** @see EventService#getSubscribersByPattern(String)  */
+   /**
+	 * Gets the subscribers by pattern.
+	 *
+	 * @param <T>   the generic type
+	 * @param topic the topic
+	 * @return the subscribers by pattern
+	 * @see EventService#getSubscribersByPattern(String)
+	 */
    public <T> List<T> getSubscribersByPattern(String topic) {
       return getSubscribersByPattern(topic, subscribersByTopicPattern);
    }
 
-   /** @see EventService#getVetoSubscribers(Class) */
+   /**
+	 * Gets the veto subscribers.
+	 *
+	 * @param <T>        the generic type
+	 * @param eventClass the event class
+	 * @return the veto subscribers
+	 * @see EventService#getVetoSubscribers(Class)
+	 */
    public <T> List<T> getVetoSubscribers(Class<T> eventClass) {
       List result = new ArrayList();
       List exactMatches;
@@ -1273,7 +1771,14 @@ public class ThreadSafeEventService implements EventService {
       return result;
    }
 
-   /** @see EventService#getVetoSubscribersToClass(Class) */
+   /**
+	 * Gets the veto subscribers to class.
+	 *
+	 * @param <T>        the generic type
+	 * @param eventClass the event class
+	 * @return the veto subscribers to class
+	 * @see EventService#getVetoSubscribersToClass(Class)
+	 */
    public <T> List<T> getVetoSubscribersToClass(Class<T> eventClass) {
       List result;
       synchronized (listenerLock) {
@@ -1286,14 +1791,28 @@ public class ThreadSafeEventService implements EventService {
       return result;
    }
 
-   /** @see EventService#getVetoSubscribersToExactClass(Class) */
+   /**
+	 * Gets the veto subscribers to exact class.
+	 *
+	 * @param <T>        the generic type
+	 * @param eventClass the event class
+	 * @return the veto subscribers to exact class
+	 * @see EventService#getVetoSubscribersToExactClass(Class)
+	 */
    public <T> List<T> getVetoSubscribersToExactClass(Class<T> eventClass) {
       synchronized (listenerLock) {
          return getSubscribers(eventClass, vetoListenersByExactClass);
       }
    }
 
-   /** @see EventService#getVetoEventListeners(String)  */
+   /**
+	 * Gets the veto event listeners.
+	 *
+	 * @param <T>            the generic type
+	 * @param topicOrPattern the topic or pattern
+	 * @return the veto event listeners
+	 * @see EventService#getVetoEventListeners(String)
+	 */
    public <T> List<T> getVetoEventListeners(String topicOrPattern) {
       List result = new ArrayList();
       List exactMatches;
@@ -1314,7 +1833,14 @@ public class ThreadSafeEventService implements EventService {
       return result;
    }
 
-   /** @see EventService#getVetoSubscribersToTopic(String) */
+   /**
+	 * Gets the veto subscribers to topic.
+	 *
+	 * @param <T>   the generic type
+	 * @param topic the topic
+	 * @return the veto subscribers to topic
+	 * @see EventService#getVetoSubscribersToTopic(String)
+	 */
    public <T> List<T> getVetoSubscribersToTopic(String topic) {
       synchronized (listenerLock) {
          return getSubscribers(topic, vetoListenersByTopic);
@@ -1322,20 +1848,31 @@ public class ThreadSafeEventService implements EventService {
    }
 
    /**
-    * Note: this is inconsistent with getSubscribers(String)
-    * @see EventService#getVetoSubscribersToTopic(String)
-    * @deprecated use getVetoSubscribersToTopic instead for direct replacement,
-    *             or use getVetoEventListeners to get topic and pattern matchers.
-    *             In EventBus 2.0 this name will replace getVetoEventListeners()
-    *             and have it's union functionality
-    */
+	 * Note: this is inconsistent with getSubscribers(String).
+	 *
+	 * @param <T>   the generic type
+	 * @param topic the topic
+	 * @return the veto subscribers
+	 * @see EventService#getVetoSubscribersToTopic(String)
+	 * @deprecated use getVetoSubscribersToTopic instead for direct replacement, or
+	 *             use getVetoEventListeners to get topic and pattern matchers. In
+	 *             EventBus 2.0 this name will replace getVetoEventListeners() and
+	 *             have it's union functionality
+	 */
    public <T> List<T> getVetoSubscribers(String topic) {
       synchronized (listenerLock) {
          return getVetoSubscribersToTopic(topic);
       }
    }
 
-   /** @see EventService#getVetoSubscribers(Pattern) */
+   /**
+	 * Gets the veto subscribers.
+	 *
+	 * @param <T>          the generic type
+	 * @param topicPattern the topic pattern
+	 * @return the veto subscribers
+	 * @see EventService#getVetoSubscribers(Pattern)
+	 */
    public <T> List<T> getVetoSubscribers(Pattern topicPattern) {
       synchronized (listenerLock) {
          PatternWrapper patternWrapper = new PatternWrapper(topicPattern);
@@ -1343,12 +1880,26 @@ public class ThreadSafeEventService implements EventService {
       }
    }
 
-   /** @see EventService#getVetoSubscribersByPattern(String)   */
+   /**
+	 * Gets the veto subscribers by pattern.
+	 *
+	 * @param <T>     the generic type
+	 * @param pattern the pattern
+	 * @return the veto subscribers by pattern
+	 * @see EventService#getVetoSubscribersByPattern(String)
+	 */
    public <T> List<T> getVetoSubscribersByPattern(String pattern) {
       return getSubscribersByPattern(pattern, vetoListenersByTopicPattern);
    }
 
-   /** Used for subscribers and veto subscribers */
+   /**
+	 * Used for subscribers and veto subscribers.
+	 *
+	 * @param <T>                       the generic type
+	 * @param topic                     the topic
+	 * @param subscribersByTopicPattern the subscribers by topic pattern
+	 * @return the subscribers by pattern
+	 */
    private <T> List<T> getSubscribersByPattern(String topic, Map subscribersByTopicPattern) {
       List result = new ArrayList();
       synchronized (listenerLock) {
@@ -1370,6 +1921,13 @@ public class ThreadSafeEventService implements EventService {
       }
    }
 
+   /**
+	 * Gets the subscribers to pattern.
+	 *
+	 * @param <T>          the generic type
+	 * @param topicPattern the topic pattern
+	 * @return the subscribers to pattern
+	 */
    protected <T> List<T> getSubscribersToPattern(Pattern topicPattern) {
       synchronized (listenerLock) {
          PatternWrapper patternWrapper = new PatternWrapper(topicPattern);
@@ -1377,6 +1935,13 @@ public class ThreadSafeEventService implements EventService {
       }
    }
 
+   /**
+	 * Gets the subscribers.
+	 *
+	 * @param classOrTopic  the class or topic
+	 * @param subscriberMap the subscriber map
+	 * @return the subscribers
+	 */
    private List getSubscribers(Object classOrTopic, Map subscriberMap) {
       List result;
       synchronized (listenerLock) {
@@ -1392,6 +1957,13 @@ public class ThreadSafeEventService implements EventService {
       return result;
    }
 
+   /**
+	 * Gets the event or veto subscribers to class.
+	 *
+	 * @param classMap   the class map
+	 * @param eventClass the event class
+	 * @return the event or veto subscribers to class
+	 */
    private List getEventOrVetoSubscribersToClass(Map classMap, Class eventClass) {
       List result = new ArrayList();
       Set keys = classMap.keySet();
@@ -1408,6 +1980,13 @@ public class ThreadSafeEventService implements EventService {
       return result;
    }
 
+   /**
+	 * Gets the event or veto subscribers to type.
+	 *
+	 * @param typeMap   the type map
+	 * @param eventType the event type
+	 * @return the event or veto subscribers to type
+	 */
    private List getEventOrVetoSubscribersToType(Map typeMap, Type eventType) {
       List result = new ArrayList();
       Set mapKeySet = typeMap.keySet();
@@ -1512,6 +2091,14 @@ public class ThreadSafeEventService implements EventService {
           */
    }
 
+   /**
+	 * Check time limit.
+	 *
+	 * @param start      the start
+	 * @param event      the event
+	 * @param subscriber the subscriber
+	 * @param l          the l
+	 */
    private void checkTimeLimit(long start, Object event, EventSubscriber subscriber, VetoEventListener l) {
       if (timeThresholdForEventTimingEventPublication == null) {
          return;
@@ -1522,6 +2109,11 @@ public class ThreadSafeEventService implements EventService {
       }
    }
 
+   /**
+	 * Subscribe timing.
+	 *
+	 * @param event the event
+	 */
    protected void subscribeTiming(SubscriberTimingEvent event) {
       LOG.log(Level.INFO, event + "");
    }
@@ -1610,13 +2202,13 @@ public class ThreadSafeEventService implements EventService {
    }
 
    /**
-    * Given a set (or subscribers or veto listeners), makes a copy of the set, resolving WeakReferences to hard
-    * references, and removing garbage collected references from the original set.
-    *
-    * @param subscribersOrVetoListeners
-    *
-    * @return a copy of the set
-    */
+	 * Given a set (or subscribers or veto listeners), makes a copy of the set,
+	 * resolving WeakReferences to hard references, and removing garbage collected
+	 * references from the original set.
+	 *
+	 * @param subscribersOrVetoListeners the subscribers or veto listeners
+	 * @return a copy of the set
+	 */
    private List createCopyOfContentsRemoveWeakRefs(Collection subscribersOrVetoListeners) {
       if (subscribersOrVetoListeners == null) {
          return null;
@@ -1649,24 +2241,32 @@ public class ThreadSafeEventService implements EventService {
    }
 
    /**
-    * Sets the default cache size for each kind of event, default is 0 (no caching).
-    * <p/>
-    * If this value is set to a positive number, then when an event is published, the EventService caches the event or
-    * topic payload data for later retrieval.  This allows subscribers to find out what has most recently happened
-    * before they subscribed.  The cached event(s) are returned from #getLastEvent(Class), #getLastTopicData(String),
-    * #getCachedEvents(Class), or #getCachedTopicData(String)
-    * <p/>
-    * The default can be overridden on a by-event-class or by-topic basis.
-    *
-    * @param defaultCacheSizePerClassOrTopic
-    */
+	 * Sets the default cache size for each kind of event, default is 0 (no
+	 * caching).
+	 * <p/>
+	 * If this value is set to a positive number, then when an event is published,
+	 * the EventService caches the event or topic payload data for later retrieval.
+	 * This allows subscribers to find out what has most recently happened before
+	 * they subscribed. The cached event(s) are returned from #getLastEvent(Class),
+	 * #getLastTopicData(String), #getCachedEvents(Class), or
+	 * #getCachedTopicData(String)
+	 * <p/>
+	 * The default can be overridden on a by-event-class or by-topic basis.
+	 *
+	 * @param defaultCacheSizePerClassOrTopic the new default cache size per class
+	 *                                        or topic
+	 */
    public void setDefaultCacheSizePerClassOrTopic(int defaultCacheSizePerClassOrTopic) {
       synchronized (cacheLock) {
          this.defaultCacheSizePerClassOrTopic = defaultCacheSizePerClassOrTopic;
       }
    }
 
-   /** @return the default number of event payloads kept per event class or topic */
+   /**
+	 * Gets the default cache size per class or topic.
+	 *
+	 * @return the default number of event payloads kept per event class or topic
+	 */
    public int getDefaultCacheSizePerClassOrTopic() {
       synchronized (cacheLock) {
          return defaultCacheSizePerClassOrTopic;
@@ -1860,10 +2460,12 @@ public class ThreadSafeEventService implements EventService {
    }
 
    /**
-    * @param eventClass an index into the cache, cannot be an interface
-    *
-    * @return the last event published for this event class, or null if caching is turned off (the default)
-    */
+	 * Gets the last event.
+	 *
+	 * @param eventClass an index into the cache, cannot be an interface
+	 * @return the last event published for this event class, or null if caching is
+	 *         turned off (the default)
+	 */
    public Object getLastEvent(Class eventClass) {
       if (eventClass.isInterface()) {
          throw new IllegalArgumentException("Interfaces are not accepted in get last event, use a specific event class.");
@@ -1878,10 +2480,12 @@ public class ThreadSafeEventService implements EventService {
    }
 
    /**
-    * @param eventClass an index into the cache, cannot be an interface
-    *
-    * @return the last events published for this event class, or null if caching is turned off (the default)
-    */
+	 * Gets the cached events.
+	 *
+	 * @param eventClass an index into the cache, cannot be an interface
+	 * @return the last events published for this event class, or null if caching is
+	 *         turned off (the default)
+	 */
    public List getCachedEvents(Class eventClass) {
       if (eventClass.isInterface()) {
          throw new IllegalArgumentException("Interfaces are not accepted in get last event, use a specific event class.");
@@ -1896,10 +2500,12 @@ public class ThreadSafeEventService implements EventService {
    }
 
    /**
-    * @param topic an index into the cache
-    *
-    * @return the last data Object published on this topic, or null if caching is turned off (the default)
-    */
+	 * Gets the last topic data.
+	 *
+	 * @param topic an index into the cache
+	 * @return the last data Object published on this topic, or null if caching is
+	 *         turned off (the default)
+	 */
    public Object getLastTopicData(String topic) {
       synchronized (cacheLock) {
          List topicCache = cacheByTopic.get(topic);
@@ -1911,10 +2517,12 @@ public class ThreadSafeEventService implements EventService {
    }
 
    /**
-    * @param topic an index into the cache
-    *
-    * @return the last data Objects published on this topic, or null if caching is turned off (the default)
-    */
+	 * Gets the cached topic data.
+	 *
+	 * @param topic an index into the cache
+	 * @return the last data Objects published on this topic, or null if caching is
+	 *         turned off (the default)
+	 */
    public List getCachedTopicData(String topic) {
       synchronized (cacheLock) {
          List topicCache = cacheByTopic.get(topic);
@@ -1979,7 +2587,16 @@ public class ThreadSafeEventService implements EventService {
       }
    }
 
-   /** Called during veto exceptions, calls handleException */
+   /**
+	 * Called during veto exceptions, calls handleException.
+	 *
+	 * @param event        the event
+	 * @param topic        the topic
+	 * @param eventObj     the event obj
+	 * @param e            the e
+	 * @param callingStack the calling stack
+	 * @param vetoer       the vetoer
+	 */
    protected void subscribeVetoException(final Object event, final String topic, final Object eventObj,
            Throwable e, StackTraceElement[] callingStack, VetoEventListener vetoer) {
       String str = "EventService veto event listener r:" + vetoer;
@@ -1989,7 +2606,15 @@ public class ThreadSafeEventService implements EventService {
       handleException("vetoing", event, topic, eventObj, e, callingStack, str);
    }
 
-   /** Called during event handling exceptions, calls handleException */
+   /**
+	 * Called during event handling exceptions, calls handleException.
+	 *
+	 * @param topic                the topic
+	 * @param eventObj             the event obj
+	 * @param e                    the e
+	 * @param callingStack         the calling stack
+	 * @param eventTopicSubscriber the event topic subscriber
+	 */
    protected void onEventException(final String topic, final Object eventObj, Throwable e,
            StackTraceElement[] callingStack, EventTopicSubscriber eventTopicSubscriber) {
       String str = "EventService topic subscriber:" + eventTopicSubscriber;
@@ -1999,7 +2624,14 @@ public class ThreadSafeEventService implements EventService {
       handleException("handling event", null, topic, eventObj, e, callingStack, str);
    }
 
-   /** Called during event handling exceptions, calls handleException */
+   /**
+	 * Called during event handling exceptions, calls handleException.
+	 *
+	 * @param event           the event
+	 * @param e               the e
+	 * @param callingStack    the calling stack
+	 * @param eventSubscriber the event subscriber
+	 */
    protected void handleException(final Object event, Throwable e,
            StackTraceElement[] callingStack, EventSubscriber eventSubscriber) {
       String str = "EventService subscriber:" + eventSubscriber;
@@ -2010,8 +2642,16 @@ public class ThreadSafeEventService implements EventService {
    }
 
    /**
-    * All exception handling goes through this method.  Logs a warning by default.
-    */
+	 * All exception handling goes through this method. Logs a warning by default.
+	 *
+	 * @param action       the action
+	 * @param event        the event
+	 * @param topic        the topic
+	 * @param eventObj     the event obj
+	 * @param e            the e
+	 * @param callingStack the calling stack
+	 * @param sourceString the source string
+	 */
    protected void handleException(final String action, final Object event, final String topic,
            final Object eventObj, Throwable e, StackTraceElement[] callingStack, String sourceString) {
       String eventClassString = (event == null ? "none" : event.getClass().getName());
@@ -2061,6 +2701,12 @@ public class ThreadSafeEventService implements EventService {
       return existingSubscriber;
    }
 
+   /**
+	 * Removes the proxy subscriber.
+	 *
+	 * @param proxy the proxy
+	 * @param iter  the iter
+	 */
    protected void removeProxySubscriber(ProxySubscriber proxy, Iterator iter) {
       iter.remove();
       proxy.proxyUnsubscribed();
@@ -2068,8 +2714,8 @@ public class ThreadSafeEventService implements EventService {
    }
 
    /**
-    * Increment the count of stale proxies and start a cleanup task if necessary
-    */
+	 * Increment the count of stale proxies and start a cleanup task if necessary.
+	 */
    protected void incWeakRefPlusProxySubscriberCount() {
       synchronized(listenerLock) {
          weakRefPlusProxySubscriberCount++;
@@ -2083,8 +2729,8 @@ public class ThreadSafeEventService implements EventService {
    }
 
    /**
-    * Decrement the count of stale proxies
-    */
+	 * Decrement the count of stale proxies.
+	 */
    protected void decWeakRefPlusProxySubscriberCount() {
       synchronized(listenerLock) {
          weakRefPlusProxySubscriberCount--;
@@ -2094,6 +2740,9 @@ public class ThreadSafeEventService implements EventService {
       }
    }
 
+   /**
+	 * Start cleanup.
+	 */
    private void startCleanup() {
       synchronized(listenerLock) {
          if (cleanupTimer == null) {
@@ -2106,7 +2755,14 @@ public class ThreadSafeEventService implements EventService {
       }
    }
    
+   /**
+	 * The Class CleanupTimerTask.
+	 */
    class CleanupTimerTask extends TimerTask {
+      
+      /**
+		 * Run.
+		 */
       @Override
       public void run() {
          synchronized(listenerLock) {
@@ -2151,7 +2807,18 @@ public class ThreadSafeEventService implements EventService {
       }      
    }
 
+   /**
+	 * The Class PrioritizedSubscriberComparator.
+	 */
    private static class PrioritizedSubscriberComparator implements Comparator<Prioritized> {
+      
+      /**
+		 * Compare.
+		 *
+		 * @param prioritized1 the prioritized 1
+		 * @param prioritized2 the prioritized 2
+		 * @return the int
+		 */
       public int compare(Prioritized prioritized1, Prioritized prioritized2) {
          if (prioritized1 == null) {
             return -1;
@@ -2170,19 +2837,38 @@ public class ThreadSafeEventService implements EventService {
    }
 
    /**
-    * Since Pattern doesn't implement equals(), we need one of these
-    */
+	 * Since Pattern doesn't implement equals(), we need one of these.
+	 */
    private class PatternWrapper {
+      
+      /** The pattern. */
       private Pattern pattern;
 
+      /**
+		 * Instantiates a new pattern wrapper.
+		 *
+		 * @param pat the pat
+		 */
       public PatternWrapper(Pattern pat) {
          pattern = pat;
       }
 
+      /**
+		 * Matches.
+		 *
+		 * @param input the input
+		 * @return true, if successful
+		 */
       public boolean matches(CharSequence input) {
          return pattern.matcher(input).matches();
       }
 
+      /**
+		 * Equals.
+		 *
+		 * @param o the o
+		 * @return true, if successful
+		 */
       public boolean equals(Object o) {
          if (this == o) {
             return true;
@@ -2206,6 +2892,11 @@ public class ThreadSafeEventService implements EventService {
          return true;
       }
 
+      /**
+		 * Hash code.
+		 *
+		 * @return the int
+		 */
       public int hashCode() {
          if (this.pattern != null && this.pattern.pattern() != null) {
             return this.pattern.pattern().hashCode();

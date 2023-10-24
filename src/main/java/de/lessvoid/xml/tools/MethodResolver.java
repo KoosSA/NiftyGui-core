@@ -12,6 +12,8 @@ import javax.annotation.Nullable;
  * @author void
  */
 public class MethodResolver {
+  
+  /** The Constant log. */
   private static final Logger log = Logger.getLogger(MethodResolver.class.getName());
 
   /**
@@ -45,6 +47,14 @@ public class MethodResolver {
     return findMethod(c.getSuperclass(), methodName);
   }
 
+  /**
+	 * Find method with args.
+	 *
+	 * @param c          the c
+	 * @param methodName the method name
+	 * @param parameters the parameters
+	 * @return the method
+	 */
   @Nullable
   public static Method findMethodWithArgs(@Nullable final Class<?> c, @Nonnull final String methodName, final Class<?> ... parameters) {
     if (c == null) {
@@ -100,6 +110,12 @@ public class MethodResolver {
     return methodName.substring(startIdx + 1, endIdx);
   }
 
+  /**
+	 * Extract method name.
+	 *
+	 * @param methodName the method name
+	 * @return the string
+	 */
   @Nullable
   private static String extractMethodName(@Nonnull final String methodName) {
     if (!methodName.contains("(")) {

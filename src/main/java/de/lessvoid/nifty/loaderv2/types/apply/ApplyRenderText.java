@@ -9,13 +9,31 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 
+/**
+ * The Class ApplyRenderText.
+ */
 public class ApplyRenderText implements ApplyRenderer {
+  
+  /** The convert. */
   private final Convert convert;
 
+  /**
+	 * Instantiates a new apply render text.
+	 *
+	 * @param convertParam the convert param
+	 */
   public ApplyRenderText(final Convert convertParam) {
     convert = convertParam;
   }
 
+  /**
+	 * Apply.
+	 *
+	 * @param screen       the screen
+	 * @param element      the element
+	 * @param attributes   the attributes
+	 * @param renderEngine the render engine
+	 */
   @Override
   public void apply(
       @Nonnull final Screen screen,

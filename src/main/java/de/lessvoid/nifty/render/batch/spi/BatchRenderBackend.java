@@ -82,14 +82,14 @@ public interface BatchRenderBackend {
   void clear();
 
   /**
-   * Creates a new mouse cursor.
-   *
-   * @param filename image file for the cursor
-   * @param hotspotX hotspot x with 0 being left of the screen
-   * @param hotspotY hotspot y with 0 being top of the screen
-   *
-   * @return the loaded mouse cursor resource ready to be applied
-   */
+	 * Creates a new mouse cursor.
+	 *
+	 * @param filename image file for the cursor
+	 * @param hotspotX hotspot x with 0 being left of the screen
+	 * @param hotspotY hotspot y with 0 being top of the screen
+	 * @return the loaded mouse cursor resource ready to be applied
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
   @Nullable
   MouseCursor createMouseCursor(@Nonnull final String filename, final int hotspotX, final int hotspotY)
           throws IOException;
@@ -124,17 +124,24 @@ public interface BatchRenderBackend {
   void clearTextureAtlas(final int atlasTextureId);
 
   /**
-   * Loads the given image (provide the size of the image using the {@link BatchRenderBackend.Image} interface.
-   * If the image fails to load, the implementation must return a non-null instance.
-   *
-   * @param filename the filename to load
-   */
+	 * Loads the given image (provide the size of the image using the
+	 * {@link BatchRenderBackend.Image} interface. If the image fails to load, the
+	 * implementation must return a non-null instance.
+	 *
+	 * @param filename the filename to load
+	 * @return the image
+	 */
   @Nonnull
   Image loadImage(@Nonnull final String filename);
 
   /**
-   * Wraps the given buffer into an Image interface;
-   */
+	 * Wraps the given buffer into an Image interface;.
+	 *
+	 * @param imageData   the image data
+	 * @param imageWidth  the image width
+	 * @param imageHeight the image height
+	 * @return the image
+	 */
   @Nullable
   Image loadImage(@Nonnull final ByteBuffer imageData, final int imageWidth, final int imageHeight);
 
@@ -260,17 +267,24 @@ public interface BatchRenderBackend {
           final int atlasTextureId);
 
   /**
-   * Whether or not to render textures with high quality settings. Usually, setting to true will result in slower
-   * performance, but nicer looking textures, and vice versa. How high quality textures are rendered versus low quality
-   * textures will vary depending on the {@link de.lessvoid.nifty.render.batch.spi.BatchRenderBackend} implementation.
-   */
+	 * Whether or not to render textures with high quality settings. Usually,
+	 * setting to true will result in slower performance, but nicer looking
+	 * textures, and vice versa. How high quality textures are rendered versus low
+	 * quality textures will vary depending on the
+	 * {@link de.lessvoid.nifty.render.batch.spi.BatchRenderBackend} implementation.
+	 *
+	 * @param shouldUseHighQualityTextures the should use high quality textures
+	 */
   void useHighQualityTextures(final boolean shouldUseHighQualityTextures);
 
   /**
-   * Whether or not to overwrite previously used atlas space with blank data. Setting to true will result in slower
-   * performance, but may be useful in debugging when visually inspecting the atlas, since there will not be portions
-   * of old images visible in currently unused atlas space.
-   */
+	 * Whether or not to overwrite previously used atlas space with blank data.
+	 * Setting to true will result in slower performance, but may be useful in
+	 * debugging when visually inspecting the atlas, since there will not be
+	 * portions of old images visible in currently unused atlas space.
+	 *
+	 * @param shouldFill the should fill
+	 */
   void fillRemovedImagesInAtlas(final boolean shouldFill);
 
   /**
@@ -280,7 +294,19 @@ public interface BatchRenderBackend {
    * @author void
    */
   public interface Image {
+    
+    /**
+	 * Gets the width.
+	 *
+	 * @return the width
+	 */
     int getWidth();
+    
+    /**
+	 * Gets the height.
+	 *
+	 * @return the height
+	 */
     int getHeight();
   }
 
@@ -289,30 +315,61 @@ public interface BatchRenderBackend {
    * @author iamtakingiteasy
    */
   public static class ByteBufferedImage implements Image {
+    
+    /** The buffer. */
     protected final ByteBuffer buffer;
+    
+    /** The width. */
     protected final int width;
+    
+    /** The height. */
     protected final int height;
 
+    /**
+	 * Instantiates a new byte buffered image.
+	 */
     public ByteBufferedImage() {
       this(null, 0, 0);
     }
 
+    /**
+	 * Instantiates a new byte buffered image.
+	 *
+	 * @param buffer the buffer
+	 * @param width  the width
+	 * @param height the height
+	 */
     public ByteBufferedImage(final ByteBuffer buffer, final int width, final int height) {
       this.buffer = buffer;
       this.width = width;
       this.height = height;
     }
 
+    /**
+	 * Gets the width.
+	 *
+	 * @return the width
+	 */
     @Override
     public int getWidth() {
       return width;
     }
 
+    /**
+	 * Gets the height.
+	 *
+	 * @return the height
+	 */
     @Override
     public int getHeight() {
       return height;
     }
 
+    /**
+	 * Gets the buffer.
+	 *
+	 * @return the buffer
+	 */
     public ByteBuffer getBuffer() {
       return buffer;
     }

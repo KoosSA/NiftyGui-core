@@ -8,10 +8,25 @@ import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 
+/**
+ * The Class MenuItemControl.
+ */
 public class MenuItemControl extends AbstractController {
+  
+  /** The screen. */
   private Screen screen;
+  
+  /** The focus handler. */
   private FocusHandler focusHandler;
 
+  /**
+	 * Bind.
+	 *
+	 * @param nifty       the nifty
+	 * @param screenParam the screen param
+	 * @param newElement  the new element
+	 * @param properties  the properties
+	 */
   @Override
   public void bind(
       @Nonnull final Nifty nifty,
@@ -22,11 +37,20 @@ public class MenuItemControl extends AbstractController {
     screen = screenParam;
   }
 
+  /**
+	 * On start screen.
+	 */
   @Override
   public void onStartScreen() {
     focusHandler = screen.getFocusHandler();
   }
 
+  /**
+	 * Input event.
+	 *
+	 * @param inputEvent the input event
+	 * @return true, if successful
+	 */
   @Override
   public boolean inputEvent(@Nonnull final NiftyInputEvent inputEvent) {
     Element element = getElement();
@@ -68,6 +92,11 @@ public class MenuItemControl extends AbstractController {
     return false;
   }
 
+  /**
+	 * On focus.
+	 *
+	 * @param getFocus the get focus
+	 */
   @Override
   public void onFocus(final boolean getFocus) {
     super.onFocus(getFocus);

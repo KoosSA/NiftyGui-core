@@ -45,22 +45,57 @@ public class CenterLayout implements LayoutManager {
     }
   }
 
+  /**
+	 * Left margin.
+	 *
+	 * @param boxConstraints the box constraints
+	 * @param rootBoxWidth   the root box width
+	 * @return the int
+	 */
   private int leftMargin(@Nonnull final BoxConstraints boxConstraints, final int rootBoxWidth) {
     return boxConstraints.getMarginLeft().getValueAsInt(rootBoxWidth);
   }
 
+  /**
+	 * Right margin.
+	 *
+	 * @param boxConstraints the box constraints
+	 * @param rootBoxWidth   the root box width
+	 * @return the int
+	 */
   private int rightMargin(@Nonnull final BoxConstraints boxConstraints, final int rootBoxWidth) {
     return boxConstraints.getMarginRight().getValueAsInt(rootBoxWidth);
   }
 
+  /**
+	 * Top margin.
+	 *
+	 * @param boxConstraints the box constraints
+	 * @param rootBoxHeight  the root box height
+	 * @return the int
+	 */
   private int topMargin(@Nonnull final BoxConstraints boxConstraints, final int rootBoxHeight) {
     return boxConstraints.getMarginTop().getValueAsInt(rootBoxHeight);
   }
 
+  /**
+	 * Bottom margin.
+	 *
+	 * @param boxConstraints the box constraints
+	 * @param rootBoxHeight  the root box height
+	 * @return the int
+	 */
   private int bottomMargin(@Nonnull final BoxConstraints boxConstraints, final int rootBoxHeight) {
     return boxConstraints.getMarginBottom().getValueAsInt(rootBoxHeight);
   }
 
+  /**
+	 * Layout element.
+	 *
+	 * @param element            the element
+	 * @param rootBox            the root box
+	 * @param rootBoxConstraints the root box constraints
+	 */
   private void layoutElement(
       @Nonnull final LayoutPart element,
       @Nonnull Box rootBox,
@@ -83,6 +118,14 @@ public class CenterLayout implements LayoutManager {
     box.setY(box.getY() + topMargin(constraint, rootBox.getHeight()) - bottomMargin(constraint, rootBox.getHeight()));
   }
 
+  /**
+	 * Handle horizontal alignment.
+	 *
+	 * @param rootBox            the root box
+	 * @param rootBoxConstraints the root box constraints
+	 * @param box                the box
+	 * @param constraint         the constraint
+	 */
   void handleHorizontalAlignment(
       @Nonnull final Box rootBox,
       @Nonnull final BoxConstraints rootBoxConstraints,
@@ -101,6 +144,14 @@ public class CenterLayout implements LayoutManager {
     }
   }
 
+  /**
+	 * Handle vertical alignment.
+	 *
+	 * @param rootBox            the root box
+	 * @param rootBoxConstraints the root box constraints
+	 * @param box                the box
+	 * @param constraint         the constraint
+	 */
   void handleVerticalAlignment(
       @Nonnull final Box rootBox,
       @Nonnull final BoxConstraints rootBoxConstraints,
@@ -119,6 +170,14 @@ public class CenterLayout implements LayoutManager {
     }
   }
 
+  /**
+	 * Handle width constraint.
+	 *
+	 * @param rootBox            the root box
+	 * @param rootBoxConstraints the root box constraints
+	 * @param box                the box
+	 * @param constraint         the constraint
+	 */
   private void handleWidthConstraint(
       @Nonnull final Box rootBox,
       @Nonnull final BoxConstraints rootBoxConstraints,
@@ -145,6 +204,14 @@ public class CenterLayout implements LayoutManager {
     }
   }
 
+  /**
+	 * Handle height constraint.
+	 *
+	 * @param rootBox            the root box
+	 * @param rootBoxConstraints the root box constraints
+	 * @param box                the box
+	 * @param constraint         the constraint
+	 */
   private void handleHeightConstraint(
       @Nonnull final Box rootBox,
       @Nonnull final BoxConstraints rootBoxConstraints,
@@ -172,9 +239,12 @@ public class CenterLayout implements LayoutManager {
   }
 
   /**
-   * @param children children elements of the root element
-   * @return new calculated SizeValue
-   */
+	 * Calculate constraint width.
+	 *
+	 * @param root     the root
+	 * @param children children elements of the root element
+	 * @return new calculated SizeValue
+	 */
   @Nonnull
   @Override
   public SizeValue calculateConstraintWidth(@Nonnull final LayoutPart root, @Nonnull final List<LayoutPart> children) {
@@ -182,9 +252,12 @@ public class CenterLayout implements LayoutManager {
   }
 
   /**
-   * @param children children elements of the root element
-   * @return new calculated SizeValue
-   */
+	 * Calculate constraint height.
+	 *
+	 * @param root     the root
+	 * @param children children elements of the root element
+	 * @return new calculated SizeValue
+	 */
   @Nonnull
   @Override
   public SizeValue calculateConstraintHeight(@Nonnull final LayoutPart root, @Nonnull final List<LayoutPart> children) {

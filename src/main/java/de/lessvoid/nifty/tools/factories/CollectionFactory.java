@@ -8,9 +8,11 @@ import javax.annotation.Nonnull;
 import de.lessvoid.nifty.tools.Factory;
 
 /**
- * This is the shared implementation for a factory that creates {@link java.util.Collection} instances.
+ * This is the shared implementation for a factory that creates
+ * {@link java.util.Collection} instances.
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
+ * @param <T> the generic type
  */
 public abstract class CollectionFactory<T> implements Factory<Collection<T>> {
   /**
@@ -37,6 +39,11 @@ public abstract class CollectionFactory<T> implements Factory<Collection<T>> {
     return (CollectionFactory<T>) ARRAY_LIST_INSTANCE;
   }
 
+  /**
+	 * Creates a new Collection object.
+	 *
+	 * @return the collection< t>
+	 */
   @Nonnull
   @Override
   public abstract Collection<T> createNew();

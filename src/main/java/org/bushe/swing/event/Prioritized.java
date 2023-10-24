@@ -10,5 +10,11 @@ package org.bushe.swing.event;
  * positive, the later it is called.
  */
 public interface Prioritized {
+   
+   /**
+	 * Gets the priority.
+	 *
+	 * @return the priority
+	 */
    int getPriority();
 }

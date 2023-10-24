@@ -6,6 +6,7 @@ import javax.annotation.Nonnull;
  * This objects contains two equal objects that can be switched upon request.
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
+ * @param <T> the generic type
  */
 public class FlipFlop<T> {
   /**

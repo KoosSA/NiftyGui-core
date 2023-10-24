@@ -18,8 +18,17 @@ import de.lessvoid.nifty.tools.Color;
  * @author void
  */
 public class ChangeColor implements EffectImpl {
+  
+  /** The color. */
   private Color color;
 
+  /**
+	 * Activate.
+	 *
+	 * @param nifty     the nifty
+	 * @param element   the element
+	 * @param parameter the parameter
+	 */
   @Override
   public void activate(
       @Nonnull final Nifty nifty,
@@ -28,6 +37,14 @@ public class ChangeColor implements EffectImpl {
     color = new de.lessvoid.nifty.tools.Color(parameter.getProperty("color", "#ffff"));
   }
 
+  /**
+	 * Execute.
+	 *
+	 * @param element        the element
+	 * @param normalizedTime the normalized time
+	 * @param falloff        the falloff
+	 * @param r              the r
+	 */
   @Override
   public void execute(
       @Nonnull final Element element,
@@ -37,6 +54,9 @@ public class ChangeColor implements EffectImpl {
     r.setColor(color);
   }
 
+  /**
+	 * Deactivate.
+	 */
   @Override
   public void deactivate() {
   }

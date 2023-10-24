@@ -1,18 +1,38 @@
 package de.lessvoid.nifty.render.batch;
 
 /**
+ * The Class BatchRenderConfiguration.
+ *
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
 public class BatchRenderConfiguration {
+  
+  /** The Constant DEFAULT_ATLAS_WIDTH. */
   // Sane default batch rendering values
   public static final int DEFAULT_ATLAS_WIDTH = 2048;
+  
+  /** The Constant DEFAULT_ATLAS_HEIGHT. */
   public static final int DEFAULT_ATLAS_HEIGHT = 2048;
+  
+  /** The Constant DEFAULT_ATLAS_PADDING. */
   public static final int DEFAULT_ATLAS_PADDING = 5;
+  
+  /** The Constant DEFAULT_INITIAL_ATLAS_COUNT. */
   public static final int DEFAULT_INITIAL_ATLAS_COUNT = 1;
+  
+  /** The Constant DEFAULT_INITIAL_BATCH_COUNT. */
   public static final int DEFAULT_INITIAL_BATCH_COUNT = 1;
+  
+  /** The Constant DEFAULT_ATLAS_TOLERANCE. */
   public static final float DEFAULT_ATLAS_TOLERANCE = 0.25f;
+  
+  /** The Constant DEFAULT_DISPOSE_IMAGES_BETWEEN_SCREENS. */
   public static final boolean DEFAULT_DISPOSE_IMAGES_BETWEEN_SCREENS = true;
+  
+  /** The Constant DEFAULT_USE_HIGH_QUALITY_TEXTURES. */
   public static final boolean DEFAULT_USE_HIGH_QUALITY_TEXTURES = false;
+  
+  /** The Constant DEFAULT_FILL_REMOVED_IMAGES_IN_ATLAS. */
   public static final boolean DEFAULT_FILL_REMOVED_IMAGES_IN_ATLAS = false;
 
   /**

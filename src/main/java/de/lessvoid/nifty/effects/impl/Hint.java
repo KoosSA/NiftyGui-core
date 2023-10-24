@@ -32,24 +32,49 @@ import de.lessvoid.nifty.tools.SizeValue;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public class Hint implements EffectImpl {
+  
+  /** The Constant log. */
   @Nonnull
   private static final Logger log = Logger.getLogger(Hint.class.getName());
+  
+  /** The Constant HINT_LAYER_ID. */
   @Nonnull
   private static final String HINT_LAYER_ID = "niftyHintLayer";
+  
+  /** The nifty. */
   @Nullable
   private Nifty nifty;
+  
+  /** The screen. */
   @Nullable
   private Screen screen;
+  
+  /** The hint layer. */
   @Nullable
   private Element hintLayer;
+  
+  /** The hint panel. */
   @Nullable
   private Element hintPanel;
+  
+  /** The hint delay. */
   private int hintDelay;
+  
+  /** The offset X. */
   @Nullable
   private String offsetX;
+  
+  /** The offset Y. */
   @Nullable
   private String offsetY;
 
+  /**
+	 * Activate.
+	 *
+	 * @param nifty     the nifty
+	 * @param element   the element
+	 * @param parameter the parameter
+	 */
   @Override
   public void activate(
       @Nonnull final Nifty nifty,
@@ -81,6 +106,11 @@ public class Hint implements EffectImpl {
     hintPanel = builder.build(nifty, screen, hintLayer);
   }
 
+  /**
+	 * Gets the hint layer.
+	 *
+	 * @return the hint layer
+	 */
   @Nonnull
   private Element getHintLayer() {
     if (hintLayer != null) {
@@ -101,6 +131,14 @@ public class Hint implements EffectImpl {
     return hintLayer;
   }
 
+  /**
+	 * Execute.
+	 *
+	 * @param element        the element
+	 * @param normalizedTime the normalized time
+	 * @param falloff        the falloff
+	 * @param r              the r
+	 */
   @Override
   public void execute(
       @Nonnull final Element element,
@@ -131,6 +169,9 @@ public class Hint implements EffectImpl {
     }
   }
 
+  /**
+	 * Deactivate.
+	 */
   @Override
   public void deactivate() {
     if (hintPanel != null) {
@@ -147,6 +188,9 @@ public class Hint implements EffectImpl {
     }
   }
 
+  /**
+	 * Removes the panel.
+	 */
   private void removePanel() {
     if (hintPanel != null && hintLayer != null) {
       hintPanel.markForRemoval(new EndNotify() {
@@ -160,6 +204,14 @@ public class Hint implements EffectImpl {
     }
   }
 
+  /**
+	 * Gets the pos X.
+	 *
+	 * @param element     the element
+	 * @param hintPanel   the hint panel
+	 * @param screenWidth the screen width
+	 * @return the pos X
+	 */
   private int getPosX(@Nonnull final Element element, @Nonnull final Element hintPanel, final int screenWidth) {
     int pos;
     if ("center".equals(offsetX)) {
@@ -180,6 +232,14 @@ public class Hint implements EffectImpl {
     return pos;
   }
 
+  /**
+	 * Gets the pos Y.
+	 *
+	 * @param element      the element
+	 * @param hintPanel    the hint panel
+	 * @param screenHeight the screen height
+	 * @return the pos Y
+	 */
   private int getPosY(@Nonnull final Element element, @Nonnull final Element hintPanel, final int screenHeight) {
     int pos;
     if ("center".equals(offsetY)) {

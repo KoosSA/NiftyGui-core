@@ -14,12 +14,26 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.TargetElementResolver;
 
+/**
+ * The Class Remote.
+ */
 public class Remote implements EffectImpl {
+  
+  /** The target element. */
   @Nullable
   private Element targetElement;
+  
+  /** The effect event id. */
   @Nullable
   private EffectEventId effectEventId;
 
+  /**
+	 * Activate.
+	 *
+	 * @param nifty     the nifty
+	 * @param element   the element
+	 * @param parameter the parameter
+	 */
   @Override
   public void activate(
       @Nonnull final Nifty nifty,
@@ -37,6 +51,14 @@ public class Remote implements EffectImpl {
     }
   }
 
+  /**
+	 * Execute.
+	 *
+	 * @param element        the element
+	 * @param normalizedTime the normalized time
+	 * @param falloff        the falloff
+	 * @param r              the r
+	 */
   @Override
   public void execute(
       @Nonnull final Element element,
@@ -45,6 +67,9 @@ public class Remote implements EffectImpl {
       @Nonnull final NiftyRenderEngine r) {
   }
 
+  /**
+	 * Deactivate.
+	 */
   @Override
   public void deactivate() {
     if (targetElement != null && effectEventId != null) {

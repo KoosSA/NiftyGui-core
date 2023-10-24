@@ -22,13 +22,28 @@ import de.lessvoid.nifty.tools.SizeValue;
  * @author void
  */
 public class FollowMouse implements EffectImpl {
+  
+  /** The Constant log. */
   @Nonnull
   private static final Logger log = Logger.getLogger(FollowMouse.class.getName());
+  
+  /** The nifty. */
   @Nullable
   private Nifty nifty;
+  
+  /** The offset X. */
   private int offsetX;
+  
+  /** The offset Y. */
   private int offsetY;
 
+  /**
+	 * Activate.
+	 *
+	 * @param nifty     the nifty
+	 * @param element   the element
+	 * @param parameter the parameter
+	 */
   @Override
   public void activate(
       @Nonnull final Nifty nifty,
@@ -39,6 +54,14 @@ public class FollowMouse implements EffectImpl {
     this.offsetY = Integer.valueOf(parameter.getProperty("offsetY", "20"));
   }
 
+  /**
+	 * Execute.
+	 *
+	 * @param element        the element
+	 * @param normalizedTime the normalized time
+	 * @param falloff        the falloff
+	 * @param r              the r
+	 */
   @Override
   public void execute(
       @Nonnull final Element element,
@@ -60,6 +83,14 @@ public class FollowMouse implements EffectImpl {
     element.getParent().layoutElements();
   }
 
+  /**
+	 * Border check.
+	 *
+	 * @param pos  the pos
+	 * @param size the size
+	 * @param max  the max
+	 * @return the int
+	 */
   private int borderCheck(final int pos, final int size, final int max) {
     if (pos + size > max) {
       return max - size;
@@ -67,6 +98,9 @@ public class FollowMouse implements EffectImpl {
     return pos;
   }
 
+  /**
+	 * Deactivate.
+	 */
   @Override
   public void deactivate() {
   }

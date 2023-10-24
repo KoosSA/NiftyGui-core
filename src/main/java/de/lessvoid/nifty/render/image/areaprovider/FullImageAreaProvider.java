@@ -8,8 +8,16 @@ import de.lessvoid.nifty.layout.Box;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.spi.render.RenderImage;
 
+/**
+ * The Class FullImageAreaProvider.
+ */
 public class FullImageAreaProvider implements AreaProvider {
 
+  /**
+	 * Sets the parameters.
+	 *
+	 * @param parameters the new parameters
+	 */
   @Override
   public void setParameters(@Nullable String parameters) {
     if (parameters != null) {
@@ -18,12 +26,24 @@ public class FullImageAreaProvider implements AreaProvider {
     }
   }
 
+  /**
+	 * Gets the source area.
+	 *
+	 * @param renderImage the render image
+	 * @return the source area
+	 */
   @Nonnull
   @Override
   public Box getSourceArea(@Nonnull RenderImage renderImage) {
     return new Box(0, 0, renderImage.getWidth(), renderImage.getHeight());
   }
 
+  /**
+	 * Gets the native size.
+	 *
+	 * @param image the image
+	 * @return the native size
+	 */
   @Nonnull
   @Override
   public Size getNativeSize(@Nonnull NiftyImage image) {

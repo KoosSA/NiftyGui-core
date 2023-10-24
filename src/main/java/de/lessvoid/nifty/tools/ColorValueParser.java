@@ -14,28 +14,59 @@ import javax.annotation.Nullable;
  * @author void
  */
 public class ColorValueParser {
+  
+  /** The is color. */
   private boolean isColor;
+  
+  /** The next index. */
   private int nextIndex;
+  
+  /** The color. */
   @Nullable
   private Color color;
 
+  /**
+	 * Instantiates a new color value parser.
+	 */
   public ColorValueParser() {
     setNoResult();
   }
 
+  /**
+	 * Checks if is color.
+	 *
+	 * @return true, if is color
+	 */
   public boolean isColor() {
     return isColor;
   }
 
+  /**
+	 * Gets the next index.
+	 *
+	 * @return the next index
+	 */
   public int getNextIndex() {
     return nextIndex;
   }
 
+  /**
+	 * Gets the color.
+	 *
+	 * @return the color
+	 */
   @Nullable
   public Color getColor() {
     return color;
   }
 
+  /**
+	 * Checks if is color.
+	 *
+	 * @param text     the text
+	 * @param startIdx the start idx
+	 * @return true, if is color
+	 */
   public boolean isColor(@Nonnull final String text, final int startIdx) {
     if (text.startsWith("\\#", startIdx)) {
       int endIdx = text.indexOf('#', startIdx + 2);
@@ -48,12 +79,21 @@ public class ColorValueParser {
     return false;
   }
 
+  /**
+	 * Sets the no result.
+	 */
   private void setNoResult() {
     nextIndex = -1;
     color = null;
     isColor = false;
   }
 
+  /**
+	 * Sets the result.
+	 *
+	 * @param value  the value
+	 * @param endIdx the end idx
+	 */
   private void setResult(@Nonnull final String value, final int endIdx) {
     nextIndex = -1;
     color = null;

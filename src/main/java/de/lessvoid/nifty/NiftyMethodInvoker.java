@@ -15,17 +15,26 @@ import de.lessvoid.xml.tools.MethodResolver;
  * @author void
  */
 public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
+  
+  /** The Constant log. */
   private static final Logger log = Logger.getLogger(NiftyMethodInvoker.class.getName());
 
+  /** The target. */
   @Nullable
   private final Object[] target;
+  
+  /** The method with name. */
   @Nullable
   private final String methodWithName;
+  
+  /** The nifty. */
   private final Nifty nifty;
 
   /**
-   * create null MethodInvoker.
-   */
+	 * create null MethodInvoker.
+	 *
+	 * @param nifty the nifty
+	 */
   public NiftyMethodInvoker(final Nifty nifty) {
     this.nifty = nifty;
     this.methodWithName = null;
@@ -33,10 +42,12 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
   }
 
   /**
-   * Create new MethodInvoker.
-   * @param methodParam method
-   * @param targetParam target
-   */
+	 * Create new MethodInvoker.
+	 *
+	 * @param nifty       the nifty
+	 * @param methodParam method
+	 * @param targetParam target
+	 */
   public NiftyMethodInvoker(final Nifty nifty, @Nullable final String methodParam, @Nonnull final Object ... targetParam) {
     this.nifty = nifty;
     this.methodWithName = methodParam;
@@ -72,6 +83,11 @@ public class NiftyMethodInvoker implements NiftyDelayedMethodInvoke {
     return true;
   }
 
+  /**
+	 * Perform invoke.
+	 *
+	 * @param invokeParametersParam the invoke parameters param
+	 */
   @Override
   public void performInvoke(@Nonnull final Object ... invokeParametersParam) {
     if (target == null || methodWithName == null) {

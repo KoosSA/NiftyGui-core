@@ -69,12 +69,20 @@ public class EventServiceLocator {
     */
    public static final String SWING_EVENT_SERVICE_CLASS = "org.bushe.swing.event.swingEventServiceClass";
 
+   /** The event bus service. */
    private static EventService EVENT_BUS_SERVICE;
+   
+   /** The swing event service. */
    private static EventService SWING_EVENT_SERVICE;
 
+   /** The Constant EVENT_SERVICES. */
    private static final Map EVENT_SERVICES = new HashMap();
 
-   /** @return the singleton instance of the EventService used by the EventBus */
+   /**
+	 * Gets the event bus service.
+	 *
+	 * @return the singleton instance of the EventService used by the EventBus
+	 */
    public static synchronized EventService getEventBusService() {
       if (EVENT_BUS_SERVICE == null) {
          EVENT_BUS_SERVICE = getEventService(EVENT_BUS_CLASS, getSwingEventService());
@@ -83,7 +91,11 @@ public class EventServiceLocator {
       return EVENT_BUS_SERVICE;
    }
 
-   /** @return the singleton instance of a SwingEventService */
+   /**
+	 * Gets the swing event service.
+	 *
+	 * @return the singleton instance of a SwingEventService
+	 */
    public static synchronized EventService getSwingEventService() {
       if (SWING_EVENT_SERVICE == null) {
          SWING_EVENT_SERVICE = getEventService(SWING_EVENT_SERVICE_CLASS, new SwingEventService());
@@ -93,11 +105,14 @@ public class EventServiceLocator {
    }
 
    /**
-    * @param serviceName the service name of the EventService, as registered by #setEventService(String, EventService),
-    * or {@link #SERVICE_NAME_EVENT_BUS} or {@link #SERVICE_NAME_SWING_EVENT_SERVICE} .
-    *
-    * @return a named event service instance
-    */
+	 * Gets the event service.
+	 *
+	 * @param serviceName the service name of the EventService, as registered by
+	 *                    #setEventService(String, EventService), or
+	 *                    {@link #SERVICE_NAME_EVENT_BUS} or
+	 *                    {@link #SERVICE_NAME_SWING_EVENT_SERVICE} .
+	 * @return a named event service instance
+	 */
    public static synchronized EventService getEventService(String serviceName) {
       EventService es = (EventService) EVENT_SERVICES.get(serviceName);
       if (es == null) {
@@ -142,6 +157,13 @@ public class EventServiceLocator {
          SWING_EVENT_SERVICE = null;
    }
 
+   /**
+	 * Gets the event service.
+	 *
+	 * @param eventServiceClassPropertyName the event service class property name
+	 * @param defaultService                the default service
+	 * @return the event service
+	 */
    private static synchronized EventService getEventService(String eventServiceClassPropertyName, EventService defaultService) {
       EventService result;
       String eventServiceClassName = System.getProperty(eventServiceClassPropertyName);

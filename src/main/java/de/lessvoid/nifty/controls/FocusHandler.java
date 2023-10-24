@@ -16,23 +16,37 @@ import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
  * @author void
  */
 public class FocusHandler {
+  
+  /** The Constant log. */
   private static final Logger log = Logger.getLogger(FocusHandler.class.getName());
 
+  /** The entries. */
   @Nonnull
   private final ArrayList<Element> entries = new ArrayList<Element>();
+  
+  /** The element buffer. */
   @Nonnull
   private final ArrayList<ArrayList<Element>> elementBuffer = new ArrayList<ArrayList<Element>>();
 
+  /** The mouse focus element. */
   @Nullable
   private Element mouseFocusElement;
+  
+  /** The mouse focus element buffer. */
   @Nonnull
   private final ArrayList<Element> mouseFocusElementBuffer = new ArrayList<Element>();
 
+  /** The keyboard focus element. */
   @Nullable
   private Element keyboardFocusElement;
+  
+  /** The keyboard focus element buffer. */
   @Nonnull
   private final ArrayList<Element> keyboardFocusElementBuffer = new ArrayList<Element>();
 
+  /**
+	 * Instantiates a new focus handler.
+	 */
   public FocusHandler() {
     mouseFocusElement = null;
     keyboardFocusElement = null;
@@ -69,11 +83,12 @@ public class FocusHandler {
   }
 
   /**
-   * add an element to the focus handler after an existing element already added to it
-   *
-   * @param existingElement element that already exists in the focushandler
-   * @param element         new element to add
-   */
+	 * add an element to the focus handler after an existing element already added
+	 * to it.
+	 *
+	 * @param existingElement element that already exists in the focushandler
+	 * @param element         new element to add
+	 */
   public void addElementAfter(final Element existingElement, final Element element) {
     int idx = entries.indexOf(existingElement);
     if (idx == -1) {
@@ -217,6 +232,9 @@ public class FocusHandler {
     mouseFocusElement = null;
   }
 
+  /**
+	 * Reset focus elements.
+	 */
   public void resetFocusElements() {
     entries.clear();
     lostKeyboardFocus(keyboardFocusElement);
@@ -255,6 +273,11 @@ public class FocusHandler {
     }
   }
 
+  /**
+	 * Lost keyboard focus.
+	 *
+	 * @param elementThatLostFocus the element that lost focus
+	 */
   public void lostKeyboardFocus(@Nullable final Element elementThatLostFocus) {
     if (elementThatLostFocus != null) {
       log.fine("lostKeyboardFocus for [" + elementThatLostFocus.toString() + "]");
@@ -266,6 +289,12 @@ public class FocusHandler {
     }
   }
 
+  /**
+	 * Key event.
+	 *
+	 * @param inputEvent the input event
+	 * @return true, if successful
+	 */
   public boolean keyEvent(@Nonnull final KeyboardInputEvent inputEvent) {
     if (keyboardFocusElement != null) {
       return keyboardFocusElement.keyEvent(inputEvent);
@@ -273,6 +302,11 @@ public class FocusHandler {
     return false;
   }
 
+  /**
+	 * Request exclusive mouse focus.
+	 *
+	 * @param newFocusElement the new focus element
+	 */
   public void requestExclusiveMouseFocus(final Element newFocusElement) {
     if (mouseFocusElement == newFocusElement) {
       return;
@@ -281,10 +315,22 @@ public class FocusHandler {
     log.fine("requestExclusiveMouseFocus for [" + mouseFocusElement.toString() + "]");
   }
 
+  /**
+	 * Checks for exclusive mouse focus.
+	 *
+	 * @param element the element
+	 * @return true, if successful
+	 */
   public boolean hasExclusiveMouseFocus(@Nonnull final Element element) {
     return element.equals(mouseFocusElement);
   }
 
+  /**
+	 * Can process mouse events.
+	 *
+	 * @param element the element
+	 * @return true, if successful
+	 */
   public boolean canProcessMouseEvents(@Nonnull final Element element) {
     if (mouseFocusElement == null) {
       return true;
@@ -297,6 +343,11 @@ public class FocusHandler {
     return canProcess;
   }
 
+  /**
+	 * Lost mouse focus.
+	 *
+	 * @param elementThatLostFocus the element that lost focus
+	 */
   public void lostMouseFocus(@Nullable final Element elementThatLostFocus) {
     if (elementThatLostFocus != null) {
       log.fine("lostMouseFocus for [" + elementThatLostFocus.toString() + "]");
@@ -306,6 +357,11 @@ public class FocusHandler {
     }
   }
 
+  /**
+	 * To string.
+	 *
+	 * @return the string
+	 */
   @Override
   @Nonnull
   public String toString() {
@@ -334,14 +390,30 @@ public class FocusHandler {
             + "focus element size: " + entries.size() + " [" + focusElements.toString() + "]";
   }
 
+  /**
+	 * Checks for any element the keyboard focus.
+	 *
+	 * @return true, if successful
+	 */
   public boolean hasAnyElementTheKeyboardFocus() {
     return keyboardFocusElement != null;
   }
 
+  /**
+	 * Checks for any element the mouse focus.
+	 *
+	 * @return true, if successful
+	 */
   public boolean hasAnyElementTheMouseFocus() {
     return mouseFocusElement != null;
   }
 
+  /**
+	 * Find element.
+	 *
+	 * @param defaultFocusElementId the default focus element id
+	 * @return the element
+	 */
   @Nullable
   public Element findElement(@Nonnull final String defaultFocusElementId) {
     for (Element element : entries) {
@@ -352,11 +424,21 @@ public class FocusHandler {
     return null;
   }
 
+  /**
+	 * Gets the keyboard focus element.
+	 *
+	 * @return the keyboard focus element
+	 */
   @Nullable
   public Element getKeyboardFocusElement() {
     return keyboardFocusElement;
   }
 
+  /**
+	 * Gets the mouse focus element.
+	 *
+	 * @return the mouse focus element
+	 */
   @Nullable
   public Element getMouseFocusElement() {
     return mouseFocusElement;

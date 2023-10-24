@@ -10,15 +10,35 @@ import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.loaderv2.types.LayerType;
 import de.lessvoid.nifty.screen.Screen;
 
+/**
+ * The Class LayerCreator.
+ */
 public class LayerCreator extends ControlAttributes {
+  
+  /**
+	 * Instantiates a new layer creator.
+	 */
   public LayerCreator() {
     setAutoId();
   }
 
+  /**
+	 * Instantiates a new layer creator.
+	 *
+	 * @param id the id
+	 */
   public LayerCreator(@Nonnull final String id) {
     setId(id);
   }
 
+  /**
+	 * Creates the.
+	 *
+	 * @param nifty  the nifty
+	 * @param screen the screen
+	 * @param parent the parent
+	 * @return the element
+	 */
   @Nonnull
   public Element create(
       @Nonnull final Nifty nifty,
@@ -43,6 +63,11 @@ public class LayerCreator extends ControlAttributes {
     return layerElement;
   }
 
+  /**
+	 * Creates the type.
+	 *
+	 * @return the element type
+	 */
   @Nonnull
   @Override
   public ElementType createType() {

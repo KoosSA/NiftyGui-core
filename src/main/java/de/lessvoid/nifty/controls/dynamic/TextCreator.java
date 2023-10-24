@@ -10,17 +10,40 @@ import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.loaderv2.types.TextType;
 import de.lessvoid.nifty.screen.Screen;
 
+/**
+ * The Class TextCreator.
+ */
 public class TextCreator extends ControlAttributes {
+  
+  /**
+	 * Instantiates a new text creator.
+	 *
+	 * @param text the text
+	 */
   public TextCreator(@Nonnull final String text) {
     setAutoId();
     setText(text);
   }
 
+  /**
+	 * Instantiates a new text creator.
+	 *
+	 * @param id   the id
+	 * @param text the text
+	 */
   public TextCreator(@Nonnull final String id, @Nonnull final String text) {
     setId(id);
     setText(text);
   }
 
+  /**
+	 * Creates the.
+	 *
+	 * @param nifty  the nifty
+	 * @param screen the screen
+	 * @param parent the parent
+	 * @return the element
+	 */
   @Nonnull
   public Element create(
       @Nonnull final Nifty nifty,
@@ -38,12 +61,22 @@ public class TextCreator extends ControlAttributes {
     });
   }
 
+  /**
+	 * Creates the type.
+	 *
+	 * @return the element type
+	 */
   @Nonnull
   @Override
   public ElementType createType() {
     return new TextType(getAttributes());
   }
 
+  /**
+	 * Sets the wrap.
+	 *
+	 * @param wrap the new wrap
+	 */
   public void setWrap(final boolean wrap) {
     getAttributes().set("wrap", wrap ? "true" : "false");
   }

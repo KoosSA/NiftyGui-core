@@ -68,13 +68,13 @@ public class ImageSizePulsate implements EffectImpl {
   }
 
   /**
-   * execute the effect.
-   *
-   * @param element           the Element
-   * @param normalizedTime    TimeInterpolator to use
-   * @param normalizedFalloff falloff value
-   * @param r                 RenderDevice to use
-   */
+	 * execute the effect.
+	 *
+	 * @param element        the Element
+	 * @param normalizedTime TimeInterpolator to use
+	 * @param falloff        the falloff
+	 * @param r              RenderDevice to use
+	 */
   @Override
   public void execute(
       @Nonnull final Element element,

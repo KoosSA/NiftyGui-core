@@ -13,12 +13,20 @@ import org.jglfont.spi.ResourceLoader;
  * @author void
  */
 public interface JGLFontLoader {
+  
   /**
-   * Load a font.
-   * @param in InputStream
-   * @return JGLAbstractFontData
-   * @throws IOException
-   */
+	 * Load a font.
+	 *
+	 * @param renderer       the renderer
+	 * @param resourceLoader the resource loader
+	 * @param in             InputStream
+	 * @param filename       the filename
+	 * @param size           the size
+	 * @param style          the style
+	 * @param params         the params
+	 * @return JGLAbstractFontData
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
   JGLAbstractFontData load(
           final JGLFontRenderer renderer,
           final ResourceLoader resourceLoader,

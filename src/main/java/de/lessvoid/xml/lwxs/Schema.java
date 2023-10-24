@@ -21,27 +21,57 @@ import de.lessvoid.xml.xpp3.Attributes;
 import de.lessvoid.xml.xpp3.XmlParser;
 import de.lessvoid.xml.xpp3.XmlProcessor;
 
+/**
+ * The Class Schema.
+ */
 public class Schema implements XmlProcessor {
+  
+  /** The Constant log. */
   @Nonnull
   private static final Logger log = Logger.getLogger(Schema.class.getName());
+  
+  /** The types. */
   @Nonnull
   private final Map < String, Type > types = new HashMap < String, Type >();
+  
+  /** The package string. */
   @Nullable
   private String packageString;
+  
+  /** The root. */
   @Nullable
   private String root;
+  
+  /** The type. */
   @Nullable
   private String type;
+  
+  /** The parser factory. */
   @Nonnull
   private final XmlPullParserFactory parserFactory;
+  
+  /** The resource loader. */
   @Nonnull
   private final NiftyResourceLoader resourceLoader;
 
+  /**
+	 * Instantiates a new schema.
+	 *
+	 * @param parserFactory  the parser factory
+	 * @param resourceLoader the resource loader
+	 */
   public Schema(@Nonnull final XmlPullParserFactory parserFactory, @Nonnull final NiftyResourceLoader resourceLoader) {
     this.parserFactory = parserFactory;
     this.resourceLoader = resourceLoader;
   }
 
+  /**
+	 * Process.
+	 *
+	 * @param xmlParser  the xml parser
+	 * @param attributes the attributes
+	 * @throws Exception the exception
+	 */
   @Override
   public void process(@Nonnull final XmlParser xmlParser, @Nonnull final Attributes attributes) throws Exception {
     packageString = attributes.get("package");
@@ -63,10 +93,23 @@ public class Schema implements XmlProcessor {
           .add("type", new TypeProcessor(this)));
   }
 
+  /**
+	 * Adds the type.
+	 *
+	 * @param name      the name
+	 * @param typeParam the type param
+	 */
   public void addType(@Nonnull final String name, @Nonnull final Type typeParam) {
     types.put(name, typeParam);
   }
 
+  /**
+	 * Gets the type.
+	 *
+	 * @param name the name
+	 * @return the type
+	 * @throws Exception the exception
+	 */
   @Nonnull
   public Type getType(@Nonnull final String name) throws Exception {
     Type t = types.get(name);
@@ -78,10 +121,23 @@ public class Schema implements XmlProcessor {
     return t;
   }
 
+  /**
+	 * Checks if is type available.
+	 *
+	 * @param name the name
+	 * @return true, if is type available
+	 */
   public boolean isTypeAvailable(@Nonnull final String name) {
     return types.containsKey(name);
   }
 
+  /**
+	 * Load xml.
+	 *
+	 * @param parser the parser
+	 * @return the xml type
+	 * @throws Exception the exception
+	 */
   @Nonnull
   public XmlType loadXml(@Nonnull final XmlParser parser) throws Exception {
     if (type == null) {
@@ -101,6 +157,15 @@ public class Schema implements XmlProcessor {
     return result;
   }
 
+  /**
+	 * Gets the single instance of Schema.
+	 *
+	 * @param className          the class name
+	 * @param elements           the elements
+	 * @param substitutionGroups the substitution groups
+	 * @return single instance of Schema
+	 * @throws Exception the exception
+	 */
   @Nonnull
   public XmlProcessorType getInstance(
       @Nonnull final String className,
@@ -116,6 +181,11 @@ public class Schema implements XmlProcessor {
     return processor;
   }
 
+  /**
+	 * Gets the types.
+	 *
+	 * @return the types
+	 */
   @Nonnull
   public Map < String, Type > getTypes() {
     return types;

@@ -15,24 +15,44 @@ import org.bushe.swing.event.ThreadSafeEventService;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface VetoRuntimeTopicSubscriber {
+    
     /**
-     * @return name of a method (that must return a String) and whose return value will become the subscription topic.
-     */
+	 * Method name.
+	 *
+	 * @return name of a method (that must return a String) and whose return value
+	 *         will become the subscription topic.
+	 */
     public abstract String methodName() default "getTopicName";
 
-    /** @return Whether to subscribe weakly or strongly. */
+    /**
+	 * Reference strength.
+	 *
+	 * @return Whether to subscribe weakly or strongly.
+	 */
     public abstract ReferenceStrength referenceStrength() default ReferenceStrength.WEAK;
 
     /**
-     * @return event service to subscribe to, default to the EventServiceLocator.SERVICE_NAME_EVENT_BUS.
-     */
+	 * Event service name.
+	 *
+	 * @return event service to subscribe to, default to the
+	 *         EventServiceLocator.SERVICE_NAME_EVENT_BUS.
+	 */
     public abstract String eventServiceName() default EventServiceLocator.SERVICE_NAME_EVENT_BUS;
 
-    /** @return Determines the order in which this subscriber is called, default is FIFO.*/
+    /**
+	 * Priority.
+	 *
+	 * @return Determines the order in which this subscriber is called, default is
+	 *         FIFO.
+	 */
     public abstract int priority() default 0;
 
     /**
-     * @return Whether or not to autocreate the event service if it doesn't exist on subscription, default is true. If the service needs to be created, it must have a default constructor.
-     */
+	 * Auto create event service class.
+	 *
+	 * @return Whether or not to autocreate the event service if it doesn't exist on
+	 *         subscription, default is true. If the service needs to be created, it
+	 *         must have a default constructor.
+	 */
     public abstract Class<? extends EventService> autoCreateEventServiceClass() default ThreadSafeEventService.class;
 }

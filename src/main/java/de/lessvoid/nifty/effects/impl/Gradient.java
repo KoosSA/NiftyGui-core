@@ -23,10 +23,21 @@ import de.lessvoid.xml.xpp3.Attributes;
  * @author void
  */
 public class Gradient implements EffectImpl {
+  
+  /** The entries. */
   @Nonnull
   private final List<Entry> entries = new ArrayList<Entry>();
+  
+  /** The horizontal. */
   private boolean horizontal = false;
 
+  /**
+	 * Activate.
+	 *
+	 * @param nifty     the nifty
+	 * @param element   the element
+	 * @param parameter the parameter
+	 */
   @Override
   public void activate(
       @Nonnull final Nifty nifty,
@@ -43,6 +54,14 @@ public class Gradient implements EffectImpl {
     horizontal = "horizontal".equals(parameter.getProperty("direction", "vertical"));
   }
 
+  /**
+	 * Execute.
+	 *
+	 * @param element        the element
+	 * @param normalizedTime the normalized time
+	 * @param falloff        the falloff
+	 * @param r              the r
+	 */
   @Override
   public void execute(
       @Nonnull final Element element,
@@ -84,16 +103,32 @@ public class Gradient implements EffectImpl {
     }
   }
 
+  /**
+	 * Deactivate.
+	 */
   @Override
   public void deactivate() {
   }
 
+  /**
+	 * The Class Entry.
+	 */
   private static class Entry {
+    
+    /** The offset. */
     @Nonnull
     public final SizeValue offset;
+    
+    /** The color. */
     @Nonnull
     public final Color color;
 
+    /**
+	 * Instantiates a new entry.
+	 *
+	 * @param offset the offset
+	 * @param color  the color
+	 */
     public Entry(@Nonnull final SizeValue offset, @Nonnull final Color color) {
       this.offset = offset;
       this.color = color;

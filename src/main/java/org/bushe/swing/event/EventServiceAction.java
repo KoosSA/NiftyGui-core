@@ -42,17 +42,34 @@ import javax.swing.ImageIcon;
  * @author Michael Bushe michael@bushe.com
  */
 public abstract class EventServiceAction extends AbstractAction {
+   
+   /** The Constant EVENT_SERVICE_TOPIC_NAME. */
    public static final String EVENT_SERVICE_TOPIC_NAME = "event-service-topic";
 
+   /** The throws exception on null event service. */
    private boolean throwsExceptionOnNullEventService = true;
+   
+   /** The Constant EVENT_BUS_EVENT_CLASS_NAME. */
    public static final String EVENT_BUS_EVENT_CLASS_NAME = "eventBus.eventClassName";
 
+   /** The topic name. */
    private String topicName;
+   
+   /** The publishes on topic. */
    private boolean publishesOnTopic = true;
 
+   /**
+	 * Instantiates a new event service action.
+	 */
    public EventServiceAction() {
    }
 
+   /**
+	 * Instantiates a new event service action.
+	 *
+	 * @param actionName the action name
+	 * @param icon       the icon
+	 */
    public EventServiceAction(String actionName, ImageIcon icon) {
       super(actionName, icon);
    }
@@ -71,7 +88,12 @@ public abstract class EventServiceAction extends AbstractAction {
     */
    protected abstract EventService getEventService(ActionEvent event);
 
-   /** @return true if this action publishes on a topic, false if it uses class-based publication. */
+   /**
+	 * Checks if is publishes on topic.
+	 *
+	 * @return true if this action publishes on a topic, false if it uses
+	 *         class-based publication.
+	 */
    public boolean isPublishesOnTopic() {
       return publishesOnTopic;
    }
@@ -86,11 +108,14 @@ public abstract class EventServiceAction extends AbstractAction {
    }
 
    /**
-    * Explicitly sets the topic name this action publishes on.
-    * <p/>
-    * A topic name does not need to be explicitly set.  See {@link #getTopicName(ActionEvent)} to understand how the
-    * topic name is determined implicitly.
-    */
+	 * Explicitly sets the topic name this action publishes on.
+	 * <p/>
+	 * A topic name does not need to be explicitly set. See
+	 * {@link #getTopicName(ActionEvent)} to understand how the topic name is
+	 * determined implicitly.
+	 *
+	 * @param topicName the new topic name
+	 */
    public void setTopicName(String topicName) {
       this.topicName = topicName;
    }
@@ -148,17 +173,23 @@ public abstract class EventServiceAction extends AbstractAction {
       return event;
    }
 
-   /** @return the name of the action (javax.swing.Action#NAME) */
+   /**
+	 * Gets the name.
+	 *
+	 * @return the name of the action (javax.swing.Action#NAME)
+	 */
    public Object getName() {
       return getValue(Action.NAME);
    }
 
    /**
-    * If isPublishesOnTopic() returns false (i.e., when using class-based rather than topic-based publication), then
-    * override this method to publish an on object other than the ActionEvent.
-    *
-    * @return the Object to publish, cannot be null
-    */
+	 * If isPublishesOnTopic() returns false (i.e., when using class-based rather
+	 * than topic-based publication), then override this method to publish an on
+	 * object other than the ActionEvent.
+	 *
+	 * @param event the event
+	 * @return the Object to publish, cannot be null
+	 */
    protected Object getEventServiceEvent(ActionEvent event) {
       return event;
    }

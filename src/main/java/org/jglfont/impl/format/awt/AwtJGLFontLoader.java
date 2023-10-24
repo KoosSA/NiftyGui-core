@@ -16,13 +16,26 @@ import org.jglfont.spi.JGLFontRenderer;
 import org.jglfont.spi.ResourceLoader;
 
 /**
- * User: iamtakingiteasy
- * Date: 2013-12-29
- * Time: 03:24
+ * User: iamtakingiteasy Date: 2013-12-29 Time: 03:24.
  */
 public class AwtJGLFontLoader implements JGLFontLoader {
+  
+  /** The Constant log. */
   private static final Logger log = Logger.getLogger(AwtJGLFontLoader.class.getName());
 
+  /**
+	 * Load.
+	 *
+	 * @param renderer       the renderer
+	 * @param resourceLoader the resource loader
+	 * @param in             the in
+	 * @param filename       the filename
+	 * @param size           the size
+	 * @param style          the style
+	 * @param params         the params
+	 * @return the JGL abstract font data
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
   @Override
   public JGLAbstractFontData load(
           final JGLFontRenderer renderer,

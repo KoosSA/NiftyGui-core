@@ -4,13 +4,28 @@ import javax.annotation.Nonnull;
 
 import de.lessvoid.xml.xpp3.Attributes;
 
+/**
+ * The Class RemoveStandardAttributes.
+ */
 public class RemoveStandardAttributes {
+  
+  /** The control attributes. */
   private final Attributes controlAttributes;
 
+  /**
+	 * Instantiates a new removes the standard attributes.
+	 *
+	 * @param controlAttributesParam the control attributes param
+	 */
   public RemoveStandardAttributes(final Attributes controlAttributesParam) {
     controlAttributes = controlAttributesParam;
   }
 
+  /**
+	 * Removes the standard.
+	 *
+	 * @return the attributes
+	 */
   @Nonnull
   public Attributes removeStandard() {
     Attributes attributes = new Attributes(controlAttributes);

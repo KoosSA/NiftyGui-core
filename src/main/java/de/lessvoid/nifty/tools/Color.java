@@ -12,6 +12,8 @@ import javax.annotation.Nonnull;
  * @author void
  */
 public class Color {
+  
+  /** The Constant log. */
   private static final Logger log = Logger.getLogger(Color.class.getName());
 
   /**
@@ -63,6 +65,8 @@ public class Color {
    * alpha component.
    */
   private float alpha = 0.0f;
+  
+  /** The color string. */
   private String colorString;
 
   /**
@@ -118,6 +122,11 @@ public class Color {
     this.colorString = fromRGBA(red, green, blue, alpha);
   }
 
+  /**
+	 * Instantiates a new color.
+	 *
+	 * @param colorParam the color param
+	 */
   public Color(@Nonnull final Color colorParam) {
     this.red = colorParam.getRed();
     this.green = colorParam.getGreen();
@@ -126,23 +135,53 @@ public class Color {
     this.colorString = colorParam.getColorString();
   }
 
+  /**
+	 * From RGBA.
+	 *
+	 * @param redValue   the red value
+	 * @param greenValue the green value
+	 * @param blueValue  the blue value
+	 * @param alphaValue the alpha value
+	 * @return the string
+	 */
   @Nonnull
   private String fromRGBA(float redValue, float greenValue, float blueValue, float alphaValue) {
     return "#" + toHex(redValue) + toHex(greenValue) + toHex(blueValue) + toHex(alphaValue);
   }
 
+  /**
+	 * To hex.
+	 *
+	 * @param redValue the red value
+	 * @return the string
+	 */
   private String toHex(final float redValue) {
     return Integer.toHexString((int) (redValue * 15));
   }
 
+  /**
+	 * Gets the color string.
+	 *
+	 * @return the color string
+	 */
   public String getColorString() {
     return colorString;
   }
 
+  /**
+	 * Sets the color string.
+	 *
+	 * @param colorString the new color string
+	 */
   public void setColorString(final String colorString) {
     this.colorString = colorString;
   }
 
+  /**
+	 * Gets the color string without alpha.
+	 *
+	 * @return the color string without alpha
+	 */
   @Nonnull
   public String getColorStringWithoutAlpha() {
     return colorString.substring(0, colorString.length() - 1);
@@ -302,10 +341,11 @@ public class Color {
   }
 
   /**
-   * Set color alpha.
-   *
-   * @param newColorAlpha new color alpha
-   */
+	 * Set color alpha.
+	 *
+	 * @param newColorAlpha new color alpha
+	 * @return the color
+	 */
   @Nonnull
   public Color setAlpha(final float newColorAlpha) {
     alpha = newColorAlpha;
@@ -339,6 +379,12 @@ public class Color {
     blue = newBlue;
   }
 
+  /**
+	 * Check.
+	 *
+	 * @param color the color
+	 * @return true, if successful
+	 */
   public static boolean check(final String color) {
     if (ColorValidator.isShortModeWithoutAlpha(color) ||
         ColorValidator.isLongModeWithoutAlpha(color) ||
@@ -348,6 +394,11 @@ public class Color {
     return false;
   }
 
+  /**
+	 * From string.
+	 *
+	 * @param color the color
+	 */
   public void fromString(@Nonnull final String color) {
     colorString = color;
     if (ColorValidator.isShortModeWithoutAlpha(color)) {
@@ -381,6 +432,11 @@ public class Color {
     }
   }
 
+  /**
+	 * From string without alpha.
+	 *
+	 * @param color the color
+	 */
   public void fromStringWithoutAlpha(@Nonnull final String color) {
     colorString = color + toHex(alpha);
     if (ColorValidator.isShortModeWithoutAlpha(color)) {
@@ -400,6 +456,11 @@ public class Color {
     }
   }
 
+  /**
+	 * Random color.
+	 *
+	 * @return the color
+	 */
   @Nonnull
   public static Color randomColor() {
     Random random = new Random();

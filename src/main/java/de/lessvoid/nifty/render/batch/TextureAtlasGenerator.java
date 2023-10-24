@@ -20,12 +20,24 @@ import javax.annotation.Nullable;
  * @author void
  */
 public class TextureAtlasGenerator {
+  
+  /** The atlas width. */
   private final int atlasWidth;
+  
+  /** The atlas height. */
   private final int atlasHeight;
+  
+  /** The atlas padding. */
   private final int atlasPadding;
+  
+  /** The atlas tolerance. */
   private final float atlasTolerance;
+  
+  /** The root. */
   @Nonnull
   private Node root;
+  
+  /** The rectangle map. */
   // for easy access we keep each node in a map with the passed name as the key so we can look up a Node directly
   @Nonnull
   private Map<String, Node> rectangleMap;
@@ -37,11 +49,27 @@ public class TextureAtlasGenerator {
    * @author void
    */
   public static class Result {
+    
+    /** The x. */
     private final int x;
+    
+    /** The y. */
     private final int y;
+    
+    /** The original image width. */
     private final int originalImageWidth;
+    
+    /** The original image height. */
     private final int originalImageHeight;
 
+    /**
+	 * Instantiates a new result.
+	 *
+	 * @param x                   the x
+	 * @param y                   the y
+	 * @param originalImageWidth  the original image width
+	 * @param originalImageHeight the original image height
+	 */
     public Result(final int x, final int y, final int originalImageWidth, final int originalImageHeight) {
       this.x = x;
       this.y = y;
@@ -49,18 +77,38 @@ public class TextureAtlasGenerator {
       this.originalImageHeight = originalImageHeight;
     }
 
+    /**
+	 * Gets the x.
+	 *
+	 * @return the x
+	 */
     public int getX() {
       return x;
     }
 
+    /**
+	 * Gets the y.
+	 *
+	 * @return the y
+	 */
     public int getY() {
       return y;
     }
 
+    /**
+	 * Gets the original image width.
+	 *
+	 * @return the original image width
+	 */
     public int getOriginalImageWidth() {
       return originalImageWidth;
     }
 
+    /**
+	 * Gets the original image height.
+	 *
+	 * @return the original image height
+	 */
     public int getOriginalImageHeight() {
       return originalImageHeight;
     }
@@ -167,6 +215,12 @@ public class TextureAtlasGenerator {
             (imageWidth + atlasPadding) * (imageHeight + atlasPadding) / (float) (atlasWidth * atlasHeight) < atlasTolerance;
   }
 
+  /**
+	 * Removes the image.
+	 *
+	 * @param name the name
+	 * @return the result
+	 */
   @Nullable
   public Result removeImage(@Nonnull final String name) {
     Node node = rectangleMap.remove(name);
@@ -180,14 +234,31 @@ public class TextureAtlasGenerator {
     return new Result(node.rect.x, node.rect.y, node.rect.width, node.rect.height);
   }
 
+  /**
+	 * Gets the atlas width.
+	 *
+	 * @return the atlas width
+	 */
   public int getAtlasWidth() {
     return atlasWidth;
   }
 
+  /**
+	 * Gets the atlas height.
+	 *
+	 * @return the atlas height
+	 */
   public int getAtlasHeight() {
     return atlasHeight;
   }
 
+  /**
+	 * Rebuild.
+	 *
+	 * @param width  the width
+	 * @param height the height
+	 * @return the list
+	 */
   @Nonnull
   public List<Result> rebuild(
       final int width,
@@ -201,12 +272,31 @@ public class TextureAtlasGenerator {
     return results;
   }
 
+  /**
+	 * The Class Rectangle.
+	 */
   private static class Rectangle {
+    
+    /** The x. */
     private final int x;
+    
+    /** The y. */
     private final int y;
+    
+    /** The width. */
     private final int width;
+    
+    /** The height. */
     private final int height;
 
+    /**
+	 * Instantiates a new rectangle.
+	 *
+	 * @param x      the x
+	 * @param y      the y
+	 * @param width  the width
+	 * @param height the height
+	 */
     public Rectangle(final int x, final int y, final int width, final int height) {
       this.x = x;
       this.y = y;
@@ -215,13 +305,30 @@ public class TextureAtlasGenerator {
     }
   }
 
+  /**
+	 * The Class Node.
+	 */
   private static class Node {
+    
+    /** The rect. */
     @Nonnull
     public final Rectangle rect;
+    
+    /** The child. */
     @Nonnull
     public final Node[] child;
+    
+    /** The occupied. */
     public boolean occupied;
 
+    /**
+	 * Instantiates a new node.
+	 *
+	 * @param x      the x
+	 * @param y      the y
+	 * @param width  the width
+	 * @param height the height
+	 */
     public Node(final int x, final int y, final int width, final int height) {
       rect = new Rectangle(x, y, width, height);
       child = new Node[2];
@@ -230,10 +337,23 @@ public class TextureAtlasGenerator {
       occupied = false;
     }
 
+    /**
+	 * Checks if is leaf.
+	 *
+	 * @return true, if is leaf
+	 */
     public boolean isLeaf() {
       return child[0] == null && child[1] == null;
     }
 
+    /**
+	 * Insert.
+	 *
+	 * @param imageWidth  the image width
+	 * @param imageHeight the image height
+	 * @param padding     the padding
+	 * @return the node
+	 */
     // Algorithm from http://www.blackpawn.com/texts/lightmaps/
     @Nullable
     public Node insert(final int imageWidth, final int imageHeight, final int padding) {
@@ -272,6 +392,9 @@ public class TextureAtlasGenerator {
     }
   }
 
+  /**
+	 * Reset.
+	 */
   public void reset() {
     root = new Node(0, 0, atlasWidth, atlasHeight);
     rectangleMap = new TreeMap<String, Node>();

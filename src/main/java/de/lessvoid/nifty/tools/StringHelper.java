@@ -2,7 +2,14 @@ package de.lessvoid.nifty.tools;
 
 import javax.annotation.Nonnull;
 
+/**
+ * The Class StringHelper.
+ */
 public final class StringHelper {
+  
+  /**
+	 * Instantiates a new string helper.
+	 */
   private StringHelper() {
   }
 

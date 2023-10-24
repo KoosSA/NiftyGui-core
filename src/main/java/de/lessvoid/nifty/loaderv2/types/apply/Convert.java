@@ -20,28 +20,76 @@ import de.lessvoid.nifty.spi.render.RenderFont;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
 
+/**
+ * The Class Convert.
+ */
 public class Convert {
+  
+  /** The Constant log. */
   private static final Logger log = Logger.getLogger(Convert.class.getName());
+  
+  /** The Constant DEFAULT_PADDING. */
   public static final String DEFAULT_PADDING = "0px";
+  
+  /** The Constant DEFAULT_MARGIN. */
   public static final String DEFAULT_MARGIN = "0px";
+  
+  /** The Constant DEFAULT_HORIZONTAL_ALIGN. */
   public static final HorizontalAlign DEFAULT_HORIZONTAL_ALIGN = HorizontalAlign.horizontalDefault;
+  
+  /** The Constant DEFAULT_VERTICAL_ALIGN. */
   public static final VerticalAlign DEFAULT_VERTICAL_ALIGN = VerticalAlign.verticalDefault;
+  
+  /** The Constant DEFAULT_TEXT_HORIZONTAL_ALIGN. */
   public static final HorizontalAlign DEFAULT_TEXT_HORIZONTAL_ALIGN = HorizontalAlign.center;
+  
+  /** The Constant DEFAULT_TEXT_VERTICAL_ALIGN. */
   public static final VerticalAlign DEFAULT_TEXT_VERTICAL_ALIGN = VerticalAlign.center;
+  
+  /** The Constant DEFAULT_IMAGE_FILTER. */
   public static final boolean DEFAULT_IMAGE_FILTER = false;
+  
+  /** The Constant DEFAULT_FOCUSABLE. */
   public static final boolean DEFAULT_FOCUSABLE = false;
+  
+  /** The Constant DEFAULT_VISIBLE_TO_MOUSE. */
   public static final boolean DEFAULT_VISIBLE_TO_MOUSE = false;
+  
+  /** The Constant DEFAULT_VISIBLE. */
   public static final boolean DEFAULT_VISIBLE = true;
+  
+  /** The Constant DEFAULT_CHILD_CLIP. */
   public static final boolean DEFAULT_CHILD_CLIP = false;
+  
+  /** The Constant DEFAULT_RENDER_ORDER. */
   public static final int DEFAULT_RENDER_ORDER = 0;
+  
+  /** The Constant verticalLayout. */
   private static final VerticalLayout verticalLayout = new VerticalLayout();
+  
+  /** The Constant centerLayout. */
   private static final CenterLayout centerLayout = new CenterLayout();
+  
+  /** The Constant horizontalLayout. */
   private static final HorizontalLayout horizontalLayout = new HorizontalLayout();
+  
+  /** The Constant overlayLayout. */
   private static final OverlayLayout overlayLayout = new OverlayLayout();
+  
+  /** The Constant absolutePositionLayout. */
   private static final AbsolutePositionLayout absolutePositionLayout = new AbsolutePositionLayout();
+  
+  /** The Constant absolutePositionLayoutKeepInside. */
   private static final AbsolutePositionLayout absolutePositionLayoutKeepInside = new AbsolutePositionLayout(
       new AbsolutePositionLayout.KeepInsidePostProcess());
 
+  /**
+	 * Font.
+	 *
+	 * @param niftyRenderEngine the nifty render engine
+	 * @param value             the value
+	 * @return the render font
+	 */
   @Nullable
   public RenderFont font(@Nonnull final NiftyRenderEngine niftyRenderEngine, @Nullable final String value) {
     if (value == null) {
@@ -50,11 +98,24 @@ public class Convert {
     return niftyRenderEngine.createFont(value);
   }
 
+  /**
+	 * Size value.
+	 *
+	 * @param value the value
+	 * @return the size value
+	 */
   @Nonnull
   public SizeValue sizeValue(@Nullable final String value) {
     return new SizeValue(value);
   }
 
+  /**
+	 * Padding size value.
+	 *
+	 * @param value        the value
+	 * @param defaultValue the default value
+	 * @return the size value
+	 */
   @Nonnull
   public SizeValue paddingSizeValue(@Nullable final String value, @Nonnull final String defaultValue) {
     if (value == null) {
@@ -63,6 +124,12 @@ public class Convert {
     return new SizeValue(value);
   }
 
+  /**
+	 * Horizontal align.
+	 *
+	 * @param value the value
+	 * @return the horizontal align
+	 */
   @Nonnull
   public HorizontalAlign horizontalAlign(@Nullable final String value) {
     if (value == null) {
@@ -76,6 +143,12 @@ public class Convert {
     }
   }
 
+  /**
+	 * Text horizontal align.
+	 *
+	 * @param value the value
+	 * @return the horizontal align
+	 */
   @Nonnull
   public HorizontalAlign textHorizontalAlign(@Nullable final String value) {
     if (value == null) {
@@ -89,6 +162,12 @@ public class Convert {
     }
   }
 
+  /**
+	 * Vertical align.
+	 *
+	 * @param value the value
+	 * @return the vertical align
+	 */
   @Nonnull
   public VerticalAlign verticalAlign(@Nullable final String value) {
     if (value == null) {
@@ -102,6 +181,12 @@ public class Convert {
     }
   }
 
+  /**
+	 * Text vertical align.
+	 *
+	 * @param value the value
+	 * @return the vertical align
+	 */
   @Nonnull
   public VerticalAlign textVerticalAlign(@Nullable final String value) {
     if (value == null) {
@@ -115,6 +200,12 @@ public class Convert {
     }
   }
 
+  /**
+	 * Layout manager.
+	 *
+	 * @param type the type
+	 * @return the layout manager
+	 */
   @Nullable
   public LayoutManager layoutManager(@Nullable final String type) {
     if (type == null) {
@@ -138,6 +229,12 @@ public class Convert {
     return null;
   }
 
+  /**
+	 * Color.
+	 *
+	 * @param value the value
+	 * @return the color
+	 */
   @Nullable
   public Color color(@Nullable final String value) {
     if (value == null) {
@@ -146,6 +243,13 @@ public class Convert {
     return new Color(value);
   }
 
+  /**
+	 * Color.
+	 *
+	 * @param value        the value
+	 * @param defaultColor the default color
+	 * @return the color
+	 */
   @Nonnull
   public Color color(@Nullable final String value, @Nonnull final Color defaultColor) {
     if (value == null) {
@@ -154,6 +258,13 @@ public class Convert {
     return new Color(value);
   }
 
+  /**
+	 * Image mode.
+	 *
+	 * @param areaProviderProperty   the area provider property
+	 * @param renderStrategyProperty the render strategy property
+	 * @return the image mode
+	 */
   @Nonnull
   public ImageMode imageMode(
       @Nullable final String areaProviderProperty,
@@ -161,6 +272,13 @@ public class Convert {
     return ImageModeFactory.getSharedInstance().createImageMode(areaProviderProperty, renderStrategyProperty);
   }
 
+  /**
+	 * Inset size value.
+	 *
+	 * @param value       the value
+	 * @param imageHeight the image height
+	 * @return the int
+	 */
   public int insetSizeValue(@Nullable final String value, final int imageHeight) {
     if (value == null) {
       return 0;

@@ -9,23 +9,47 @@ import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.xml.xpp3.Attributes;
 
+/**
+ * The Class EffectTypeOnHover.
+ */
 public class EffectTypeOnHover extends EffectType {
+  
+  /** The hover type. */
   @Nonnull
   private HoverType hoverType;
 
+  /**
+	 * Instantiates a new effect type on hover.
+	 */
   public EffectTypeOnHover() {
     hoverType = new HoverType();
   }
 
+  /**
+	 * Instantiates a new effect type on hover.
+	 *
+	 * @param hoverAttributes the hover attributes
+	 */
   public EffectTypeOnHover(@Nonnull final ControlHoverAttributes hoverAttributes) {
     hoverType = hoverAttributes.create();
   }
 
+  /**
+	 * Instantiates a new effect type on hover.
+	 *
+	 * @param attributes the attributes
+	 */
   public EffectTypeOnHover(@Nonnull final Attributes attributes) {
     super(attributes);
     hoverType = new HoverType();
   }
 
+  /**
+	 * Clone.
+	 *
+	 * @return the effect type on hover
+	 * @throws CloneNotSupportedException the clone not supported exception
+	 */
   @Nonnull
   @Override
   public EffectTypeOnHover clone() throws CloneNotSupportedException {
@@ -38,6 +62,12 @@ public class EffectTypeOnHover extends EffectType {
     }
   }
 
+  /**
+	 * Instantiates a new effect type on hover.
+	 *
+	 * @param attributes      the attributes
+	 * @param hoverAttributes the hover attributes
+	 */
   public EffectTypeOnHover(
       @Nonnull final Attributes attributes,
       @Nonnull final ControlHoverAttributes hoverAttributes) {
@@ -46,16 +76,22 @@ public class EffectTypeOnHover extends EffectType {
   }
 
   /**
-   * This supports creating CustomControlCreator.
-   *
-   * @return
-   */
+	 * This supports creating CustomControlCreator.
+	 *
+	 * @return the control effect on hover attributes
+	 */
   @Override
   @Nonnull
   public ControlEffectOnHoverAttributes convert() {
     return new ControlEffectOnHoverAttributes(getAttributes(), effectValues, hoverType);
   }
 
+  /**
+	 * Output.
+	 *
+	 * @param offset the offset
+	 * @return the string
+	 */
   @Override
   public String output(final int offset) {
     String result = super.output(offset);
@@ -63,6 +99,12 @@ public class EffectTypeOnHover extends EffectType {
     return result;
   }
 
+  /**
+	 * Initialize effect.
+	 *
+	 * @param effect        the effect
+	 * @param effectEventId the effect event id
+	 */
   @Override
   protected void initializeEffect(@Nonnull final Effect effect, final EffectEventId effectEventId) {
     Falloff falloff = hoverType.materialize();

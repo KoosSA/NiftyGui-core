@@ -21,25 +21,61 @@ import de.lessvoid.nifty.tools.TargetElementResolver;
  */
 public class Move implements EffectImpl {
 
+  /** The Constant log. */
   private static final Logger log = Logger.getLogger(Move.class.getName());
 
+  /** The Constant LEFT. */
   private static final String LEFT = "left";
+  
+  /** The Constant RIGHT. */
   private static final String RIGHT = "right";
+  
+  /** The Constant TOP. */
   private static final String TOP = "top";
+  
+  /** The Constant BOTTOM. */
   private static final String BOTTOM = "bottom";
 
+  /** The direction. */
   private String direction;
+  
+  /** The offset. */
   private long offset = 0;
+  
+  /** The start offset. */
   private long startOffset = 0;
+  
+  /** The offset dir. */
   private int offsetDir = 0;
+  
+  /** The offset Y. */
   private float offsetY;
+  
+  /** The start offset Y. */
   private float startOffsetY;
+  
+  /** The start offset X. */
   private int startOffsetX;
+  
+  /** The offset X. */
   private float offsetX;
+  
+  /** The with target. */
   private boolean withTarget = false;
+  
+  /** The from offset. */
   private boolean fromOffset = false;
+  
+  /** The to offset. */
   private boolean toOffset = false;
 
+  /**
+	 * Activate.
+	 *
+	 * @param nifty     the nifty
+	 * @param element   the element
+	 * @param parameter the parameter
+	 */
   @Override
   public void activate(
       @Nonnull final Nifty nifty,
@@ -110,6 +146,14 @@ public class Move implements EffectImpl {
     }
   }
 
+  /**
+	 * Execute.
+	 *
+	 * @param element        the element
+	 * @param normalizedTime the normalized time
+	 * @param falloff        the falloff
+	 * @param r              the r
+	 */
   @Override
   public void execute(
       @Nonnull final Element element,
@@ -137,6 +181,9 @@ public class Move implements EffectImpl {
     }
   }
 
+  /**
+	 * Deactivate.
+	 */
   @Override
   public void deactivate() {
   }

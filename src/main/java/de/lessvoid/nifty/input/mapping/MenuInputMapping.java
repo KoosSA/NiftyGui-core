@@ -7,8 +7,17 @@ import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 
+/**
+ * The Class MenuInputMapping.
+ */
 public class MenuInputMapping implements NiftyInputMapping {
 
+  /**
+	 * Convert.
+	 *
+	 * @param inputEvent the input event
+	 * @return the nifty standard input event
+	 */
   @Override
   @Nullable
   public NiftyStandardInputEvent convert(@Nonnull final KeyboardInputEvent inputEvent) {

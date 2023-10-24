@@ -4,12 +4,25 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+/**
+ * The Class ElementMoveAction.
+ */
 public class ElementMoveAction implements Action {
+  
+  /** The moved element. */
   @Nonnull
   private final Element movedElement;
+  
+  /** The destination element. */
   @Nonnull
   private final Element destinationElement;
 
+  /**
+	 * Instantiates a new element move action.
+	 *
+	 * @param movedElement       the moved element
+	 * @param destinationElement the destination element
+	 */
   public ElementMoveAction(
       @Nonnull final Element movedElement,
       @Nonnull final Element destinationElement) {
@@ -17,6 +30,9 @@ public class ElementMoveAction implements Action {
     this.destinationElement = destinationElement;
   }
 
+  /**
+	 * Perform.
+	 */
   @Override
   public void perform() {
     if (movedElement.hasParent()) {
@@ -32,6 +48,11 @@ public class ElementMoveAction implements Action {
     destinationElement.layoutElements();
   }
 
+  /**
+	 * Adds the to focus handler.
+	 *
+	 * @param element the element
+	 */
   private void addToFocusHandler(@Nonnull final Element element) {
     if (element.isFocusable()) {
       // currently add the element to the end of the focus handler

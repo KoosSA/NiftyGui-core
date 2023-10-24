@@ -13,22 +13,47 @@ import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
  * this device works.
  */
 public class NullSoundDevice implements SoundDevice {
+  
+  /**
+	 * Sets the resource loader.
+	 *
+	 * @param niftyResourceLoader the new resource loader
+	 */
   @Override
   public void setResourceLoader(@Nonnull NiftyResourceLoader niftyResourceLoader) {
   }
 
+  /**
+	 * Load sound.
+	 *
+	 * @param soundSystem the sound system
+	 * @param filename    the filename
+	 * @return the sound handle
+	 */
   @Nullable
   @Override
   public SoundHandle loadSound(@Nonnull SoundSystem soundSystem, @Nonnull String filename) {
     return null;
   }
 
+  /**
+	 * Load music.
+	 *
+	 * @param soundSystem the sound system
+	 * @param filename    the filename
+	 * @return the sound handle
+	 */
   @Nullable
   @Override
   public SoundHandle loadMusic(@Nonnull SoundSystem soundSystem, @Nonnull String filename) {
     return null;
   }
 
+  /**
+	 * Update.
+	 *
+	 * @param delta the delta
+	 */
   @Override
   public void update(int delta) {
   }

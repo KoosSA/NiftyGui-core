@@ -63,18 +63,32 @@ import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 
 /**
+ * The Class Element.
+ *
  * @author void
  */
 public class Element implements NiftyEvent, EffectManager.Notify {
+  
+  /** The Constant log. */
   @Nonnull
   private static final Logger log = Logger.getLogger(Element.class.getName());
+  
+  /** The element type. */
   @Nonnull
   private final ElementType elementType;
+  
+  /** The id. */
   @Nullable
   private String id;
+  
+  /** The render order. */
   private int renderOrder;
+  
+  /** The parent. */
   @Nullable
   private Element parent;
+  
+  /** The children. */
   @Nullable
   private List<Element> children;
 
@@ -115,8 +129,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   @Nonnull
   private final ElementRenderer[] elementRenderer;
 
+  /** The effect manager. */
   @Nonnull
   private EffectManager effectManager;
+  
+  /** The interaction. */
   @Nonnull
   private ElementInteraction interaction;
 
@@ -173,6 +190,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    */
   private boolean visibleToMouseEvents;
 
+  /** The clip children. */
   private boolean clipChildren;
 
   /**
@@ -203,34 +221,55 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   @Nullable
   private Screen screen;
 
+  /** The time. */
   @Nonnull
   private TimeProvider time;
+  
+  /** The element debug out. */
   @Nonnull
   private final List<String> elementDebugOut = new ArrayList<String>();
+  
+  /** The element debug. */
   @Nonnull
   private final StringBuilder elementDebug = new StringBuilder();
+  
+  /** The parent clip area. */
   private boolean parentClipArea = false;
+  
+  /** The parent clip X. */
   private int parentClipX;
+  
+  /** The parent clip Y. */
   private int parentClipY;
+  
+  /** The parent clip width. */
   private int parentClipWidth;
+  
+  /** The parent clip height. */
   private int parentClipHeight;
 
   // this will be set to true when constraints, padding, margin and so on have been changed and this change should
+  /** The constraints changed. */
   // publish an event on the event bus later
   private boolean constraintsChanged;
 
+  /** The ignore mouse events. */
   /*
    * Whether or not this element should ignore all mouse events.
    */
   private boolean ignoreMouseEvents;
 
+  /** The ignore keyboard events. */
   /*
    * Whether or not this element should ignore all keyboard events.
    */
   private boolean ignoreKeyboardEvents;
 
+  /** The Constant convert. */
   @Nonnull
   private static final Convert convert;
+  
+  /** The Constant rendererApplier. */
   @Nonnull
   private static final Map<Class<? extends ElementRenderer>, ApplyRenderer> rendererApplier;
 
@@ -242,9 +281,22 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     rendererApplier.put(PanelRenderer.class, new ApplyRendererPanel(convert));
   }
 
+  /** The user data. */
   @Nullable
   private Map<String, Object> userData;
 
+  /**
+	 * Instantiates a new element.
+	 *
+	 * @param nifty                the nifty
+	 * @param elementType          the element type
+	 * @param id                   the id
+	 * @param parent               the parent
+	 * @param focusHandler         the focus handler
+	 * @param visibleToMouseEvents the visible to mouse events
+	 * @param timeProvider         the time provider
+	 * @param elementRenderer      the element renderer
+	 */
   public Element(
       @Nonnull final Nifty nifty,
       @Nonnull final ElementType elementType,
@@ -267,8 +319,18 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   /**
-   * Use this constructor to specify a LayoutPart
-   */
+	 * Use this constructor to specify a LayoutPart.
+	 *
+	 * @param nifty                the nifty
+	 * @param elementType          the element type
+	 * @param id                   the id
+	 * @param parent               the parent
+	 * @param layoutPart           the layout part
+	 * @param focusHandler         the focus handler
+	 * @param visibleToMouseEvents the visible to mouse events
+	 * @param timeProvider         the time provider
+	 * @param elementRenderer      the element renderer
+	 */
   public Element(
       @Nonnull final Nifty nifty,
       @Nonnull final ElementType elementType,
@@ -299,8 +361,13 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   /**
-   * This is used when the element is being created from an ElementType in the loading process.
-   */
+	 * This is used when the element is being created from an ElementType in the
+	 * loading process.
+	 *
+	 * @param targetScreen the target screen
+	 * @param attributes   the attributes
+	 * @param renderEngine the render engine
+	 */
   public void initializeFromAttributes(
       @Nonnull final Screen targetScreen,
       @Nonnull final Attributes attributes,
@@ -375,10 +442,20 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Initialize from post attributes.
+	 *
+	 * @param attributes the attributes
+	 */
   public void initializeFromPostAttributes(@Nonnull final Attributes attributes) {
     visible = attributes.getAsBoolean("visible", Convert.DEFAULT_VISIBLE);
   }
 
+  /**
+	 * Gets the id.
+	 *
+	 * @return the id
+	 */
   @Nullable
   public String getId() {
     return id;
@@ -403,6 +480,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return parent != null;
   }
 
+  /**
+	 * Sets the parent.
+	 *
+	 * @param element the new parent
+	 */
   public void setParent(@Nullable final Element element) {
     parent = element;
 
@@ -415,6 +497,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Parent has clip area.
+	 *
+	 * @return true, if successful
+	 */
   private boolean parentHasClipArea() {
     if (parent == null) {
       return false;
@@ -422,11 +509,24 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return parent.parentClipArea;
   }
 
+  /**
+	 * Gets the element state string.
+	 *
+	 * @param offset the offset
+	 * @return the element state string
+	 */
   @Nonnull
   public String getElementStateString(@Nonnull final String offset) {
     return getElementStateString(offset, ".*");
   }
 
+  /**
+	 * Gets the element state string.
+	 *
+	 * @param offset the offset
+	 * @param regex  the regex
+	 * @return the element state string
+	 */
   @Nonnull
   public String getElementStateString(@Nonnull final String offset, @Nonnull final String regex) {
     elementDebugOut.clear();
@@ -504,6 +604,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return elementDebug.toString();
   }
 
+  /**
+	 * Gets the state.
+	 *
+	 * @return the state
+	 */
   @Nonnull
   private String getState() {
     if (isEffectActive(EffectEventId.onStartScreen)) {
@@ -529,6 +634,12 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return "normal";
   }
 
+  /**
+	 * Output size value.
+	 *
+	 * @param value the value
+	 * @return the string
+	 */
   @Nullable
   private String outputSizeValue(@Nullable final SizeValue value) {
     if (value == null) {
@@ -539,35 +650,64 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   /**
-   * Gets the x location of the top left corner of this element.
-   */
+	 * Gets the x location of the top left corner of this element.
+	 *
+	 * @return the x
+	 */
   public int getX() {
     return layoutPart.getBox().getX();
   }
 
   /**
-   * Gets the y location of the top left corner of this element.
-   */
+	 * Gets the y location of the top left corner of this element.
+	 *
+	 * @return the y
+	 */
   public int getY() {
     return layoutPart.getBox().getY();
   }
 
+  /**
+	 * Gets the height.
+	 *
+	 * @return the height
+	 */
   public int getHeight() {
     return layoutPart.getBox().getHeight();
   }
 
+  /**
+	 * Gets the width.
+	 *
+	 * @return the width
+	 */
   public int getWidth() {
     return layoutPart.getBox().getWidth();
   }
 
+  /**
+	 * Sets the height.
+	 *
+	 * @param height the new height
+	 */
   public void setHeight(int height) {
     layoutPart.getBox().setHeight(height);
   }
 
+  /**
+	 * Sets the width.
+	 *
+	 * @param width the new width
+	 */
   public void setWidth(int width) {
     layoutPart.getBox().setWidth(width);
   }
 
+  /**
+	 * Gets the children.
+	 *
+	 * @return the children
+	 */
   @Nonnull
   public List<Element> getChildren() {
     if (children == null) {
@@ -604,15 +744,21 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   /**
-   * Adds a child element to the end of the list of this element's children.
-   */
+	 * Adds a child element to the end of the list of this element's children.
+	 *
+	 * @param child the child
+	 */
   public void addChild(@Nonnull final Element child) {
     insertChild(child, getChildrenCount());
   }
 
   /**
-   * Inserts a child element at the specified index in this element's list of children.
-   */
+	 * Inserts a child element at the specified index in this element's list of
+	 * children.
+	 *
+	 * @param child the child
+	 * @param index the index
+	 */
   public void insertChild(@Nonnull final Element child, final int index) {
     final int lastValidIndex = getChildrenCount();
     int usedIndex = index;
@@ -657,8 +803,10 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   /**
-   * Set the index of this element in it's parent's list of children.
-   */
+	 * Set the index of this element in it's parent's list of children.
+	 *
+	 * @param index the new index
+	 */
   public void setIndex(final int index) {
     if (parent == null) {
       return;
@@ -680,6 +828,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Render.
+	 *
+	 * @param r the r
+	 */
   public void render(@Nonnull final NiftyRenderEngine r) {
     if (visible) {
       if (effectManager.isEmpty()) {
@@ -701,6 +854,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Render element.
+	 *
+	 * @param r the r
+	 */
   private void renderElement(@Nonnull final NiftyRenderEngine r) {
     for (int i = 0; i < elementRenderer.length; i++) {
       ElementRenderer renderer = elementRenderer[i];
@@ -708,6 +866,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Render children.
+	 *
+	 * @param r the r
+	 */
   private void renderChildren(@Nonnull final NiftyRenderEngine r) {
     if (clipChildren) {
       r.enableClip(getX(), getY(), getX() + getWidth(), getY() + getHeight());
@@ -718,6 +881,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Render internal child elements.
+	 *
+	 * @param r the r
+	 */
   private void renderInternalChildElements(@Nonnull final NiftyRenderEngine r) {
     if (elementsRenderOrder != null) {
       for (int i = 0; i < elementsRenderOrder.length; i++) {
@@ -727,10 +895,18 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Sets the layout manager.
+	 *
+	 * @param newLayout the new layout manager
+	 */
   public void setLayoutManager(@Nullable final LayoutManager newLayout) {
     this.layoutManager = newLayout;
   }
 
+  /**
+	 * Reset layout.
+	 */
   public void resetLayout() {
 
     TextRenderer textRenderer = getRenderer(TextRenderer.class);
@@ -747,6 +923,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Pre process constraint width.
+	 */
   private void preProcessConstraintWidth() {
     if (children != null) {
       final int childrenCount = children.size();
@@ -759,6 +938,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     preProcessConstraintWidthThisLevel();
   }
 
+  /**
+	 * Pre process constraint width this level.
+	 */
   private void preProcessConstraintWidthThisLevel() {
     // This is either the original width value, or a value we set here.
     SizeValue myWidth = getConstraintWidth();
@@ -824,6 +1006,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Gets the layout children with independent width.
+	 *
+	 * @return the layout children with independent width
+	 */
   @Nonnull
   private List<LayoutPart> getLayoutChildrenWithIndependentWidth() {
     if (children == null) {
@@ -841,6 +1028,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return layoutPartChild;
   }
 
+  /**
+	 * Pre process constraint height.
+	 */
   private void preProcessConstraintHeight() {
     if (children != null) {
       final int childrenCount = children.size();
@@ -853,6 +1043,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     preProcessConstraintHeightThisLevel();
   }
 
+  /**
+	 * Pre process constraint height this level.
+	 */
   private void preProcessConstraintHeightThisLevel() {
     // This is either the original height value, or a value we set here.
     SizeValue myHeight = getConstraintHeight();
@@ -919,6 +1112,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Gets the layout children with independent height.
+	 *
+	 * @return the layout children with independent height
+	 */
   @Nonnull
   private List<LayoutPart> getLayoutChildrenWithIndependentHeight() {
     if (children == null) {
@@ -936,6 +1134,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return layoutPartChild;
   }
 
+  /**
+	 * Process layout internal.
+	 */
   private void processLayoutInternal() {
     if (children != null) {
       final int childrenCount = children.size();
@@ -949,6 +1150,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Process layout.
+	 */
   private void processLayout() {
     processLayoutInternal();
 
@@ -994,6 +1198,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Layout elements.
+	 */
   public void layoutElements() {
     prepareLayout();
     processLayout();
@@ -1007,6 +1214,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     publishConstraintsChangedEvent();
   }
 
+  /**
+	 * Publish constraints changed event.
+	 */
   private void publishConstraintsChangedEvent() {
     if (constraintsChanged) {
       publishEvent();
@@ -1019,11 +1229,22 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Prepare layout.
+	 */
   private void prepareLayout() {
     preProcessConstraintWidth();
     preProcessConstraintHeight();
   }
 
+  /**
+	 * Sets the parent clip area.
+	 *
+	 * @param x      the x
+	 * @param y      the y
+	 * @param width  the width
+	 * @param height the height
+	 */
   private void setParentClipArea(final int x, final int y, final int width, final int height) {
     parentClipArea = true;
     parentClipX = x;
@@ -1040,6 +1261,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Reset effects.
+	 */
   public void resetEffects() {
     effectManager.reset();
     if (children != null) {
@@ -1051,6 +1275,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Reset all effects.
+	 */
   public void resetAllEffects() {
     effectManager.resetAll();
     if (children != null) {
@@ -1062,6 +1289,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Restore for show.
+	 */
   public void restoreForShow() {
     effectManager.restoreForShow();
     if (children != null) {
@@ -1073,6 +1303,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Reset for hide.
+	 */
   public void resetForHide() {
     effectManager.resetForHide();
     if (children != null) {
@@ -1084,6 +1317,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Reset single effect.
+	 *
+	 * @param effectEventId the effect event id
+	 */
   public void resetSingleEffect(@Nonnull final EffectEventId effectEventId) {
     effectManager.resetSingleEffect(effectEventId);
     if (children != null) {
@@ -1095,6 +1333,12 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Reset single effect.
+	 *
+	 * @param effectEventId the effect event id
+	 * @param customKey     the custom key
+	 */
   public void resetSingleEffect(@Nonnull final EffectEventId effectEventId, @Nonnull final String customKey) {
     effectManager.resetSingleEffect(effectEventId, customKey);
     if (children != null) {
@@ -1106,6 +1350,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Reset mouse down.
+	 */
   public void resetMouseDown() {
     interaction.resetMouseDown();
     if (children != null) {
@@ -1117,64 +1364,130 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Sets the constraint X.
+	 *
+	 * @param newX the new constraint X
+	 */
   public void setConstraintX(@Nonnull final SizeValue newX) {
     layoutPart.getBoxConstraints().setX(newX);
     notifyListeners();
   }
 
+  /**
+	 * Sets the constraint Y.
+	 *
+	 * @param newY the new constraint Y
+	 */
   public void setConstraintY(@Nonnull final SizeValue newY) {
     layoutPart.getBoxConstraints().setY(newY);
     notifyListeners();
   }
 
+  /**
+	 * Sets the constraint width.
+	 *
+	 * @param newWidth the new constraint width
+	 */
   public void setConstraintWidth(@Nonnull final SizeValue newWidth) {
     layoutPart.getBoxConstraints().setWidth(newWidth);
     notifyListeners();
   }
 
+  /**
+	 * Sets the constraint height.
+	 *
+	 * @param newHeight the new constraint height
+	 */
   public void setConstraintHeight(@Nonnull final SizeValue newHeight) {
     layoutPart.getBoxConstraints().setHeight(newHeight);
     notifyListeners();
   }
 
+  /**
+	 * Gets the constraint X.
+	 *
+	 * @return the constraint X
+	 */
   @Nonnull
   public SizeValue getConstraintX() {
     return layoutPart.getBoxConstraints().getX();
   }
 
+  /**
+	 * Gets the constraint Y.
+	 *
+	 * @return the constraint Y
+	 */
   @Nonnull
   public SizeValue getConstraintY() {
     return layoutPart.getBoxConstraints().getY();
   }
 
+  /**
+	 * Gets the constraint width.
+	 *
+	 * @return the constraint width
+	 */
   @Nonnull
   public SizeValue getConstraintWidth() {
     return layoutPart.getBoxConstraints().getWidth();
   }
 
+  /**
+	 * Gets the constraint height.
+	 *
+	 * @return the constraint height
+	 */
   @Nonnull
   public SizeValue getConstraintHeight() {
     return layoutPart.getBoxConstraints().getHeight();
   }
 
+  /**
+	 * Sets the constraint horizontal align.
+	 *
+	 * @param newHorizontalAlign the new constraint horizontal align
+	 */
   public void setConstraintHorizontalAlign(@Nonnull final HorizontalAlign newHorizontalAlign) {
     layoutPart.getBoxConstraints().setHorizontalAlign(newHorizontalAlign);
   }
 
+  /**
+	 * Sets the constraint vertical align.
+	 *
+	 * @param newVerticalAlign the new constraint vertical align
+	 */
   public void setConstraintVerticalAlign(@Nonnull final VerticalAlign newVerticalAlign) {
     layoutPart.getBoxConstraints().setVerticalAlign(newVerticalAlign);
   }
 
+  /**
+	 * Gets the constraint horizontal align.
+	 *
+	 * @return the constraint horizontal align
+	 */
   @Nonnull
   public HorizontalAlign getConstraintHorizontalAlign() {
     return layoutPart.getBoxConstraints().getHorizontalAlign();
   }
 
+  /**
+	 * Gets the constraint vertical align.
+	 *
+	 * @return the constraint vertical align
+	 */
   @Nonnull
   public VerticalAlign getConstraintVerticalAlign() {
     return layoutPart.getBoxConstraints().getVerticalAlign();
   }
 
+  /**
+	 * Register effect.
+	 *
+	 * @param theId the the id
+	 * @param e     the e
+	 */
   public void registerEffect(
       @Nonnull final EffectEventId theId,
       @Nonnull final Effect e) {
@@ -1182,14 +1495,32 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     effectManager.registerEffect(theId, e);
   }
 
+  /**
+	 * Start effect.
+	 *
+	 * @param effectEventId the effect event id
+	 */
   public void startEffect(@Nonnull final EffectEventId effectEventId) {
     startEffect(effectEventId, null);
   }
 
+  /**
+	 * Start effect.
+	 *
+	 * @param effectEventId   the effect event id
+	 * @param effectEndNotify the effect end notify
+	 */
   public void startEffect(@Nonnull final EffectEventId effectEventId, @Nullable final EndNotify effectEndNotify) {
     startEffect(effectEventId, effectEndNotify, null);
   }
 
+  /**
+	 * Start effect.
+	 *
+	 * @param effectEventId   the effect event id
+	 * @param effectEndNotify the effect end notify
+	 * @param customKey       the custom key
+	 */
   public void startEffect(
       @Nonnull final EffectEventId effectEventId,
       @Nullable final EndNotify effectEndNotify,
@@ -1197,16 +1528,34 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     startEffectDoIt(effectEventId, effectEndNotify, customKey, true);
   }
 
+  /**
+	 * Start effect without children.
+	 *
+	 * @param effectEventId the effect event id
+	 */
   public void startEffectWithoutChildren(@Nonnull final EffectEventId effectEventId) {
     startEffectWithoutChildren(effectEventId, null);
   }
 
+  /**
+	 * Start effect without children.
+	 *
+	 * @param effectEventId   the effect event id
+	 * @param effectEndNotify the effect end notify
+	 */
   public void startEffectWithoutChildren(
       @Nonnull final EffectEventId effectEventId,
       @Nullable final EndNotify effectEndNotify) {
     startEffectWithoutChildren(effectEventId, effectEndNotify, null);
   }
 
+  /**
+	 * Start effect without children.
+	 *
+	 * @param effectEventId   the effect event id
+	 * @param effectEndNotify the effect end notify
+	 * @param customKey       the custom key
+	 */
   public void startEffectWithoutChildren(
       @Nonnull final EffectEventId effectEventId,
       @Nullable final EndNotify effectEndNotify,
@@ -1214,6 +1563,14 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     startEffectDoIt(effectEventId, effectEndNotify, customKey, false);
   }
 
+  /**
+	 * Start effect do it.
+	 *
+	 * @param effectEventId   the effect event id
+	 * @param effectEndNotify the effect end notify
+	 * @param customKey       the custom key
+	 * @param withChildren    the with children
+	 */
   private void startEffectDoIt(
       @Nonnull final EffectEventId effectEventId,
       @Nullable final EndNotify effectEndNotify,
@@ -1300,6 +1657,13 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     forwardToSelf.perform();
   }
 
+  /**
+	 * Start effect internal.
+	 *
+	 * @param effectEventId   the effect event id
+	 * @param effectEndNotify the effect end notify
+	 * @param customKey       the custom key
+	 */
   private void startEffectInternal(
       @Nonnull final EffectEventId effectEventId,
       @Nullable final EndNotify effectEndNotify,
@@ -1347,14 +1711,30 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Stop effect.
+	 *
+	 * @param effectEventId the effect event id
+	 */
   public void stopEffect(@Nonnull final EffectEventId effectEventId) {
     stopEffectInternal(effectEventId, true);
   }
 
+  /**
+	 * Stop effect without children.
+	 *
+	 * @param effectEventId the effect event id
+	 */
   public void stopEffectWithoutChildren(@Nonnull final EffectEventId effectEventId) {
     stopEffectInternal(effectEventId, false);
   }
 
+  /**
+	 * Stop effect internal.
+	 *
+	 * @param effectEventId the effect event id
+	 * @param withChildren  the with children
+	 */
   private void stopEffectInternal(@Nonnull final EffectEventId effectEventId, final boolean withChildren) {
     if (EffectEventId.onStartScreen == effectEventId ||
         EffectEventId.onEndScreen == effectEventId) {
@@ -1382,14 +1762,19 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   /**
-   * Checks if a certain effect is still active in this element or any of its children.
-   *
-   * @return true if the effect has ended and false otherwise
-   */
+	 * Checks if a certain effect is still active in this element or any of its
+	 * children.
+	 *
+	 * @param effectEventId the effect event id
+	 * @return true if the effect has ended and false otherwise
+	 */
   public boolean isEffectActive(@Nonnull final EffectEventId effectEventId) {
     return effectStateCache.get(effectEventId);
   }
 
+  /**
+	 * Enable.
+	 */
   public void enable() {
     if (enabled) {
       return;
@@ -1397,6 +1782,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     enableInternal();
   }
 
+  /**
+	 * Enable internal.
+	 */
   private void enableInternal() {
     enabledCount++;
     if (enabledCount == 0) {
@@ -1418,6 +1806,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Enable effect.
+	 */
   void enableEffect() {
     stopEffectWithoutChildren(EffectEventId.onDisabled);
     startEffectWithoutChildren(EffectEventId.onEnabled);
@@ -1426,6 +1817,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Disable.
+	 */
   public void disable() {
     if (!enabled) {
       return;
@@ -1433,6 +1827,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     disableInternal();
   }
 
+  /**
+	 * Disable internal.
+	 */
   private void disableInternal() {
     enabledCount--;
     if (enabledCount == -1) {
@@ -1455,6 +1852,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Disable focus.
+	 */
   public void disableFocus() {
     if (focusHandler.getKeyboardFocusElement() == this) {
       Element prevElement = focusHandler.getNext(this);
@@ -1473,6 +1873,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Disable effect.
+	 */
   void disableEffect() {
     stopEffectWithoutChildren(EffectEventId.onHover);
     stopEffectWithoutChildren(EffectEventId.onStartHover);
@@ -1485,14 +1888,27 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Checks if is enabled.
+	 *
+	 * @return true, if is enabled
+	 */
   public boolean isEnabled() {
     return enabled;
   }
 
+  /**
+	 * Show.
+	 */
   public void show() {
     show(null);
   }
 
+  /**
+	 * Show.
+	 *
+	 * @param perform the perform
+	 */
   public void show(@Nullable final EndNotify perform) {
     // don't show if show is still in progress
     if (isEffectActive(EffectEventId.onShow)) {
@@ -1509,6 +1925,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     startEffect(EffectEventId.onShow, perform);
   }
 
+  /**
+	 * Internal show.
+	 */
   private void internalShow() {
     visible = true;
     restoreForShow();
@@ -1518,6 +1937,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Sets the visible.
+	 *
+	 * @param visibleParam the new visible
+	 */
   public void setVisible(final boolean visibleParam) {
     if (visibleParam) {
       show();
@@ -1526,10 +1950,18 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Hide.
+	 */
   public void hide() {
     hide(null);
   }
 
+  /**
+	 * Hide.
+	 *
+	 * @param perform the perform
+	 */
   public void hide(@Nullable final EndNotify perform) {
     // don't hide if not visible
     if (!isVisible()) {
@@ -1559,10 +1991,16 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     });
   }
 
+  /**
+	 * Show without effects.
+	 */
   public void showWithoutEffects() {
     internalShow();
   }
 
+  /**
+	 * Hide without effect.
+	 */
   public void hideWithoutEffect() {
     // don't hide if not visible
     if (!isVisible()) {
@@ -1573,6 +2011,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     internalHide();
   }
 
+  /**
+	 * Internal hide.
+	 */
   private void internalHide() {
     visible = false;
     disableFocus();
@@ -1604,15 +2045,30 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return visible && parent.isVisibleWithParent();
   }
 
+  /**
+	 * Sets the hot spot falloff.
+	 *
+	 * @param newFalloff the new hot spot falloff
+	 */
   public void setHotSpotFalloff(@Nullable final Falloff newFalloff) {
     effectManager.setFalloff(newFalloff);
   }
 
+  /**
+	 * Gets the falloff.
+	 *
+	 * @return the falloff
+	 */
   @Nullable
   public Falloff getFalloff() {
     return effectManager.getFalloff();
   }
 
+  /**
+	 * Can handle mouse events.
+	 *
+	 * @return true, if successful
+	 */
   public boolean canHandleMouseEvents() {
     if (isEffectActive(EffectEventId.onStartScreen)) {
       return false;
@@ -1674,10 +2130,15 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   /**
-   * This should check if the mouse event is inside the current element and if it is
-   * forward the event to it's child. The purpose of this is to build a list of all
-   * elements from front to back that are available for a certain mouse position.
-   */
+	 * This should check if the mouse event is inside the current element and if it
+	 * is forward the event to it's child. The purpose of this is to build a list of
+	 * all elements from front to back that are available for a certain mouse
+	 * position.
+	 *
+	 * @param mouseEvent       the mouse event
+	 * @param eventTime        the event time
+	 * @param mouseOverHandler the mouse over handler
+	 */
   public void buildMouseOverElements(
       @Nonnull final NiftyMouseInputEvent mouseEvent,
       final long eventTime,
@@ -1705,31 +2166,48 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Mouse event hover preprocess.
+	 *
+	 * @param mouseEvent the mouse event
+	 * @param eventTime  the event time
+	 */
   public void mouseEventHoverPreprocess(@Nonnull final NiftyMouseInputEvent mouseEvent, final long eventTime) {
     effectManager.handleHoverDeactivate(this, mouseEvent.getMouseX(), mouseEvent.getMouseY());
   }
+  
   /**
-   * Process mouse event for this element
-   * @param mouseEvent
-   * @param eventTime is the current time in milliseconds
-   * @return True if the event has been processed
-   */
+	 * Process mouse event for this element.
+	 *
+	 * @param mouseEvent the mouse event
+	 * @param eventTime  is the current time in milliseconds
+	 * @return True if the event has been processed
+	 */
   public boolean mouseEvent(@Nonnull final NiftyMouseInputEvent mouseEvent, final long eventTime) {
     mouseEventHover(mouseEvent);
     return interaction.process(mouseEvent, eventTime, isInside(mouseEvent), canHandleInteraction(),
         focusHandler.hasExclusiveMouseFocus(this));
   }
 
+  /**
+	 * Mouse event hover.
+	 *
+	 * @param mouseEvent the mouse event
+	 */
   private void mouseEventHover(@Nonnull final NiftyMouseInputEvent mouseEvent) {
     effectManager.handleHover(this, mouseEvent.getMouseX(), mouseEvent.getMouseY());
     effectManager.handleHoverStartAndEnd(this, mouseEvent.getMouseX(), mouseEvent.getMouseY());
   }
 
   /**
-   * Handles the MouseOverEvent. Must not call child elements. This is handled by the caller.
-   *
-   * @return true the mouse event has been consumed and false when the mouse event can be processed further down
-   */
+	 * Handles the MouseOverEvent. Must not call child elements. This is handled by
+	 * the caller.
+	 *
+	 * @param mouseEvent the mouse event
+	 * @param eventTime  the event time
+	 * @return true the mouse event has been consumed and false when the mouse event
+	 *         can be processed further down
+	 */
   public boolean mouseOverEvent(@Nonnull final NiftyMouseInputEvent mouseEvent, final long eventTime) {
     boolean isMouseEventConsumed = false;
     if (interaction.onMouseOver(this, mouseEvent)) {
@@ -1742,12 +2220,22 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   /**
-   * Checks to see if the given mouse position is inside of this element.
-   */
+	 * Checks to see if the given mouse position is inside of this element.
+	 *
+	 * @param inputEvent the input event
+	 * @return true, if is inside
+	 */
   private boolean isInside(@Nonnull final NiftyMouseInputEvent inputEvent) {
     return isMouseInsideElement(inputEvent.getMouseX(), inputEvent.getMouseY());
   }
 
+  /**
+	 * Checks if is mouse inside element.
+	 *
+	 * @param mouseX the mouse X
+	 * @param mouseY the mouse Y
+	 * @return true, if is mouse inside element
+	 */
   public boolean isMouseInsideElement(final int mouseX, final int mouseY) {
     if (parentClipArea) {
       // must be inside the parent to continue
@@ -1769,6 +2257,13 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Checks if is inside parent clip area.
+	 *
+	 * @param mouseX the mouse X
+	 * @param mouseY the mouse Y
+	 * @return true, if is inside parent clip area
+	 */
   private boolean isInsideParentClipArea(final int mouseX, final int mouseY) {
     return mouseX >= parentClipX &&
         mouseX <= (parentClipX + parentClipWidth) &&
@@ -1777,14 +2272,16 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   /**
-   * @deprecated Use {@link #onClickAndReleasePrimaryMouseButton()} instead.
-   *
-   * Simulates a click-release of the primary mouse button on the element.
-   *
-   * @see #onClickAndReleasePrimaryMouseButton()
-   * @see #onClickAndReleaseSecondaryMouseButton()
-   * @see #onClickAndReleaseSecondaryMouseButton()
-   */
+	 * On click.
+	 *
+	 * @see #onClickAndReleasePrimaryMouseButton()
+	 * @see #onClickAndReleaseSecondaryMouseButton()
+	 * @see #onClickAndReleaseSecondaryMouseButton()
+	 * @deprecated Use {@link #onClickAndReleasePrimaryMouseButton()} instead.
+	 * 
+	 *             Simulates a click-release of the primary mouse button on the
+	 *             element.
+	 */
   @Deprecated
   public void onClick() {
     onClickAndReleasePrimaryMouseButton();
@@ -1896,6 +2393,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     interaction.clickAndReleaseTertiaryMouseButton(nifty);
   }
 
+  /**
+	 * Can handle interaction.
+	 *
+	 * @return true, if successful
+	 */
   private boolean canHandleInteraction() {
     if (screen == null || !enabled) {
       return false;
@@ -1905,8 +2407,12 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   /**
-   * @return the element or null if an element with the specified id cannot be found
-   */
+	 * Find element by id.
+	 *
+	 * @param findId the find id
+	 * @return the element or null if an element with the specified id cannot be
+	 *         found
+	 */
   @Nullable
   public Element findElementById(@Nullable final String findId) {
     if (findId == null) {
@@ -1935,6 +2441,12 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return null;
   }
 
+  /**
+	 * Find elements by style.
+	 *
+	 * @param styleIds the style ids
+	 * @return the list
+	 */
   public List<Element> findElementsByStyle(@Nullable final String... styleIds) {
     if (styleIds == null || styleIds.length == 0) {
       return Collections.emptyList();
@@ -1958,10 +2470,24 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return elements;
   }
 
+  /**
+	 * Checks for style.
+	 *
+	 * @param e       the e
+	 * @param styleId the style id
+	 * @return true, if successful
+	 */
   private static boolean hasStyle(Element e, String styleId) {
     return styleId.equals(e.getStyle());
   }
 
+  /**
+	 * Child id match.
+	 *
+	 * @param name the name
+	 * @param id   the id
+	 * @return true, if successful
+	 */
   private boolean childIdMatch(@Nonnull final String name, @Nullable final String id) {
     if (name.startsWith("#")) {
       if (id != null && id.endsWith(name)) {
@@ -1971,10 +2497,20 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return false;
   }
 
+  /**
+	 * Sets the on click alternate key.
+	 *
+	 * @param newAlternateKey the new on click alternate key
+	 */
   public void setOnClickAlternateKey(final String newAlternateKey) {
     interaction.setAlternateKey(newAlternateKey);
   }
 
+  /**
+	 * Sets the alternate key.
+	 *
+	 * @param alternateKey the new alternate key
+	 */
   public void setAlternateKey(@Nullable final String alternateKey) {
     effectManager.setAlternateKey(alternateKey);
 
@@ -1987,15 +2523,30 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Gets the effect manager.
+	 *
+	 * @return the effect manager
+	 */
   @Nonnull
   public EffectManager getEffectManager() {
     return effectManager;
   }
 
+  /**
+	 * Sets the effect manager.
+	 *
+	 * @param effectManagerParam the new effect manager
+	 */
   public void setEffectManager(@Nonnull final EffectManager effectManagerParam) {
     effectManager = effectManagerParam;
   }
 
+  /**
+	 * Bind to screen.
+	 *
+	 * @param newScreen the new screen
+	 */
   private void bindToScreen(@Nonnull final Screen newScreen) {
     screen = newScreen;
     if (id != null) {
@@ -2003,6 +2554,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Bind to focus handler.
+	 *
+	 * @param isPopup the is popup
+	 */
   private void bindToFocusHandler(final boolean isPopup) {
     if (!focusable) {
       return;
@@ -2020,10 +2576,20 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Checks for ancestor popup.
+	 *
+	 * @return true, if successful
+	 */
   private boolean hasAncestorPopup() {
     return findAncestorPopupElement() != null;
   }
 
+  /**
+	 * Find ancestor popup element.
+	 *
+	 * @return the element
+	 */
   @Nullable
   private Element findAncestorPopupElement() {
     if (elementType instanceof PopupType) {
@@ -2037,11 +2603,17 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return parent.findAncestorPopupElement();
   }
 
+  /**
+	 * On start screen.
+	 */
   public void onStartScreen() {
     onStartScreenSubscribeControllerAnnotations();
     onStartScreenInternal();
   }
 
+  /**
+	 * On start screen subscribe controller annotations.
+	 */
   private void onStartScreenSubscribeControllerAnnotations() {
     if (children != null) {
       final int childrenCount = children.size();
@@ -2055,6 +2627,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * On start screen internal.
+	 */
   private void onStartScreenInternal() {
     if (children != null) {
       final int childrenCount = children.size();
@@ -2092,10 +2667,21 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return null;
   }
 
+  /**
+	 * Sets the visible to mouse events.
+	 *
+	 * @param newVisibleToMouseEvents the new visible to mouse events
+	 */
   public void setVisibleToMouseEvents(final boolean newVisibleToMouseEvents) {
     this.visibleToMouseEvents = newVisibleToMouseEvents;
   }
 
+  /**
+	 * Key event.
+	 *
+	 * @param inputEvent the input event
+	 * @return true, if successful
+	 */
   public boolean keyEvent(@Nonnull final KeyboardInputEvent inputEvent) {
     if (attachedInputControl != null && id != null) {
       return attachedInputControl.keyEvent(nifty, inputEvent, id);
@@ -2103,14 +2689,29 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return false;
   }
 
+  /**
+	 * Sets the clip children.
+	 *
+	 * @param clipChildrenParam the new clip children
+	 */
   public void setClipChildren(final boolean clipChildrenParam) {
     this.clipChildren = clipChildrenParam;
   }
 
+  /**
+	 * Checks if is clip children.
+	 *
+	 * @return true, if is clip children
+	 */
   public boolean isClipChildren() {
     return this.clipChildren;
   }
 
+  /**
+	 * Sets the render order.
+	 *
+	 * @param renderOrder the new render order
+	 */
   public void setRenderOrder(final int renderOrder) {
     this.renderOrder = renderOrder;
     if (parent != null) {
@@ -2118,6 +2719,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Render order changed.
+	 *
+	 * @param element the element
+	 */
   private void renderOrderChanged(@Nonnull final Element element) {
     if (elementsRenderOrderSet == null) {
       log.warning("Can't report a changed order, parent doesn't seem to have children?! O.o");
@@ -2144,6 +2750,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Gets the render order.
+	 *
+	 * @return the render order
+	 */
   public int getRenderOrder() {
     return renderOrder;
   }
@@ -2159,10 +2770,20 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Attach input control.
+	 *
+	 * @param newInputControl the new input control
+	 */
   public void attachInputControl(final NiftyInputControl newInputControl) {
     attachedInputControl = newInputControl;
   }
 
+  /**
+	 * Checks for parent active on start or on end screen effect.
+	 *
+	 * @return true, if successful
+	 */
   private boolean hasParentActiveOnStartOrOnEndScreenEffect() {
     if (parent != null) {
       return
@@ -2173,6 +2794,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return false;
   }
 
+  /**
+	 * Reset interaction blocked.
+	 */
   private void resetInteractionBlocked() {
     interactionBlocked = false;
     if (children != null) {
@@ -2185,14 +2809,26 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   /**
-   * @author void
-   */
+	 * The Class LocalEndNotify.
+	 *
+	 * @author void
+	 */
   public class LocalEndNotify implements EndNotify {
+    
+    /** The effect event id. */
     @Nonnull
     private final EffectEventId effectEventId;
+    
+    /** The effect end notify. */
     @Nullable
     private final EndNotify effectEndNotify;
 
+    /**
+	 * Instantiates a new local end notify.
+	 *
+	 * @param effectEventIdParam   the effect event id param
+	 * @param effectEndNotifyParam the effect end notify param
+	 */
     public LocalEndNotify(
         @Nonnull final EffectEventId effectEventIdParam,
         @Nullable final EndNotify effectEndNotifyParam) {
@@ -2200,6 +2836,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       effectEndNotify = effectEndNotifyParam;
     }
 
+    /**
+	 * Perform.
+	 */
     @Override
     public void perform() {
       if (effectEventId.equals(EffectEventId.onStartScreen) || effectEventId.equals(EffectEventId.onEndScreen)) {
@@ -2222,6 +2861,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Sets the id.
+	 *
+	 * @param id the new id
+	 */
   public void setId(@Nullable final String id) {
     @Nullable String oldId = this.id;
     this.id = id;
@@ -2243,16 +2887,31 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     parent.renderOrderChanged(this);
   }
 
+  /**
+	 * Gets the element type.
+	 *
+	 * @return the element type
+	 */
   @Nonnull
   public ElementType getElementType() {
     return elementType;
   }
 
+  /**
+	 * Gets the element renderer.
+	 *
+	 * @return the element renderer
+	 */
   @Nonnull
   public ElementRenderer[] getElementRenderer() {
     return elementRenderer;
   }
 
+  /**
+	 * Sets the focusable.
+	 *
+	 * @param isFocusable the new focusable
+	 */
   public void setFocusable(final boolean isFocusable) {
     this.focusable = isFocusable;
     if (children != null) {
@@ -2264,11 +2923,21 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Gets the attached input control.
+	 *
+	 * @return the attached input control
+	 */
   @Nullable
   public NiftyInputControl getAttachedInputControl() {
     return attachedInputControl;
   }
 
+  /**
+	 * Bind controls.
+	 *
+	 * @param target the target
+	 */
   public void bindControls(@Nonnull final Screen target) {
     if (screen == target) {
       return;
@@ -2286,6 +2955,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Inits the controls.
+	 *
+	 * @param isPopup the is popup
+	 */
   public void initControls(final boolean isPopup) {
     if (children != null) {
       final int childrenCount = children.size();
@@ -2314,17 +2988,32 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Gets the focus handler.
+	 *
+	 * @return the focus handler
+	 */
   @Nonnull
   public FocusHandler getFocusHandler() {
     return focusHandler;
   }
 
+  /**
+	 * Refresh style.
+	 *
+	 * @param styleId the style id
+	 */
   public void refreshStyle(final String styleId) {
     log.log(Level.FINE, "Rereshing style of {0}", Element.this.getId());
     String simplyStyle = styleId.split("#")[0];
     setStyle(simplyStyle);
   }
 
+  /**
+	 * Sets the style.
+	 *
+	 * @param newStyle the new style
+	 */
   public void setStyle(@Nonnull final String newStyle) {
     final String oldStyle = getStyle();
     if (oldStyle != null) {
@@ -2344,11 +3033,21 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     publishEvent();
   }
 
+  /**
+	 * Gets the style.
+	 *
+	 * @return the style
+	 */
   @Nullable
   public String getStyle() {
     return elementType.getAttributes().get("style");
   }
 
+  /**
+	 * Removes the style.
+	 *
+	 * @param style the style
+	 */
   void removeStyle(@Nonnull final String style) {
     log.fine("before removeStyle [" + style + "]\n" + elementType.output(0));
 
@@ -2401,6 +3100,14 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Find control.
+	 *
+	 * @param <T>                   the generic type
+	 * @param elementName           the element name
+	 * @param requestedControlClass the requested control class
+	 * @return the t
+	 */
   @Nullable
   public <T extends Controller> T findControl(
       @Nonnull final String elementName,
@@ -2412,6 +3119,14 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return element.getControl(requestedControlClass);
   }
 
+  /**
+	 * Find nifty control.
+	 *
+	 * @param <T>                   the generic type
+	 * @param elementName           the element name
+	 * @param requestedControlClass the requested control class
+	 * @return the t
+	 */
   @Nullable
   public <T extends NiftyControl> T findNiftyControl(
       @Nonnull final String elementName,
@@ -2423,6 +3138,13 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return element.getNiftyControl(requestedControlClass);
   }
 
+  /**
+	 * Gets the control.
+	 *
+	 * @param <T>                   the generic type
+	 * @param requestedControlClass the requested control class
+	 * @return the control
+	 */
   @Nullable
   public <T extends Controller> T getControl(@Nonnull final Class<T> requestedControlClass) {
     if (attachedInputControl != null) {
@@ -2444,6 +3166,13 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return null;
   }
 
+  /**
+	 * Gets the nifty control.
+	 *
+	 * @param <T>                   the generic type
+	 * @param requestedControlClass the requested control class
+	 * @return the nifty control
+	 */
   @Nullable
   public <T extends NiftyControl> T getNiftyControl(@Nonnull final Class<T> requestedControlClass) {
     if (attachedInputControl != null) {
@@ -2467,10 +3196,20 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return null;
   }
 
+  /**
+	 * Checks if is focusable.
+	 *
+	 * @return true, if is focusable
+	 */
   public boolean isFocusable() {
     return focusable && enabled && visible && hasVisibleParent() && !isIgnoreKeyboardEvents();
   }
 
+  /**
+	 * Checks for visible parent.
+	 *
+	 * @return true, if successful
+	 */
   private boolean hasVisibleParent() {
     if (parent != null) {
       return parent.visible && parent.hasVisibleParent();
@@ -2478,113 +3217,226 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return true;
   }
 
+  /**
+	 * Sets the on mouse over method.
+	 *
+	 * @param onMouseOverMethod the new on mouse over method
+	 */
   public void setOnMouseOverMethod(@Nullable final NiftyMethodInvoker onMouseOverMethod) {
     interaction.setOnMouseOver(onMouseOverMethod);
   }
 
+  /**
+	 * Gets the layout part.
+	 *
+	 * @return the layout part
+	 */
   @Nonnull
   public LayoutPart getLayoutPart() {
     return layoutPart;
   }
 
+  /**
+	 * Checks if is visible to mouse events.
+	 *
+	 * @return true, if is visible to mouse events
+	 */
   public boolean isVisibleToMouseEvents() {
     return visibleToMouseEvents;
   }
 
+  /**
+	 * Gets the padding left.
+	 *
+	 * @return the padding left
+	 */
   @Nonnull
   public SizeValue getPaddingLeft() {
     return layoutPart.getBoxConstraints().getPaddingLeft();
   }
 
+  /**
+	 * Gets the padding right.
+	 *
+	 * @return the padding right
+	 */
   @Nonnull
   public SizeValue getPaddingRight() {
     return layoutPart.getBoxConstraints().getPaddingRight();
   }
 
+  /**
+	 * Gets the padding top.
+	 *
+	 * @return the padding top
+	 */
   @Nonnull
   public SizeValue getPaddingTop() {
     return layoutPart.getBoxConstraints().getPaddingTop();
   }
 
+  /**
+	 * Gets the padding bottom.
+	 *
+	 * @return the padding bottom
+	 */
   @Nonnull
   public SizeValue getPaddingBottom() {
     return layoutPart.getBoxConstraints().getPaddingBottom();
   }
 
+  /**
+	 * Gets the margin left.
+	 *
+	 * @return the margin left
+	 */
   @Nonnull
   public SizeValue getMarginLeft() {
     return layoutPart.getBoxConstraints().getMarginLeft();
   }
 
+  /**
+	 * Gets the margin right.
+	 *
+	 * @return the margin right
+	 */
   @Nonnull
   public SizeValue getMarginRight() {
     return layoutPart.getBoxConstraints().getMarginRight();
   }
 
+  /**
+	 * Gets the margin top.
+	 *
+	 * @return the margin top
+	 */
   @Nonnull
   public SizeValue getMarginTop() {
     return layoutPart.getBoxConstraints().getMarginTop();
   }
 
+  /**
+	 * Gets the margin bottom.
+	 *
+	 * @return the margin bottom
+	 */
   @Nonnull
   public SizeValue getMarginBottom() {
     return layoutPart.getBoxConstraints().getMarginBottom();
   }
 
+  /**
+	 * Sets the padding left.
+	 *
+	 * @param paddingValue the new padding left
+	 */
   public void setPaddingLeft(@Nonnull final SizeValue paddingValue) {
     layoutPart.getBoxConstraints().setPaddingLeft(paddingValue);
     notifyListeners();
   }
 
+  /**
+	 * Sets the padding right.
+	 *
+	 * @param paddingValue the new padding right
+	 */
   public void setPaddingRight(@Nonnull final SizeValue paddingValue) {
     layoutPart.getBoxConstraints().setPaddingRight(paddingValue);
     notifyListeners();
   }
 
+  /**
+	 * Sets the padding top.
+	 *
+	 * @param paddingValue the new padding top
+	 */
   public void setPaddingTop(@Nonnull final SizeValue paddingValue) {
     layoutPart.getBoxConstraints().setPaddingTop(paddingValue);
     notifyListeners();
   }
 
+  /**
+	 * Sets the padding bottom.
+	 *
+	 * @param paddingValue the new padding bottom
+	 */
   public void setPaddingBottom(@Nonnull final SizeValue paddingValue) {
     layoutPart.getBoxConstraints().setPaddingBottom(paddingValue);
     notifyListeners();
   }
 
+  /**
+	 * Sets the margin left.
+	 *
+	 * @param value the new margin left
+	 */
   public void setMarginLeft(@Nonnull final SizeValue value) {
     layoutPart.getBoxConstraints().setMarginLeft(value);
     notifyListeners();
   }
 
+  /**
+	 * Sets the margin right.
+	 *
+	 * @param value the new margin right
+	 */
   public void setMarginRight(@Nonnull final SizeValue value) {
     layoutPart.getBoxConstraints().setMarginRight(value);
     notifyListeners();
   }
 
+  /**
+	 * Sets the margin top.
+	 *
+	 * @param value the new margin top
+	 */
   public void setMarginTop(@Nonnull final SizeValue value) {
     layoutPart.getBoxConstraints().setMarginTop(value);
     notifyListeners();
   }
 
+  /**
+	 * Sets the margin bottom.
+	 *
+	 * @param value the new margin bottom
+	 */
   public void setMarginBottom(@Nonnull final SizeValue value) {
     layoutPart.getBoxConstraints().setMarginBottom(value);
     notifyListeners();
   }
 
+  /**
+	 * To string.
+	 *
+	 * @return the string
+	 */
   @Override
   @Nonnull
   public String toString() {
     return id + " (" + super.toString() + ")";
   }
 
+  /**
+	 * Checks if is started.
+	 *
+	 * @return true, if is started
+	 */
   public boolean isStarted() {
     return isEffectActive(EffectEventId.onStartScreen);
   }
 
+  /**
+	 * Mark for removal.
+	 */
   public void markForRemoval() {
     markForRemoval(null);
   }
 
+  /**
+	 * Mark for removal.
+	 *
+	 * @param endNotify the end notify
+	 */
   public void markForRemoval(@Nullable final EndNotify endNotify) {
     if (screen == null) {
       log.warning("Marking the element [" + String.valueOf(getId()) + "] for removal is not possible when there is " +
@@ -2594,10 +3446,21 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Mark for move.
+	 *
+	 * @param destination the destination
+	 */
   public void markForMove(@Nonnull final Element destination) {
     markForMove(destination, null);
   }
 
+  /**
+	 * Mark for move.
+	 *
+	 * @param destination the destination
+	 * @param endNotify   the end notify
+	 */
   public void markForMove(@Nonnull final Element destination, @Nullable final EndNotify endNotify) {
     if (screen == null) {
       log.warning("Marking the element [" + String.valueOf(getId()) + "] for moving is not possible when there is not" +
@@ -2607,6 +3470,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Reactivate.
+	 */
   public void reactivate() {
     done = false;
     if (children != null) {
@@ -2617,26 +3483,50 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Notify listeners.
+	 */
   private void notifyListeners() {
     constraintsChanged = true;
   }
 
+  /**
+	 * Publish event.
+	 */
   private void publishEvent() {
     if (id != null) {
       nifty.publishEvent(id, this);
     }
   }
 
+  /**
+	 * Gets the nifty.
+	 *
+	 * @return the nifty
+	 */
   @Nonnull
   public Nifty getNifty() {
     return nifty;
   }
 
+  /**
+	 * Gets the screen.
+	 *
+	 * @return the screen
+	 */
   @Nullable
   public Screen getScreen() {
 	return screen;
   }
 
+  /**
+	 * Gets the effects.
+	 *
+	 * @param <T>            the generic type
+	 * @param effectEventId  the effect event id
+	 * @param requestedClass the requested class
+	 * @return the effects
+	 */
   @Nonnull
   public <T extends EffectImpl> List<Effect> getEffects(
       @Nonnull final EffectEventId effectEventId,
@@ -2644,6 +3534,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return effectManager.getEffects(effectEventId, requestedClass);
   }
 
+  /**
+	 * On end screen.
+	 *
+	 * @param screen the screen
+	 */
   public void onEndScreen(@Nonnull final Screen screen) {
     if (id != null) {
       screen.unregisterElementId(id);
@@ -2661,11 +3556,21 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Gets the element interaction.
+	 *
+	 * @return the element interaction
+	 */
   @Nonnull
   public ElementInteraction getElementInteraction() {
     return interaction;
   }
 
+  /**
+	 * Sets the ignore mouse events.
+	 *
+	 * @param newValue the new ignore mouse events
+	 */
   public void setIgnoreMouseEvents(final boolean newValue) {
     ignoreMouseEvents = newValue;
     if (newValue) {
@@ -2673,10 +3578,20 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Checks if is ignore mouse events.
+	 *
+	 * @return true, if is ignore mouse events
+	 */
   public boolean isIgnoreMouseEvents() {
     return ignoreMouseEvents;
   }
 
+  /**
+	 * Sets the ignore keyboard events.
+	 *
+	 * @param newValue the new ignore keyboard events
+	 */
   public void setIgnoreKeyboardEvents(final boolean newValue) {
     ignoreKeyboardEvents = newValue;
     if (newValue) {
@@ -2684,10 +3599,21 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Checks if is ignore keyboard events.
+	 *
+	 * @return true, if is ignore keyboard events
+	 */
   public boolean isIgnoreKeyboardEvents() {
     return ignoreKeyboardEvents;
   }
 
+  /**
+	 * Effect state changed.
+	 *
+	 * @param eventId the event id
+	 * @param active  the active
+	 */
   @Override
   public void effectStateChanged(@Nonnull final EffectEventId eventId, final boolean active) {
     // Get the oldState first.
@@ -2709,6 +3635,12 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Checks if is effect active recalc.
+	 *
+	 * @param eventId the event id
+	 * @return true, if is effect active recalc
+	 */
   private boolean isEffectActiveRecalc(@Nonnull final EffectEventId eventId) {
     if (children != null) {
       final int childrenCount = children.size();
@@ -2722,6 +3654,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return effectManager.isActive(eventId);
   }
 
+  /**
+	 * Internal remove element.
+	 *
+	 * @param element the element
+	 */
   // package private to prevent public access
   void internalRemoveElement(@Nonnull final Element element) {
     if (elementsRenderOrderSet != null && children != null) {
@@ -2756,6 +3693,9 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Internal remove element with children.
+	 */
   // package private to prevent public access
   void internalRemoveElementWithChildren() {
     if (children != null) {
@@ -2771,10 +3711,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   /**
-   * Sets custom user data for this element.
-   *
-   * @param key the key for the object to set
-   */
+	 * Sets custom user data for this element.
+	 *
+	 * @param key  the key for the object to set
+	 * @param data the data
+	 */
   public void setUserData(@Nonnull final String key, @Nullable final Object data) {
     if (data == null) {
       if (userData != null) {
@@ -2792,8 +3733,12 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   /**
-   * Gets custom user data set with {@link #setUserData(String, Object)} by key
-   */
+	 * Gets custom user data set with {@link #setUserData(String, Object)} by key.
+	 *
+	 * @param <T> the generic type
+	 * @param key the key
+	 * @return the user data
+	 */
   @Nullable
   @SuppressWarnings("unchecked")
   public <T> T getUserData(@Nonnull final String key) {
@@ -2804,8 +3749,10 @@ public class Element implements NiftyEvent, EffectManager.Notify {
   }
 
   /**
-   * Gets all custom user data keys set with {@link #setUserData(String, Object)}
-   */
+	 * Gets all custom user data keys set with {@link #setUserData(String, Object)}.
+	 *
+	 * @return the user data keys
+	 */
   @Nonnull
   public Set<String> getUserDataKeys() {
     if (userData != null) {
@@ -2828,6 +3775,14 @@ public class Element implements NiftyEvent, EffectManager.Notify {
    * all the others.
    */
   private static final class RenderOrderComparator implements Comparator<Element> {
+    
+    /**
+	 * Compare.
+	 *
+	 * @param o1 the o 1
+	 * @param o2 the o 2
+	 * @return the int
+	 */
     @Override
     public int compare(@Nonnull final Element o1, @Nonnull final Element o2) {
       if (o1 == o2) {
@@ -2865,6 +3820,12 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       return Integer.valueOf(o1.hashCode()).compareTo(Integer.valueOf(o2.hashCode()));
     }
 
+    /**
+	 * Gets the render order.
+	 *
+	 * @param element the element
+	 * @return the render order
+	 */
     private int getRenderOrder(@Nonnull final Element element) {
       if (element.renderOrder != 0) {
         return element.renderOrder;
@@ -2873,6 +3834,12 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  /**
+	 * Empty iterator.
+	 *
+	 * @param <T> the generic type
+	 * @return the iterator
+	 */
   // We don't want to give up Java 1.6 compatibility right now.
   @SuppressWarnings("unchecked")
   @Nonnull
@@ -2880,20 +3847,40 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return (Iterator<T>) EmptyIterator.EMPTY_ITERATOR;
   }
 
+  /**
+	 * The Class EmptyIterator.
+	 *
+	 * @param <E> the element type
+	 */
   private static class EmptyIterator<E> implements Iterator<E> {
+    
+    /** The Constant EMPTY_ITERATOR. */
     static final EmptyIterator<Object> EMPTY_ITERATOR = new EmptyIterator<Object>();
 
+    /**
+	 * Checks for next.
+	 *
+	 * @return true, if successful
+	 */
     @Override
     public boolean hasNext() {
       return false;
     }
 
+    /**
+	 * Next.
+	 *
+	 * @return the e
+	 */
     @Override
     @Nonnull
     public E next() {
       throw new NoSuchElementException();
     }
 
+    /**
+	 * Removes the.
+	 */
     @Override
     public void remove() {
       throw new IllegalStateException();

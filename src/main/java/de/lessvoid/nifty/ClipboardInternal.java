@@ -15,11 +15,21 @@ public class ClipboardInternal implements Clipboard {
   @Nullable
   private String data;
 
+  /**
+	 * Put.
+	 *
+	 * @param data the data
+	 */
   @Override
   public void put(@Nullable final String data) {
     this.data = data;
   }
 
+  /**
+	 * Gets the.
+	 *
+	 * @return the string
+	 */
   @Nullable
   @Override
   public String get() {

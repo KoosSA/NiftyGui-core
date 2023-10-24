@@ -9,6 +9,12 @@ import de.lessvoid.nifty.spi.time.TimeProvider;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public class FastTimeProvider implements TimeProvider {
+    
+    /**
+	 * Gets the ms time.
+	 *
+	 * @return the ms time
+	 */
     @Override
     public long getMsTime() {
         return System.currentTimeMillis();

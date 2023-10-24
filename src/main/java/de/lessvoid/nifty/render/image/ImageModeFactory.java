@@ -19,16 +19,31 @@ import de.lessvoid.nifty.render.image.renderstrategy.RenderStrategy;
 import de.lessvoid.nifty.render.image.renderstrategy.RepeatStrategy;
 import de.lessvoid.nifty.render.image.renderstrategy.ResizeStrategy;
 
+/**
+ * A factory for creating ImageMode objects.
+ */
 public class ImageModeFactory {
 
+  /** The s shared instance. */
   @Nullable
   private static ImageModeFactory s_sharedInstance = null;
 
+  /** The m area provider factory. */
   @Nonnull
   private final ParameterizedObjectFactory<AreaProvider> m_areaProviderFactory;
+  
+  /** The m render strategy factory. */
   @Nonnull
   private final ParameterizedObjectFactory<RenderStrategy> m_renderStrategyFactory;
 
+  /**
+	 * Instantiates a new image mode factory.
+	 *
+	 * @param areaProviderMapping        the area provider mapping
+	 * @param fallbackAreaProvider       the fallback area provider
+	 * @param renderStrategyMapping      the render strategy mapping
+	 * @param fallbackRenderStrategyName the fallback render strategy name
+	 */
   public ImageModeFactory(
       @Nonnull Map<String, Class<? extends AreaProvider>> areaProviderMapping,
       @Nonnull String fallbackAreaProvider,
@@ -39,6 +54,13 @@ public class ImageModeFactory {
         fallbackRenderStrategyName);
   }
 
+  /**
+	 * Creates a new ImageMode object.
+	 *
+	 * @param areaProviderDescription   the area provider description
+	 * @param renderStrategyDescription the render strategy description
+	 * @return the image mode
+	 */
   @Nonnull
   public ImageMode createImageMode(
       @Nullable final String areaProviderDescription,
@@ -49,16 +71,33 @@ public class ImageModeFactory {
         getRenderStrategy(renderStrategyDescription));
   }
 
+  /**
+	 * Gets the area provider.
+	 *
+	 * @param areaProviderDescription the area provider description
+	 * @return the area provider
+	 */
   @Nonnull
   AreaProvider getAreaProvider(@Nullable final String areaProviderDescription) {
     return m_areaProviderFactory.create(areaProviderDescription);
   }
 
+  /**
+	 * Gets the render strategy.
+	 *
+	 * @param renderStrategyDescription the render strategy description
+	 * @return the render strategy
+	 */
   @Nonnull
   RenderStrategy getRenderStrategy(@Nullable final String renderStrategyDescription) {
     return m_renderStrategyFactory.create(renderStrategyDescription);
   }
 
+  /**
+	 * Gets the shared instance.
+	 *
+	 * @return the shared instance
+	 */
   @Nonnull
   synchronized public static ImageModeFactory getSharedInstance() {
     if (s_sharedInstance == null) {

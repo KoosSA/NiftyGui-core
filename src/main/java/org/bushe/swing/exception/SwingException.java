@@ -39,27 +39,44 @@ import java.io.PrintWriter;
  * subsequent call to SwingUtilities.invokeLater(), then throws a Swing Exception so the calling stack is saved.
  */
 public class SwingException extends Exception {
+   
+   /** The calling stack trace. */
    protected StackTraceElement[] callingStackTrace;
 
-   /** Default constructor */
+   /**
+	 * Default constructor.
+	 */
    public SwingException() {
       super();
    }
 
    /**
-    * Constructor for compatibility with Exception. Use ClientException(String, Throwable, StackTraceElement[])
-    * instead
-    */
+	 * Constructor for compatibility with Exception. Use ClientException(String,
+	 * Throwable, StackTraceElement[]) instead
+	 *
+	 * @param message the message
+	 */
    public SwingException(String message) {
       super(message);
    }
 
-   /** Constructor for compatibility with Exception Use ClientException(String, Throwable, StackTraceElement[]) instead */
+   /**
+	 * Constructor for compatibility with Exception Use ClientException(String,
+	 * Throwable, StackTraceElement[]) instead.
+	 *
+	 * @param cause the cause
+	 */
    public SwingException(Throwable cause) {
       super(cause);
    }
 
-   /** Constructor for compatibility with Exception Use ClientException(String, Throwable, StackTraceElement[]) instead */
+   /**
+	 * Constructor for compatibility with Exception Use ClientException(String,
+	 * Throwable, StackTraceElement[]) instead.
+	 *
+	 * @param message the message
+	 * @param cause   the cause
+	 */
    public SwingException(String message, Throwable cause) {
       super(message, cause);
    }
@@ -99,20 +116,20 @@ public class SwingException extends Exception {
    }
 
    /**
-    * Calls printWriter(ps, true)
-    *
-    * @param ps the print stream
-    */
+	 * Calls printWriter(ps, true).
+	 *
+	 * @param ps the print stream
+	 */
    public void printStackTrace(PrintStream ps) {
       PrintWriter pw = new PrintWriter(ps, true);
       printStackTrace(pw);
    }
 
    /**
-    * Prints the calling stack and the exception stack trace.
-    *
-    * @param pw
-    */
+	 * Prints the calling stack and the exception stack trace.
+	 *
+	 * @param pw the pw
+	 */
    public void printStackTrace(PrintWriter pw) {
       pw.println(this);
       if (callingStackTrace != null) {

@@ -18,57 +18,111 @@ import de.lessvoid.nifty.render.NiftyRenderEngine;
  * @author void
  */
 public class EffectProcessorImpl implements EffectProcessor {
+  
+  /** The Constant log. */
   @Nonnull
   private static final Logger log = Logger.getLogger(EffectProcessorImpl.class.getName());
+  
+  /** The notify. */
   @Nonnull
   private final Notify notify;
+  
+  /** The all effects. */
   @Nonnull
   private final List<Effect> allEffects = new ArrayList<Effect>();
+  
+  /** The active effects. */
   @Nonnull
   private final ActiveEffects activeEffects = new ActiveEffects();
+  
+  /** The active effects to remove. */
   @Nonnull
   private final List<Effect> activeEffectsToRemove = new ArrayList<Effect>();
+  
+  /** The pushed effects. */
   @Nonnull
   private final List<Effect> pushedEffects = new ArrayList<Effect>();
 
+  /** The active. */
   private boolean active = false;
+  
+  /** The listener. */
   @Nullable
   private EndNotify listener;
 
+  /** The never stop rendering. */
   private final boolean neverStopRendering;
+  
+  /** The processing effects. */
   private boolean processingEffects;
+  
+  /** The pending effects remove. */
   private boolean pendingEffectsRemove;
 
+  /**
+	 * Instantiates a new effect processor impl.
+	 *
+	 * @param notify                  the notify
+	 * @param neverStopRenderingParam the never stop rendering param
+	 */
   public EffectProcessorImpl(@Nonnull final Notify notify, final boolean neverStopRenderingParam) {
     this.notify = notify;
     this.neverStopRendering = neverStopRenderingParam;
   }
 
+  /**
+	 * Register effect.
+	 *
+	 * @param e the e
+	 */
   @Override
   public void registerEffect(@Nonnull final Effect e) {
     allEffects.add(e);
   }
 
+  /**
+	 * Render pre.
+	 *
+	 * @param renderDevice the render device
+	 */
   @Override
   public void renderPre(@Nonnull final NiftyRenderEngine renderDevice) {
     renderActive(renderDevice, activeEffects.getActivePre());
   }
 
+  /**
+	 * Render post.
+	 *
+	 * @param renderDevice the render device
+	 */
   @Override
   public void renderPost(@Nonnull final NiftyRenderEngine renderDevice) {
     renderActive(renderDevice, activeEffects.getActivePost());
   }
 
+  /**
+	 * Render overlay.
+	 *
+	 * @param renderDevice the render device
+	 */
   @Override
   public void renderOverlay(@Nonnull final NiftyRenderEngine renderDevice) {
     renderActive(renderDevice, activeEffects.getActiveOverlay());
   }
 
+  /**
+	 * Checks if is active.
+	 *
+	 * @return true, if is active
+	 */
   @Override
   public boolean isActive() {
     return active;
   }
 
+  /**
+	 * Save active never stop rendering effects.
+	 */
   @Override
   public void saveActiveNeverStopRenderingEffects() {
     pushedEffects.clear();
@@ -83,6 +137,9 @@ public class EffectProcessorImpl implements EffectProcessor {
     reset();
   }
 
+  /**
+	 * Restore never stop rendering effects.
+	 */
   @Override
   public void restoreNeverStopRenderingEffects() {
     for (int i = 0; i < pushedEffects.size(); i++) {
@@ -92,6 +149,9 @@ public class EffectProcessorImpl implements EffectProcessor {
     pushedEffects.clear();
   }
 
+  /**
+	 * Reset.
+	 */
   @Override
   public void reset() {
     internalSetActive(false);
@@ -106,6 +166,11 @@ public class EffectProcessorImpl implements EffectProcessor {
     }
   }
 
+  /**
+	 * Reset.
+	 *
+	 * @param customKey the custom key
+	 */
   @Override
   public void reset(@Nonnull final String customKey) {
     activeEffectsToRemove.clear();
@@ -130,6 +195,13 @@ public class EffectProcessorImpl implements EffectProcessor {
     }
   }
 
+  /**
+	 * Activate.
+	 *
+	 * @param newListener the new listener
+	 * @param alternate   the alternate
+	 * @param customKey   the custom key
+	 */
   @Override
   public void activate(
       @Nullable final EndNotify newListener,
@@ -149,6 +221,11 @@ public class EffectProcessorImpl implements EffectProcessor {
     }
   }
 
+  /**
+	 * Gets the state string.
+	 *
+	 * @return the state string
+	 */
   @Nonnull
   @Override
   public String getStateString() {
@@ -169,6 +246,11 @@ public class EffectProcessorImpl implements EffectProcessor {
     }
   }
 
+  /**
+	 * Sets the active.
+	 *
+	 * @param newActive the new active
+	 */
   @Override
   public void setActive(final boolean newActive) {
     internalSetActive(newActive);
@@ -177,6 +259,12 @@ public class EffectProcessorImpl implements EffectProcessor {
     }
   }
 
+  /**
+	 * Process hover.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 */
   @Override
   public void processHover(final int x, final int y) {
     for (int i = 0; i < allEffects.size(); i++) {
@@ -200,6 +288,12 @@ public class EffectProcessorImpl implements EffectProcessor {
     }
   }
 
+  /**
+	 * Process start hover.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 */
   @Override
   public void processStartHover(final int x, final int y) {
     for (int i = 0; i < allEffects.size(); i++) {
@@ -223,6 +317,12 @@ public class EffectProcessorImpl implements EffectProcessor {
     }
   }
 
+  /**
+	 * Process end hover.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 */
   @Override
   public void processEndHover(final int x, final int y) {
     for (int i = 0; i < allEffects.size(); i++) {
@@ -249,6 +349,12 @@ public class EffectProcessorImpl implements EffectProcessor {
     }
   }
 
+  /**
+	 * Process hover deactivate.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 */
   @Override
   public void processHoverDeactivate(final int x, final int y) {
     for (int i = 0; i < allEffects.size(); i++) {
@@ -264,6 +370,9 @@ public class EffectProcessorImpl implements EffectProcessor {
     }
   }
 
+  /**
+	 * Removes the all effects.
+	 */
   @Override
   public void removeAllEffects() {
     allEffects.clear();
@@ -271,12 +380,12 @@ public class EffectProcessorImpl implements EffectProcessor {
   }
 
   /**
-   * Return a List of all Effects that use the given EffectImpl.
-   *
-   * @param <T>
-   * @param requestedClass
-   * @return
-   */
+	 * Return a List of all Effects that use the given EffectImpl.
+	 *
+	 * @param <T>            the generic type
+	 * @param requestedClass the requested class
+	 * @return the effects
+	 */
   @Nonnull
   @Override
   public <T extends EffectImpl> List<Effect> getEffects(@Nonnull final Class<T> requestedClass) {
@@ -291,10 +400,25 @@ public class EffectProcessorImpl implements EffectProcessor {
     return result;
   }
 
+  /**
+	 * The Interface Notify.
+	 */
   public interface Notify {
+    
+    /**
+	 * Effect processor state changed.
+	 *
+	 * @param active the active
+	 */
     void effectProcessorStateChanged(boolean active);
   }
 
+  /**
+	 * Render active.
+	 *
+	 * @param renderDevice the render device
+	 * @param effects      the effects
+	 */
   private void renderActive(@Nonnull final NiftyRenderEngine renderDevice, @Nonnull final List<Effect> effects) {
     if (isInactive()) {
       return;
@@ -315,6 +439,13 @@ public class EffectProcessorImpl implements EffectProcessor {
     checkPendingEffectsRemove();
   }
 
+  /**
+	 * Start effect.
+	 *
+	 * @param e         the e
+	 * @param alternate the alternate
+	 * @param customKey the custom key
+	 */
   private void startEffect(
       @Nonnull final Effect e,
       @Nullable final String alternate,
@@ -331,6 +462,9 @@ public class EffectProcessorImpl implements EffectProcessor {
     }
   }
 
+  /**
+	 * Check finish.
+	 */
   private void checkFinish() {
     if (active) {
       if (!activeEffects.containsActiveEffects()) {
@@ -344,6 +478,9 @@ public class EffectProcessorImpl implements EffectProcessor {
     }
   }
 
+  /**
+	 * Check pending effects remove.
+	 */
   private void checkPendingEffectsRemove() {
     if (processingEffects) {
       if (pendingEffectsRemove) {
@@ -354,10 +491,20 @@ public class EffectProcessorImpl implements EffectProcessor {
     }
   }
 
+  /**
+	 * Checks if is inactive.
+	 *
+	 * @return true, if is inactive
+	 */
   private boolean isInactive() {
     return !active && isNotNeverStopRendering();
   }
 
+  /**
+	 * Checks if is not never stop rendering.
+	 *
+	 * @return true, if is not never stop rendering
+	 */
   private boolean isNotNeverStopRendering() {
     List<Effect> effects = activeEffects.getActive();
     for (int i = 0; i < effects.size(); i++) {
@@ -373,10 +520,21 @@ public class EffectProcessorImpl implements EffectProcessor {
     }
   }
 
+  /**
+	 * Checks if is active.
+	 *
+	 * @param e the e
+	 * @return true, if is active
+	 */
   private boolean isActive(@Nonnull final Effect e) {
     return e.isActive() || e.isNeverStopRendering() || neverStopRendering;
   }
 
+  /**
+	 * Internal set active.
+	 *
+	 * @param newActive the new active
+	 */
   private void internalSetActive(final boolean newActive) {
     boolean oldActive = active;
     this.active = newActive;

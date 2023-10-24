@@ -12,76 +12,163 @@ import de.lessvoid.nifty.loaderv2.types.helper.CollectionLogger;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.StopWatch;
 
+/**
+ * The Class NiftyType.
+ */
 public class NiftyType extends XmlBaseType {
+  
+  /** The Constant log. */
   private static final Logger log = Logger.getLogger(NiftyType.class.getName());
 
+  /** The styles. */
   @Nonnull
   private final Collection<StyleType> styles = new ArrayList<StyleType>();
+  
+  /** The use styles. */
   @Nonnull
   private final Collection<UseStylesType> useStyles = new ArrayList<UseStylesType>();
+  
+  /** The use controls. */
   @Nonnull
   private final Collection<UseControlsType> useControls = new ArrayList<UseControlsType>();
+  
+  /** The registered sounds. */
   @Nonnull
   private final Collection<RegisterSoundType> registeredSounds = new ArrayList<RegisterSoundType>();
+  
+  /** The registered music. */
   @Nonnull
   private final Collection<RegisterMusicType> registeredMusic = new ArrayList<RegisterMusicType>();
+  
+  /** The registered mouse cursor. */
   @Nonnull
   private final Collection<RegisterMouseCursorType> registeredMouseCursor = new ArrayList<RegisterMouseCursorType>();
+  
+  /** The registered effect. */
   @Nonnull
   private final Collection<RegisterEffectType> registeredEffect = new ArrayList<RegisterEffectType>();
+  
+  /** The resource bundles. */
   @Nonnull
   private final Collection<ResourceBundleType> resourceBundles = new ArrayList<ResourceBundleType>();
+  
+  /** The popups. */
   @Nonnull
   private final Collection<PopupType> popups = new ArrayList<PopupType>();
+  
+  /** The control definitions. */
   @Nonnull
   private final Collection<ControlDefinitionType> controlDefinitions = new ArrayList<ControlDefinitionType>();
+  
+  /** The screens. */
   @Nonnull
   private final Collection<ScreenType> screens = new ArrayList<ScreenType>();
 
+  /**
+	 * Adds the style.
+	 *
+	 * @param newStyle the new style
+	 */
   public void addStyle(final StyleType newStyle) {
     styles.add(newStyle);
   }
 
+  /**
+	 * Adds the use styles.
+	 *
+	 * @param newStyle the new style
+	 */
   public void addUseStyles(final UseStylesType newStyle) {
     useStyles.add(newStyle);
   }
 
+  /**
+	 * Adds the use controls.
+	 *
+	 * @param useControl the use control
+	 */
   public void addUseControls(final UseControlsType useControl) {
     useControls.add(useControl);
   }
 
+  /**
+	 * Adds the register sound.
+	 *
+	 * @param registerSound the register sound
+	 */
   public void addRegisterSound(final RegisterSoundType registerSound) {
     registeredSounds.add(registerSound);
   }
 
+  /**
+	 * Adds the register music.
+	 *
+	 * @param registerMusic the register music
+	 */
   public void addRegisterMusic(final RegisterMusicType registerMusic) {
     registeredMusic.add(registerMusic);
   }
 
+  /**
+	 * Adds the register mouse cursor.
+	 *
+	 * @param registerMouseCursor the register mouse cursor
+	 */
   public void addRegisterMouseCursor(final RegisterMouseCursorType registerMouseCursor) {
     registeredMouseCursor.add(registerMouseCursor);
   }
 
+  /**
+	 * Adds the resource bundle.
+	 *
+	 * @param resourceBundle the resource bundle
+	 */
   public void addResourceBundle(final ResourceBundleType resourceBundle) {
     resourceBundles.add(resourceBundle);
   }
 
+  /**
+	 * Adds the register effect.
+	 *
+	 * @param registerEffect the register effect
+	 */
   public void addRegisterEffect(final RegisterEffectType registerEffect) {
     registeredEffect.add(registerEffect);
   }
 
+  /**
+	 * Adds the popup.
+	 *
+	 * @param popupType the popup type
+	 */
   public void addPopup(final PopupType popupType) {
     popups.add(popupType);
   }
 
+  /**
+	 * Adds the control definition.
+	 *
+	 * @param controlDefinition the control definition
+	 */
   public void addControlDefinition(final ControlDefinitionType controlDefinition) {
     controlDefinitions.add(controlDefinition);
   }
 
+  /**
+	 * Adds the screen.
+	 *
+	 * @param screenType the screen type
+	 */
   public void addScreen(final ScreenType screenType) {
     screens.add(screenType);
   }
 
+  /**
+	 * Creates the.
+	 *
+	 * @param nifty        the nifty
+	 * @param timeProvider the time provider
+	 */
   public void create(@Nonnull final Nifty nifty, @Nonnull final TimeProvider timeProvider) {
     StopWatch stopWatch = new StopWatch(timeProvider);
     stopWatch.start();
@@ -152,18 +239,36 @@ public class NiftyType extends XmlBaseType {
     log.fine("create Screens [" + stopWatch.stop() + "]");
   }
 
+  /**
+	 * Load styles.
+	 *
+	 * @param niftyLoader the nifty loader
+	 * @param nifty       the nifty
+	 * @throws Exception the exception
+	 */
   public void loadStyles(@Nonnull final NiftyLoader niftyLoader, @Nonnull final Nifty nifty) throws Exception {
     for (UseStylesType useStyle : useStyles) {
       useStyle.loadStyle(niftyLoader, this, nifty);
     }
   }
 
+  /**
+	 * Load controls.
+	 *
+	 * @param niftyLoader the nifty loader
+	 * @throws Exception the exception
+	 */
   public void loadControls(@Nonnull final NiftyLoader niftyLoader) throws Exception {
     for (UseControlsType useControl : useControls) {
       useControl.loadControl(niftyLoader, this);
     }
   }
 
+  /**
+	 * Output.
+	 *
+	 * @return the string
+	 */
   @Nonnull
   public String output() {
     int offset = 1;

@@ -21,45 +21,99 @@ import javax.imageio.ImageIO;
  * @author Kevin Glass, Julien Gouesse (JOGL 2 port)
  */
 public class TGAImageLoader implements ImageLoader {
+  
+  /** The image width. */
   private int imageWidth;
+  
+  /** The image height. */
   private int imageHeight;
+  
+  /** The image bit depth. */
   private short imageBitDepth;
+  
+  /** The texture width. */
   private int textureWidth;
+  
+  /** The texture height. */
   private int textureHeight;
+  
+  /** The should flip vertically. */
   private boolean shouldFlipVertically;
+  
+  /** The should force alpha. */
   private boolean shouldForceAlpha;
 
+  /**
+	 * Gets the image bit depth.
+	 *
+	 * @return the image bit depth
+	 */
   @Override
   public int getImageBitDepth() {
     return imageBitDepth;
   }
 
+  /**
+	 * Gets the image width.
+	 *
+	 * @return the image width
+	 */
   @Override
   public int getImageWidth() {
     return imageWidth;
   }
 
+  /**
+	 * Gets the image height.
+	 *
+	 * @return the image height
+	 */
   @Override
   public int getImageHeight() {
     return imageHeight;
   }
 
+  /**
+	 * Gets the texture width.
+	 *
+	 * @return the texture width
+	 */
   @Override
   public int getTextureWidth() {
     return textureWidth;
   }
 
+  /**
+	 * Gets the texture height.
+	 *
+	 * @return the texture height
+	 */
   @Override
   public int getTextureHeight() {
     return textureHeight;
   }
 
+  /**
+	 * Load as byte buffer RGBA.
+	 *
+	 * @param imageStream the image stream
+	 * @return the byte buffer
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
   @Nonnull
   @Override
   public ByteBuffer loadAsByteBufferRGBA(@Nonnull @WillNotClose final InputStream imageStream) throws IOException {
     return loadImage(imageStream, false, true, null);
   }
 
+  /**
+	 * Load as byte buffer ARGB.
+	 *
+	 * @param imageStream          the image stream
+	 * @param shouldFlipVertically the should flip vertically
+	 * @return the byte buffer
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
   @Nonnull
   @Override
   public ByteBuffer loadAsByteBufferARGB(
@@ -68,6 +122,13 @@ public class TGAImageLoader implements ImageLoader {
     return loadImage(imageStream, shouldFlipVertically, false, null, false, true);
   }
 
+  /**
+	 * Load as buffered image.
+	 *
+	 * @param imageStream the image stream
+	 * @return the buffered image
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
   @Nonnull
   @Override
   public BufferedImage loadAsBufferedImage(@Nonnull @WillNotClose final InputStream imageStream) throws IOException {
@@ -76,6 +137,16 @@ public class TGAImageLoader implements ImageLoader {
 
   // Internal implementations
 
+  /**
+	 * Load image.
+	 *
+	 * @param imageStream          the image stream
+	 * @param shouldFlipVertically the should flip vertically
+	 * @param shouldForceAlpha     the should force alpha
+	 * @param transparency         the transparency
+	 * @return the byte buffer
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
   // TODO Refactor.
   @SuppressWarnings("ConstantConditions")
   @Nonnull
@@ -272,6 +343,18 @@ public class TGAImageLoader implements ImageLoader {
     return scratch;
   }
 
+  /**
+	 * Load image.
+	 *
+	 * @param imageStream          the image stream
+	 * @param shouldFlipVertically the should flip vertically
+	 * @param shouldForceAlpha     the should force alpha
+	 * @param transparency         the transparency
+	 * @param forceNonePowerOfTwo  the force none power of two
+	 * @param modeARGB             the mode ARGB
+	 * @return the byte buffer
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
   // TODO Refactor.
   @Nonnull
   private ByteBuffer loadImage(
@@ -479,27 +562,33 @@ public class TGAImageLoader implements ImageLoader {
   }
 
   /**
-   * Flip the endian-ness of the short
-   *
-   * @param signedShort The short to flip
-   * @return The flipped short
-   */
+	 * Flip the endian-ness of the short.
+	 *
+	 * @param signedShort The short to flip
+	 * @return The flipped short
+	 */
   private short flipEndian(final short signedShort) {
     int input = signedShort & 0xFFFF;
     return (short) (input << 8 | (input & 0xFF00) >>> 8);
   }
 
+  /**
+	 * Creates the native ordered byte buffer.
+	 *
+	 * @param numBytes the num bytes
+	 * @return the byte buffer
+	 */
   @Nonnull
   private ByteBuffer createNativeOrderedByteBuffer(final int numBytes) {
     return ByteBuffer.allocateDirect(numBytes).order(ByteOrder.nativeOrder());
   }
 
   /**
-   * Get the closest greater power of 2 to the fold number
-   *
-   * @param fold The target number
-   * @return The power of 2
-   */
+	 * Get the closest greater power of 2 to the fold number.
+	 *
+	 * @param fold The target number
+	 * @return The power of 2
+	 */
   private int get2Fold(final int fold) {
     int ret = 2;
     while (ret < fold) {

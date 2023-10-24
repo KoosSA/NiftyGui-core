@@ -14,24 +14,50 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.render.RenderImage;
 
+/**
+ * The Class NiftyImageManager.
+ */
 public class NiftyImageManager {
+  
+  /** The Constant log. */
   @Nonnull
   private static final Logger log = Logger.getLogger(NiftyImageManager.class.getName());
+  
+  /** The render device. */
   @Nonnull
   private final RenderDevice renderDevice;
+  
+  /** The image cache. */
   @Nonnull
   private final Map<String, ReferencedCountedImage> imageCache = new HashMap<String, ReferencedCountedImage>();
+  
+  /** The back reference. */
   @Nonnull
   private final Map<RenderImage, ReferencedCountedImage> backReference = new HashMap<RenderImage,
       ReferencedCountedImage>();
+  
+  /** The ext. */
   @Nonnull
   private final NiftyImageManagerExt<ReferencedCountedImage> ext;
 
+  /**
+	 * Instantiates a new nifty image manager.
+	 *
+	 * @param renderDevice the render device
+	 */
   public NiftyImageManager(@Nonnull final RenderDevice renderDevice) {
     this.renderDevice = renderDevice;
     this.ext = getExtImpl(renderDevice);
   }
 
+  /**
+	 * Register image.
+	 *
+	 * @param filename     the filename
+	 * @param filterLinear the filter linear
+	 * @param screen       the screen
+	 * @return the render image
+	 */
   @Nullable
   public RenderImage registerImage(
       @Nonnull final String filename,
@@ -45,6 +71,11 @@ public class NiftyImageManager {
     return image.getRenderImage();
   }
 
+  /**
+	 * Unregister image.
+	 *
+	 * @param image the image
+	 */
   public void unregisterImage(@Nonnull final RenderImage image) {
     if (backReference.containsKey(image)) {
       ReferencedCountedImage reference = backReference.get(image);
@@ -54,6 +85,11 @@ public class NiftyImageManager {
     }
   }
 
+  /**
+	 * Upload screen images.
+	 *
+	 * @param screen the screen
+	 */
   public void uploadScreenImages(@Nonnull final Screen screen) {
     log.fine(">>> uploadScreenImages [" + screen.getScreenId() + "] start");
     NiftyStopwatch.start();
@@ -70,6 +106,11 @@ public class NiftyImageManager {
     }
   }
 
+  /**
+	 * Unload screen images.
+	 *
+	 * @param screen the screen
+	 */
   public void unloadScreenImages(@Nonnull final Screen screen) {
     log.fine(">>> unloadScreenImages [" + screen.getScreenId() + "] start");
     NiftyStopwatch.start();
@@ -86,6 +127,11 @@ public class NiftyImageManager {
     }
   }
 
+  /**
+	 * Screen added.
+	 *
+	 * @param screen the screen
+	 */
   public void screenAdded(@Nonnull final Screen screen) {
     ext.screenAdded(screen);
 
@@ -94,6 +140,11 @@ public class NiftyImageManager {
     }
   }
 
+  /**
+	 * Screen removed.
+	 *
+	 * @param screen the screen
+	 */
   public void screenRemoved(@Nonnull final Screen screen) {
     ext.screenRemoved(screen);
 
@@ -102,6 +153,12 @@ public class NiftyImageManager {
     }
   }
 
+  /**
+	 * Reload.
+	 *
+	 * @param image the image
+	 * @return the render image
+	 */
   @Nonnull
   public RenderImage reload(@Nonnull final RenderImage image) {
     if (backReference.containsKey(image)) {
@@ -110,6 +167,11 @@ public class NiftyImageManager {
     return image;
   }
 
+  /**
+	 * Gets the info string.
+	 *
+	 * @return the info string
+	 */
   @Nonnull
   public String getInfoString() {
     StringBuffer result = new StringBuffer();
@@ -119,6 +181,12 @@ public class NiftyImageManager {
     return result.toString();
   }
 
+  /**
+	 * Gets the ext impl.
+	 *
+	 * @param renderer the renderer
+	 * @return the ext impl
+	 */
   @Nonnull
   private NiftyImageManagerExt<ReferencedCountedImage> getExtImpl(final RenderDevice renderer) {
     if (renderer instanceof BatchRenderDevice) {
@@ -127,11 +195,26 @@ public class NiftyImageManager {
     return new NiftyImageManagerExtStandard();
   }
 
+  /**
+	 * Builds the name.
+	 *
+	 * @param filename     the filename
+	 * @param filterLinear the filter linear
+	 * @return the string
+	 */
   @Nonnull
   private static String buildName(@Nonnull final String filename, final boolean filterLinear) {
     return filename + "|" + Boolean.toString(filterLinear);
   }
 
+  /**
+	 * Adds the image.
+	 *
+	 * @param filename     the filename
+	 * @param filterLinear the filter linear
+	 * @param screen       the screen
+	 * @return the referenced counted image
+	 */
   @Nullable
   private ReferencedCountedImage addImage(
       @Nonnull final String filename,
@@ -161,6 +244,12 @@ public class NiftyImageManager {
     return newImage;
   }
 
+  /**
+	 * Removes the image.
+	 *
+	 * @param reference the reference
+	 * @return true, if successful
+	 */
   private boolean removeImage(@Nonnull final ReferencedCountedImage reference) {
     Screen screen = reference.getScreen();
     if (reference.removeReference()) {
@@ -179,23 +268,62 @@ public class NiftyImageManager {
     return false;
   }
 
+  /**
+	 * The Interface ReferencedCountedImage.
+	 */
   public interface ReferencedCountedImage {
+    
+    /**
+	 * Reload.
+	 *
+	 * @return the render image
+	 */
     @Nonnull
     RenderImage reload();
 
+    /**
+	 * Adds the reference.
+	 *
+	 * @return the render image
+	 */
     @Nonnull
     RenderImage addReference();
 
+    /**
+	 * Removes the reference.
+	 *
+	 * @return true, if successful
+	 */
     boolean removeReference();
 
+    /**
+	 * Gets the references.
+	 *
+	 * @return the references
+	 */
     int getReferences();
 
+    /**
+	 * Gets the render image.
+	 *
+	 * @return the render image
+	 */
     @Nonnull
     RenderImage getRenderImage();
 
+    /**
+	 * Gets the name.
+	 *
+	 * @return the name
+	 */
     @Nonnull
     String getName();
 
+    /**
+	 * Gets the screen.
+	 *
+	 * @return the screen
+	 */
     @Nonnull
     Screen getScreen();
   }

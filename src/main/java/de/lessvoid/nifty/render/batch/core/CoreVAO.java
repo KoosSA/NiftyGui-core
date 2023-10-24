@@ -17,15 +17,24 @@ import de.lessvoid.nifty.render.batch.spi.core.CoreGL;
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
 public class CoreVAO {
+  
+  /** The gl. */
   @Nonnull
   private final CoreGL gl;
+  
+  /** The vertex array buffer. */
   @Nonnull
   private final IntBuffer vertexArrayBuffer;
+  
+  /** The vao. */
   private int vao;
 
   /**
-   * Creates a new VAO. This calls glGenVertexArrays.
-   */
+	 * Creates a new VAO. This calls glGenVertexArrays.
+	 *
+	 * @param gl            the gl
+	 * @param bufferFactory the buffer factory
+	 */
   public CoreVAO(@Nonnull final CoreGL gl, @Nonnull final BufferFactory bufferFactory) {
     this.gl = gl;
     this.vertexArrayBuffer = bufferFactory.createNativeOrderedIntBuffer(1);
@@ -71,6 +80,9 @@ public class CoreVAO {
     CheckGL.checkGLError(gl, "glVertexAttribPointer (" + index + ")");
   }
 
+  /**
+	 * Inits the.
+	 */
   private void init() {
     vertexArrayBuffer.clear();
     gl.glGenVertexArrays(1, vertexArrayBuffer);

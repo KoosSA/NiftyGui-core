@@ -95,13 +95,27 @@ public interface NiftyRenderEngine {
   String getFontname(@Nonnull RenderFont font);
 
   /**
-   * Render a quad.
-   */
+	 * Render a quad.
+	 *
+	 * @param x      the x
+	 * @param y      the y
+	 * @param width  the width
+	 * @param height the height
+	 */
   void renderQuad(int x, int y, int width, int height);
 
   /**
-   * Renders a quad with different colors at the quad vertices.
-   */
+	 * Renders a quad with different colors at the quad vertices.
+	 *
+	 * @param x           the x
+	 * @param y           the y
+	 * @param width       the width
+	 * @param height      the height
+	 * @param topLeft     the top left
+	 * @param topRight    the top right
+	 * @param bottomRight the bottom right
+	 * @param bottomLeft  the bottom left
+	 */
   void renderQuad(
       int x,
       int y,
@@ -197,13 +211,18 @@ public interface NiftyRenderEngine {
   boolean isColorAlphaChanged();
 
   /**
-   * Set BlendMode.
-   */
+	 * Set BlendMode.
+	 *
+	 * @param blendMode the new blend mode
+	 */
   void setBlendMode(@Nonnull BlendMode blendMode);
 
   /**
-   * Move to the given x/y position.
-   */
+	 * Move to the given x/y position.
+	 *
+	 * @param xParam the x param
+	 * @param yParam the y param
+	 */
   void moveTo(float xParam, float yParam);
 
   /**
@@ -215,20 +234,29 @@ public interface NiftyRenderEngine {
   void moveToRelative(float xParam, float yParam);
 
   /**
-   * Enable clipping to the given region.
-   */
+	 * Enable clipping to the given region.
+	 *
+	 * @param x0 the x 0
+	 * @param y0 the y 0
+	 * @param x1 the x 1
+	 * @param y1 the y 1
+	 */
   void enableClip(int x0, int y0, int x1, int y1);
 
   /**
-   * Clip an absolute region
-   * @see Nifty#setAbsoluteClip(int, int, int, int) 
-   * @param x0 X coordinates of left-upper corner
-   * @param y0 Y coordinates of left-upper corner
-   * @param x1 X coordinates of right-bottom corner
-   * @param y1 Y coordinates of right-bottom corner
-   */
+	 * Clip an absolute region.
+	 *
+	 * @param x0 X coordinates of left-upper corner
+	 * @param y0 Y coordinates of left-upper corner
+	 * @param x1 X coordinates of right-bottom corner
+	 * @param y1 Y coordinates of right-bottom corner
+	 * @see Nifty#setAbsoluteClip(int, int, int, int)
+	 */
   void setAbsoluteClip(int x0,int y0,int x1,int y1);
   
+  /**
+	 * Apply absolute clip.
+	 */
   void applyAbsoluteClip();
 
   /**
@@ -256,8 +284,11 @@ public interface NiftyRenderEngine {
   void setImageScale(float scale);
 
   /**
-   * set global position.
-   */
+	 * set global position.
+	 *
+	 * @param xPos the x pos
+	 * @param yPos the y pos
+	 */
   void setGlobalPosition(float xPos, float yPos);
 
   /**
@@ -309,26 +340,91 @@ public interface NiftyRenderEngine {
    */
   void displayResolutionChanged();
 
+  /**
+	 * Enable auto scaling.
+	 *
+	 * @param baseResolutionX the base resolution X
+	 * @param baseResolutionY the base resolution Y
+	 */
   void enableAutoScaling(int baseResolutionX, int baseResolutionY);
 
+  /**
+	 * Enable auto scaling.
+	 *
+	 * @param baseResolutionX the base resolution X
+	 * @param baseResolutionY the base resolution Y
+	 * @param scaleX          the scale X
+	 * @param scaleY          the scale Y
+	 */
   void enableAutoScaling(int baseResolutionX, int baseResolutionY, float scaleX, float scaleY);
 
+  /**
+	 * Disable auto scaling.
+	 */
   void disableAutoScaling();
 
+  /**
+	 * Convert to native X.
+	 *
+	 * @param x the x
+	 * @return the int
+	 */
   int convertToNativeX(int x);
 
+  /**
+	 * Convert to native Y.
+	 *
+	 * @param y the y
+	 * @return the int
+	 */
   int convertToNativeY(int y);
 
+  /**
+	 * Convert to native width.
+	 *
+	 * @param x the x
+	 * @return the int
+	 */
   int convertToNativeWidth(int x);
 
+  /**
+	 * Convert to native height.
+	 *
+	 * @param y the y
+	 * @return the int
+	 */
   int convertToNativeHeight(int y);
 
+  /**
+	 * Convert from native X.
+	 *
+	 * @param x the x
+	 * @return the int
+	 */
   int convertFromNativeX(int x);
 
+  /**
+	 * Convert from native Y.
+	 *
+	 * @param y the y
+	 * @return the int
+	 */
   int convertFromNativeY(int y);
 
+  /**
+	 * Convert to native text size X.
+	 *
+	 * @param size the size
+	 * @return the float
+	 */
   float convertToNativeTextSizeX(float size);
 
+  /**
+	 * Convert to native text size Y.
+	 *
+	 * @param size the size
+	 * @return the float
+	 */
   float convertToNativeTextSizeY(float size);
 
   /**

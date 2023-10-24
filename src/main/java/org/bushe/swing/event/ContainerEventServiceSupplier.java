@@ -38,5 +38,11 @@ package org.bushe.swing.event;
  * @author Michael Bushe michael@bushe.com
  */
 public interface ContainerEventServiceSupplier {
+   
+   /**
+	 * Gets the container event service.
+	 *
+	 * @return the container event service
+	 */
    public EventService getContainerEventService();
 }

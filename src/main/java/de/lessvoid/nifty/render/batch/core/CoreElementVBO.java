@@ -17,20 +17,37 @@ import de.lessvoid.nifty.render.batch.spi.core.CoreGL;
  * Note: Requires OpenGL 3.2 or greater.
  */
 public class CoreElementVBO {
+  
+  /** The gl. */
   @Nonnull
   private final CoreGL gl;
+  
+  /** The index buffer. */
   @Nonnull
   private final IntBuffer indexBuffer;
+  
+  /** The id buffer. */
   @Nonnull
   private final IntBuffer idBuffer;
+  
+  /** The id. */
   private final int id;
+  
+  /** The usage. */
   private final int usage;
 
   /**
-   * Creates a new VBO with the specified static vertex data (GL_STATIC_DRAW). This will create the vertex buffer
-   * object but does not bind or send the vertex data to the GPU. You'll need to call {@link #bind()} to bind this VBO
-   * and you'll need to call {@link #send()} to transmit the vertex data to the GPU.
-   */
+	 * Creates a new VBO with the specified static vertex data (GL_STATIC_DRAW).
+	 * This will create the vertex buffer object but does not bind or send the
+	 * vertex data to the GPU. You'll need to call {@link #bind()} to bind this VBO
+	 * and you'll need to call {@link #send()} to transmit the vertex data to the
+	 * GPU.
+	 *
+	 * @param gl            the gl
+	 * @param bufferFactory the buffer factory
+	 * @param data          the data
+	 * @return the core element VBO
+	 */
   @Nonnull
   public static CoreElementVBO createStaticVBO(
           @Nonnull final CoreGL gl,
@@ -40,10 +57,15 @@ public class CoreElementVBO {
   }
 
   /**
-   * This provides the same functionality as
-   * {@link #createStaticVBO(de.lessvoid.nifty.render.batch.spi.core.CoreGL, de.lessvoid.nifty.render.batch.spi.BufferFactory, int[])},
-   * but automatically sends the specified vertex data to the GPU.
-   */
+	 * This provides the same functionality as
+	 * {@link #createStaticVBO(de.lessvoid.nifty.render.batch.spi.core.CoreGL, de.lessvoid.nifty.render.batch.spi.BufferFactory, int[])},
+	 * but automatically sends the specified vertex data to the GPU.
+	 *
+	 * @param gl            the gl
+	 * @param bufferFactory the buffer factory
+	 * @param data          the data
+	 * @return the core element VBO
+	 */
   @Nonnull
   public static CoreElementVBO createAndSendStaticVBO(
           @Nonnull final CoreGL gl,
@@ -55,10 +77,15 @@ public class CoreElementVBO {
   }
 
   /**
-   * This provides the same functionality as
-   * {@link #createStaticVBO(de.lessvoid.nifty.render.batch.spi.core.CoreGL, de.lessvoid.nifty.render.batch.spi.BufferFactory, int[])},
-   * but automatically sends the specified vertex data to the GPU.
-   */
+	 * This provides the same functionality as
+	 * {@link #createStaticVBO(de.lessvoid.nifty.render.batch.spi.core.CoreGL, de.lessvoid.nifty.render.batch.spi.BufferFactory, int[])},
+	 * but automatically sends the specified vertex data to the GPU.
+	 *
+	 * @param gl            the gl
+	 * @param bufferFactory the buffer factory
+	 * @param data          the data
+	 * @return the core element VBO
+	 */
   @Nonnull
   public static CoreElementVBO createAndSendStaticVBO(
           @Nonnull final CoreGL gl,
@@ -70,10 +97,15 @@ public class CoreElementVBO {
   }
 
   /**
-   * This works exactly as
-   * {@link #createStaticVBO(de.lessvoid.nifty.render.batch.spi.core.CoreGL, de.lessvoid.nifty.render.batch.spi.BufferFactory, int[])},
-   * but will use GL_DYNAMIC_DRAW instead.
-   */
+	 * This works exactly as
+	 * {@link #createStaticVBO(de.lessvoid.nifty.render.batch.spi.core.CoreGL, de.lessvoid.nifty.render.batch.spi.BufferFactory, int[])},
+	 * but will use GL_DYNAMIC_DRAW instead.
+	 *
+	 * @param gl            the gl
+	 * @param bufferFactory the buffer factory
+	 * @param data          the data
+	 * @return the core element VBO
+	 */
   @Nonnull
   public static CoreElementVBO createDynamicVBO(
           @Nonnull final CoreGL gl,
@@ -83,10 +115,15 @@ public class CoreElementVBO {
   }
 
   /**
-   * This works exactly as
-   * {@link #createStaticVBO(de.lessvoid.nifty.render.batch.spi.core.CoreGL, de.lessvoid.nifty.render.batch.spi.BufferFactory, int[])},
-   * but will use GL_STREAM_DRAW instead.
-   */
+	 * This works exactly as
+	 * {@link #createStaticVBO(de.lessvoid.nifty.render.batch.spi.core.CoreGL, de.lessvoid.nifty.render.batch.spi.BufferFactory, int[])},
+	 * but will use GL_STREAM_DRAW instead.
+	 *
+	 * @param gl            the gl
+	 * @param bufferFactory the buffer factory
+	 * @param data          the data
+	 * @return the core element VBO
+	 */
   @Nonnull
   public static CoreElementVBO createStreamVBO(
           @Nonnull final CoreGL gl,
@@ -96,11 +133,14 @@ public class CoreElementVBO {
   }
 
   /**
-   * Allows access to the internal {@link java.nio.FloatBuffer} (stored in system memory, not GPU memory) that
-   * contains the original vertex data. You can access and change this buffer if you want to update the buffer content.
-   * Just make sure that you call {@link java.nio.Buffer#rewind()} before sending your new vertex data to the GPU with
-   * the {@link #send()} method.
-   */
+	 * Allows access to the internal {@link java.nio.FloatBuffer} (stored in system
+	 * memory, not GPU memory) that contains the original vertex data. You can
+	 * access and change this buffer if you want to update the buffer content. Just
+	 * make sure that you call {@link java.nio.Buffer#rewind()} before sending your
+	 * new vertex data to the GPU with the {@link #send()} method.
+	 *
+	 * @return the buffer
+	 */
   public IntBuffer getBuffer() {
     return indexBuffer;
   }
@@ -113,6 +153,9 @@ public class CoreElementVBO {
     CheckGL.checkGLError(gl, "glBindBuffer(GL_ELEMENT_ARRAY_BUFFER)");
   }
 
+  /**
+	 * Unbind.
+	 */
   public void unbind() {
     gl.glBindBuffer(gl.GL_ELEMENT_ARRAY_BUFFER(), 0);
     CheckGL.checkGLError(gl, "glBindBuffer(GL_ELEMENT_ARRAY_BUFFER -> unbind)");
@@ -152,6 +195,14 @@ public class CoreElementVBO {
     gl.glDisable(gl.GL_PRIMITIVE_RESTART());
   }
 
+  /**
+	 * Instantiates a new core element VBO.
+	 *
+	 * @param gl            the gl
+	 * @param bufferFactory the buffer factory
+	 * @param usageType     the usage type
+	 * @param data          the data
+	 */
   private CoreElementVBO(
           @Nonnull final CoreGL gl,
           @Nonnull final BufferFactory bufferFactory,

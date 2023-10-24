@@ -30,12 +30,21 @@ import javax.imageio.ImageIO;
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
 public class DefaultImageLoader implements ImageLoader {
+  
+  /** The Constant GL_ALPHA_COLOR_MODEL. */
   @Nonnull
   private static final ColorModel GL_ALPHA_COLOR_MODEL = new ComponentColorModel(ColorSpace.getInstance(ColorSpace
           .CS_sRGB), new int[] { 8, 8, 8, 8 }, true, false, ComponentColorModel.TRANSLUCENT, DataBuffer.TYPE_BYTE);
+  
+  /** The image properties. */
   @Nullable
   private ImageProperties imageProperties;
 
+  /**
+	 * Gets the image bit depth.
+	 *
+	 * @return the image bit depth
+	 */
   @Override
   public int getImageBitDepth() {
     if (imageProperties == null) {
@@ -44,6 +53,11 @@ public class DefaultImageLoader implements ImageLoader {
     return imageProperties.getBitDepth();
   }
 
+  /**
+	 * Gets the image width.
+	 *
+	 * @return the image width
+	 */
   @Override
   public int getImageWidth() {
     if (imageProperties == null) {
@@ -52,6 +66,11 @@ public class DefaultImageLoader implements ImageLoader {
     return imageProperties.getWidth();
   }
 
+  /**
+	 * Gets the image height.
+	 *
+	 * @return the image height
+	 */
   @Override
   public int getImageHeight() {
     if (imageProperties == null) {
@@ -60,6 +79,11 @@ public class DefaultImageLoader implements ImageLoader {
     return imageProperties.getHeight();
   }
 
+  /**
+	 * Gets the texture width.
+	 *
+	 * @return the texture width
+	 */
   @Override
   public int getTextureWidth() {
     if (imageProperties == null) {
@@ -68,6 +92,11 @@ public class DefaultImageLoader implements ImageLoader {
     return imageProperties.getWidth();
   }
 
+  /**
+	 * Gets the texture height.
+	 *
+	 * @return the texture height
+	 */
   @Override
   public int getTextureHeight() {
     if (imageProperties == null) {
@@ -76,12 +105,27 @@ public class DefaultImageLoader implements ImageLoader {
     return imageProperties.getHeight();
   }
 
+  /**
+	 * Load as byte buffer RGBA.
+	 *
+	 * @param imageStream the image stream
+	 * @return the byte buffer
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
   @Override
   @Nonnull
   public ByteBuffer loadAsByteBufferRGBA(@Nonnull @WillNotClose final InputStream imageStream) throws IOException {
     return convertToOpenGlFormat(loadImageFromStream(imageStream), false, false);
   }
 
+  /**
+	 * Load as byte buffer ARGB.
+	 *
+	 * @param imageStream          the image stream
+	 * @param shouldFlipVertically the should flip vertically
+	 * @return the byte buffer
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
   @Nonnull
   @Override
   public ByteBuffer loadAsByteBufferARGB(
@@ -94,6 +138,13 @@ public class DefaultImageLoader implements ImageLoader {
     }
   }
 
+  /**
+	 * Load as buffered image.
+	 *
+	 * @param imageStream the image stream
+	 * @return the buffered image
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
   @Nonnull
   @Override
   public BufferedImage loadAsBufferedImage(@Nonnull @WillNotClose InputStream imageStream) throws IOException {
@@ -106,6 +157,13 @@ public class DefaultImageLoader implements ImageLoader {
 
   // Internal implementations
 
+  /**
+	 * Load image from stream.
+	 *
+	 * @param imageStream the image stream
+	 * @return the buffered image
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
   private BufferedImage loadImageFromStream(@Nonnull @WillNotClose final InputStream imageStream) throws IOException {
     BufferedImage image;
     try {
@@ -119,6 +177,14 @@ public class DefaultImageLoader implements ImageLoader {
     return image;
   }
 
+  /**
+	 * Convert to open gl format.
+	 *
+	 * @param originalImage        the original image
+	 * @param shouldFlipVertically the should flip vertically
+	 * @param shouldUseARGB        the should use ARGB
+	 * @return the byte buffer
+	 */
   @Nonnull
   private ByteBuffer convertToOpenGlFormat(
           @Nonnull final BufferedImage originalImage,
@@ -148,6 +214,12 @@ public class DefaultImageLoader implements ImageLoader {
     return openGlImageByteBuffer;
   }
 
+  /**
+	 * Blank image for mac os X compatibility.
+	 *
+	 * @param imageGraphics   the image graphics
+	 * @param imageProperties the image properties
+	 */
   private void blankImageForMacOsXCompatibility(
           @Nonnull final Graphics2D imageGraphics,
           @Nonnull final ImageProperties imageProperties) {
@@ -155,6 +227,13 @@ public class DefaultImageLoader implements ImageLoader {
     imageGraphics.fillRect(0, 0, imageProperties.getWidth(), imageProperties.getHeight());
   }
 
+  /**
+	 * Copy image.
+	 *
+	 * @param sourceImage           the source image
+	 * @param destinationGraphics   the destination graphics
+	 * @param sourceImageProperties the source image properties
+	 */
   private void copyImage(
           @Nonnull final BufferedImage sourceImage,
           @Nonnull final Graphics2D destinationGraphics,
@@ -167,6 +246,12 @@ public class DefaultImageLoader implements ImageLoader {
     }
   }
 
+  /**
+	 * Creates the image with properties.
+	 *
+	 * @param imageProperties the image properties
+	 * @return the buffered image
+	 */
   @Nonnull
   private BufferedImage createImageWithProperties(@Nonnull final ImageProperties imageProperties) {
     return new BufferedImage(
@@ -176,6 +261,12 @@ public class DefaultImageLoader implements ImageLoader {
             null);
   }
 
+  /**
+	 * Creates the raster with properties.
+	 *
+	 * @param imageProperties the image properties
+	 * @return the writable raster
+	 */
   @Nonnull
   private WritableRaster createRasterWithProperties(@Nonnull final ImageProperties imageProperties) {
     return Raster.createInterleavedRaster(
@@ -186,6 +277,12 @@ public class DefaultImageLoader implements ImageLoader {
             null);
   }
 
+  /**
+	 * Creates the byte buffer.
+	 *
+	 * @param data the data
+	 * @return the byte buffer
+	 */
   @Nonnull
   private ByteBuffer createByteBuffer(@Nonnull final byte[] data) {
     return (ByteBuffer) ByteBuffer.allocateDirect(data.length)
@@ -194,6 +291,11 @@ public class DefaultImageLoader implements ImageLoader {
             .flip();
   }
 
+  /**
+	 * Convert image to ARGB.
+	 *
+	 * @param imageData the image data
+	 */
   private void convertImageToARGB(@Nonnull final byte[] imageData) {
     for (int i = 0; i < imageData.length; i += 4) {
       byte rr = imageData[i];
@@ -207,20 +309,47 @@ public class DefaultImageLoader implements ImageLoader {
     }
   }
 
+  /**
+	 * Gets the raw image data.
+	 *
+	 * @param image the image
+	 * @return the raw image data
+	 */
   @Nonnull
   private byte[] getRawImageData(@Nonnull final BufferedImage image) {
     return ((DataBufferByte)image.getRaster().getDataBuffer()).getData();
   }
 
+  /**
+	 * Dispose image.
+	 *
+	 * @param graphics2D the graphics 2 D
+	 */
   private void disposeImage(@Nonnull final Graphics2D graphics2D) {
     graphics2D.dispose();
   }
 
+  /**
+	 * The Class ImageProperties.
+	 */
   private static class ImageProperties {
+    
+    /** The width. */
     private final int width;
+    
+    /** The height. */
     private final int height;
+    
+    /** The is flipped vertically. */
     private final boolean isFlippedVertically;
 
+    /**
+	 * Instantiates a new image properties.
+	 *
+	 * @param width               the width
+	 * @param height              the height
+	 * @param isFlippedVertically the is flipped vertically
+	 */
     private ImageProperties(
             final int width,
             final int height,
@@ -230,26 +359,56 @@ public class DefaultImageLoader implements ImageLoader {
       this.isFlippedVertically = isFlippedVertically;
     }
 
+    /**
+	 * Gets the width.
+	 *
+	 * @return the width
+	 */
     private int getWidth() {
       return width;
     }
 
+    /**
+	 * Gets the height.
+	 *
+	 * @return the height
+	 */
     private int getHeight() {
       return height;
     }
 
+    /**
+	 * Checks if is flipped.
+	 *
+	 * @return true, if is flipped
+	 */
     private boolean isFlipped() {
       return isFlippedVertically;
     }
 
+    /**
+	 * Gets the color model.
+	 *
+	 * @return the color model
+	 */
     private ColorModel getColorModel() {
       return GL_ALPHA_COLOR_MODEL;
     }
 
+    /**
+	 * Gets the bit depth.
+	 *
+	 * @return the bit depth
+	 */
     private int getBitDepth() {
       return 32;
     }
 
+    /**
+	 * Gets the color bands.
+	 *
+	 * @return the color bands
+	 */
     private int getColorBands() {
       return 4;
     }

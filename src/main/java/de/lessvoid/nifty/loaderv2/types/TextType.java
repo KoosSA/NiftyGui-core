@@ -8,25 +8,50 @@ import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.loaderv2.types.helper.ElementRendererCreator;
 import de.lessvoid.xml.xpp3.Attributes;
 
+/**
+ * The Class TextType.
+ */
 public class TextType extends ElementType {
+  
+  /**
+	 * Instantiates a new text type.
+	 */
   public TextType() {
     super();
   }
 
+  /**
+	 * Instantiates a new text type.
+	 *
+	 * @param src the src
+	 */
   public TextType(@Nonnull final TextType src) {
     super(src);
   }
 
+  /**
+	 * Copy.
+	 *
+	 * @return the text type
+	 */
   @Override
   @Nonnull
   public TextType copy() {
     return new TextType(this);
   }
 
+  /**
+	 * Instantiates a new text type.
+	 *
+	 * @param attributes the attributes
+	 */
   public TextType(@Nonnull final Attributes attributes) {
     super(attributes);
   }
 
+  /**
+	 * Make flat.
+	 */
   @Override
   protected void makeFlat() {
     super.makeFlat();

@@ -11,14 +11,30 @@ import de.lessvoid.nifty.effects.Falloff;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 
+/**
+ * The Class ChangeMouseCursor.
+ */
 public class ChangeMouseCursor implements EffectImpl {
+  
+  /** The nifty mouse. */
   @Nullable
   private NiftyMouse niftyMouse;
+  
+  /** The old mouse id. */
   @Nullable
   private String oldMouseId;
+  
+  /** The new mouse id. */
   @Nullable
   private String newMouseId;
 
+  /**
+	 * Activate.
+	 *
+	 * @param nifty     the nifty
+	 * @param element   the element
+	 * @param parameter the parameter
+	 */
   @Override
   public void activate(
       @Nonnull final Nifty nifty,
@@ -29,6 +45,14 @@ public class ChangeMouseCursor implements EffectImpl {
     newMouseId = parameter.getProperty("id");
   }
 
+  /**
+	 * Execute.
+	 *
+	 * @param element    the element
+	 * @param effectTime the effect time
+	 * @param falloff    the falloff
+	 * @param r          the r
+	 */
   @Override
   public void execute(
       @Nonnull final Element element,
@@ -40,6 +64,9 @@ public class ChangeMouseCursor implements EffectImpl {
     }
   }
 
+  /**
+	 * Deactivate.
+	 */
   @Override
   public void deactivate() {
     if (niftyMouse != null) {

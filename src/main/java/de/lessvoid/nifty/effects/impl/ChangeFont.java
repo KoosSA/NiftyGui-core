@@ -18,9 +18,18 @@ import de.lessvoid.nifty.spi.render.RenderFont;
  * @author void
  */
 public class ChangeFont implements EffectImpl {
+  
+  /** The font. */
   @Nullable
   private RenderFont font;
 
+  /**
+	 * Activate.
+	 *
+	 * @param nifty     the nifty
+	 * @param element   the element
+	 * @param parameter the parameter
+	 */
   @Override
   public void activate(
       @Nonnull final Nifty nifty,
@@ -29,6 +38,14 @@ public class ChangeFont implements EffectImpl {
     font = nifty.getRenderEngine().createFont(parameter.getProperty("font"));
   }
 
+  /**
+	 * Execute.
+	 *
+	 * @param element        the element
+	 * @param normalizedTime the normalized time
+	 * @param falloff        the falloff
+	 * @param r              the r
+	 */
   @Override
   public void execute(
       @Nonnull final Element element,
@@ -38,6 +55,9 @@ public class ChangeFont implements EffectImpl {
     r.setFont(font);
   }
 
+  /**
+	 * Deactivate.
+	 */
   @Override
   public void deactivate() {
   }

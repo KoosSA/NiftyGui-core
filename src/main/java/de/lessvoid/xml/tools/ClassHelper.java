@@ -39,12 +39,13 @@ public final class ClassHelper {
   }
 
   /**
-   * dynamically load the given class, create and return a new instance.
-   * @param className className
-   * @param type type
-   * @param <T> class
-   * @return new ScreenController instance or null
-   */
+	 * dynamically load the given class, create and return a new instance.
+	 *
+	 * @param <T>       class
+	 * @param className className
+	 * @param type      type
+	 * @return new ScreenController instance or null
+	 */
   @Nullable
   public static <T> T getInstance(@Nonnull final String className, @Nonnull final Class<T> type) {
     try {
@@ -61,6 +62,13 @@ public final class ClassHelper {
     return null;
   }
 
+  /**
+	 * Gets the single instance of ClassHelper.
+	 *
+	 * @param <T>   the generic type
+	 * @param clazz the clazz
+	 * @return single instance of ClassHelper
+	 */
   @Nullable
   public static <T> T getInstance(@Nonnull final Class<T> clazz) {
     try {

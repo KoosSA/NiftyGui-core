@@ -9,9 +9,22 @@ import de.lessvoid.nifty.spi.render.MouseCursor;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
+ * A factory for creating MouseCursor objects.
+ *
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
 public interface MouseCursorFactory {
+  
+  /**
+	 * Creates the.
+	 *
+	 * @param filename       the filename
+	 * @param hotspotX       the hotspot X
+	 * @param hotspotY       the hotspot Y
+	 * @param resourceLoader the resource loader
+	 * @return the mouse cursor
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
   @Nullable
   public MouseCursor create(
           @Nonnull final String filename,

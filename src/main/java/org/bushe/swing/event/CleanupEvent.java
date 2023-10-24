@@ -33,21 +33,42 @@ public class CleanupEvent {
       FINISHED_CLEANING;
    }
    
+   /** The status. */
    private Status status;
+   
+   /** The total weak refs and proxies. */
    private int totalWeakRefsAndProxies;
+   
+   /** The num stale subscribers cleaned. */
    private Integer numStaleSubscribersCleaned;
    
+   /**
+	 * Instantiates a new cleanup event.
+	 *
+	 * @param status                     the status
+	 * @param totalWeakRefsAndProxies    the total weak refs and proxies
+	 * @param numStaleSubscribersCleaned the num stale subscribers cleaned
+	 */
    public CleanupEvent(Status status, int totalWeakRefsAndProxies, Integer numStaleSubscribersCleaned) {
       this.status = status;
       this.totalWeakRefsAndProxies = totalWeakRefsAndProxies;
       this.numStaleSubscribersCleaned = numStaleSubscribersCleaned;
    }
 
+   /**
+	 * Gets the status.
+	 *
+	 * @return the status
+	 */
    public Status getStatus() {
       return status;
    }
 
-   /** Total weak refs and ProxySubscribers subscribed. */
+   /**
+	 * Total weak refs and ProxySubscribers subscribed.
+	 *
+	 * @return the total weak refs and proxies
+	 */
    public int getTotalWeakRefsAndProxies() {
       return totalWeakRefsAndProxies;
    }

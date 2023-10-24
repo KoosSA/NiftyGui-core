@@ -19,6 +19,7 @@ package org.bushe.swing.event;
  * Callback interface for topic-based subscribers of an {@link EventService}.
  *
  * @author Michael Bushe michael@bushe.com
+ * @param <T> the generic type
  */
 public interface EventTopicSubscriber<T> {
 

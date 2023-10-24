@@ -16,9 +16,16 @@ import de.lessvoid.nifty.tools.Color;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public class Parameters {
+  
+  /** The parameters. */
   @Nonnull
   private final Properties parameters = new Properties();
 
+  /**
+	 * Instantiates a new parameters.
+	 *
+	 * @param properties the properties
+	 */
   public Parameters(@Nonnull final Properties properties) {
     parameters.putAll(properties);
   }
@@ -222,13 +229,14 @@ public class Parameters {
   }
 
   /**
-   * Get the parameter as a instance of a enumeration member.
-   *
-   * @param name      the name of the attribute
-   * @param enumClass the enumeration class
-   * @param <T>       the enumeration type
-   * @return the enumeration instance the parameter was mapped to or {@code null} if the mapping failed
-   */
+	 * Get the parameter as a instance of a enumeration member.
+	 *
+	 * @param <T>       the enumeration type
+	 * @param name      the name of the attribute
+	 * @param enumClass the enumeration class
+	 * @return the enumeration instance the parameter was mapped to or {@code null}
+	 *         if the mapping failed
+	 */
   @Nullable
   public <T extends Enum<T>> T getAsEnum(@Nonnull final String name, @Nonnull final Class<T> enumClass) {
     String value = get(name);
@@ -243,14 +251,15 @@ public class Parameters {
   }
 
   /**
-   * Get the parameter as a instance of a enumeration member.
-   *
-   * @param name         the name of the attribute
-   * @param enumClass    the enumeration class
-   * @param defaultValue the value returned in case the mapping failed
-   * @param <T>          the enumeration type
-   * @return the enumeration instance the parameter was mapped to or the default value in case the mapping failed
-   */
+	 * Get the parameter as a instance of a enumeration member.
+	 *
+	 * @param <T>          the enumeration type
+	 * @param name         the name of the attribute
+	 * @param enumClass    the enumeration class
+	 * @param defaultValue the value returned in case the mapping failed
+	 * @return the enumeration instance the parameter was mapped to or the default
+	 *         value in case the mapping failed
+	 */
   @Nonnull
   public <T extends Enum<T>> T getAsEnum(
       @Nonnull final String name,

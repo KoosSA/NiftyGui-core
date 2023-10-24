@@ -120,11 +120,26 @@ public class NiftyLoader {
     }
   }
 
+  /**
+	 * Validate nifty xml.
+	 *
+	 * @param inputStreamXml the input stream xml
+	 * @return true, if successful
+	 * @throws Exception the exception
+	 */
   @Deprecated
   public boolean validateNiftyXml(@Nonnull @WillClose final InputStream inputStreamXml) throws Exception {
     return validateNiftyXml("nifty.xsd", inputStreamXml);
   }
 
+  /**
+	 * Validate nifty xml.
+	 *
+	 * @param schemaId       the schema id
+	 * @param inputStreamXml the input stream xml
+	 * @return true, if successful
+	 * @throws Exception the exception
+	 */
   public boolean validateNiftyXml(
       @Nonnull final String schemaId,
       @Nonnull @WillClose final InputStream inputStreamXml) throws Exception {
@@ -138,6 +153,13 @@ public class NiftyLoader {
     return true;
   }
 
+  /**
+	 * Validate.
+	 *
+	 * @param schemaId       the schema id
+	 * @param inputStreamXml the input stream xml
+	 * @throws Exception the exception
+	 */
   private void validate(
       @Nonnull final String schemaId,
       @Nonnull @WillClose final InputStream inputStreamXml) throws Exception {
@@ -162,6 +184,15 @@ public class NiftyLoader {
     }
   }
 
+  /**
+	 * Load style file.
+	 *
+	 * @param schemaId      the schema id
+	 * @param styleFilename the style filename
+	 * @param niftyType     the nifty type
+	 * @param nifty         the nifty
+	 * @throws Exception the exception
+	 */
   public void loadStyleFile(
       @Nonnull final String schemaId,
       @Nonnull final String styleFilename,
@@ -184,6 +215,14 @@ public class NiftyLoader {
     }
   }
   
+  /**
+	 * Load control file.
+	 *
+	 * @param schemaId        the schema id
+	 * @param controlFilename the control filename
+	 * @param niftyType       the nifty type
+	 * @throws Exception the exception
+	 */
   public void loadControlFile(
       @Nonnull final String schemaId,
       @Nonnull final String controlFilename,
@@ -205,6 +244,13 @@ public class NiftyLoader {
     }
   }
 
+  /**
+	 * Register schema.
+	 *
+	 * @param schemaId          the schema id
+	 * @param inputStreamSchema the input stream schema
+	 * @throws Exception the exception
+	 */
   public void registerSchema(
       @Nonnull final String schemaId,
       @Nonnull @WillClose final InputStream inputStreamSchema) throws Exception {
@@ -220,6 +266,13 @@ public class NiftyLoader {
     }
   }
 
+  /**
+	 * Gets the schema.
+	 *
+	 * @param schemaId the schema id
+	 * @return the schema
+	 * @throws Exception the exception
+	 */
   @Nonnull
   private Schema getSchema(@Nonnull final String schemaId) throws Exception {
     Schema niftyXmlSchema = schemes.get(schemaId);
@@ -229,6 +282,11 @@ public class NiftyLoader {
     return niftyXmlSchema;
   }
 
+  /**
+	 * Close silently.
+	 *
+	 * @param closeable the closeable
+	 */
   private static void closeSilently(@Nullable final Closeable closeable) {
     if (closeable != null) {
       try {

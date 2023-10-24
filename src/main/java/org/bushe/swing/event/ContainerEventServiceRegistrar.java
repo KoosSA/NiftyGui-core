@@ -36,11 +36,23 @@ import javax.swing.event.AncestorListener;
  * @author Michael Bushe michael@bushe.com
  */
 public class ContainerEventServiceRegistrar {
+   
+   /** The j comp. */
    private JComponent jComp;
+   
+   /** The event subscriber. */
    private EventSubscriber eventSubscriber;
+   
+   /** The event classes. */
    private Class[] eventClasses;
+   
+   /** The event topic subscriber. */
    private EventTopicSubscriber eventTopicSubscriber;
+   
+   /** The topics. */
    private String[] topics;
+   
+   /** The container event service. */
    private EventService containerEventService;
 
    /**
@@ -191,9 +203,11 @@ public class ContainerEventServiceRegistrar {
    }
 
    /**
-    * @return the container event service, if null, it tries to find it, but it still may be null if this object is not
-    *         in a container.
-    */
+	 * Gets the container event service.
+	 *
+	 * @return the container event service, if null, it tries to find it, but it
+	 *         still may be null if this object is not in a container.
+	 */
    public EventService getContainerEventService() {
       if (containerEventService != null) {
          return containerEventService;

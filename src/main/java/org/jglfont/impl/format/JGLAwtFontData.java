@@ -18,21 +18,39 @@ import org.jglfont.spi.JGLFontRenderer;
 import org.jglfont.spi.ResourceLoader;
 
 /**
- * User: iamtakingiteasy
- * Date: 2013-12-29
- * Time: 03:25
+ * User: iamtakingiteasy Date: 2013-12-29 Time: 03:25.
  */
 public class JGLAwtFontData extends JGLAbstractFontData {
+  
+  /** The font. */
   private Font font;
+  
+  /** The font metrics. */
   private FontMetrics fontMetrics;
 
+  /** The glyph graphics. */
   private Graphics2D glyphGraphics;
+  
+  /** The glyph image. */
   private BufferedImage glyphImage;
 
+  /** The glyph side. */
   private int glyphSide;
+  
+  /** The glyph width. */
   private int glyphWidth;
+  
+  /** The glyph height. */
   private int glyphHeight;
 
+  /**
+	 * Instantiates a new JGL awt font data.
+	 *
+	 * @param renderer       the renderer
+	 * @param resourceLoader the resource loader
+	 * @param font           the font
+	 * @param glyphSide      the glyph side
+	 */
   public JGLAwtFontData(final JGLFontRenderer renderer, final ResourceLoader resourceLoader, final Font font, int glyphSide) {
     super(renderer, resourceLoader);
     this.font = font;
@@ -53,6 +71,11 @@ public class JGLAwtFontData extends JGLAbstractFontData {
     setBitmapHeight(glyphHeight * 16);
   }
 
+  /**
+	 * Creates the graphics.
+	 *
+	 * @return the graphics 2 D
+	 */
   public Graphics2D createGraphics() {
     Graphics2D glyphGraphics = glyphImage.createGraphics();
     glyphGraphics.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
@@ -70,10 +93,18 @@ public class JGLAwtFontData extends JGLAbstractFontData {
     return glyphGraphics;
   }
 
+  /**
+	 * Inits the.
+	 */
   @Override
   public void init() {
   }
 
+  /**
+	 * Load page.
+	 *
+	 * @param page the page
+	 */
   private void loadPage(int page) {
     ByteBuffer texture = ByteBuffer.allocateDirect(getBitmapWidth() * getBitmapHeight() * 4);
     texture.order(ByteOrder.LITTLE_ENDIAN);
@@ -157,6 +188,11 @@ public class JGLAwtFontData extends JGLAbstractFontData {
     }
   }
 
+  /**
+	 * Pre process glyph.
+	 *
+	 * @param codepoint the codepoint
+	 */
   @Override
   public void preProcessGlyph(Integer codepoint) {
     if (!characters.containsKey(codepoint)) {

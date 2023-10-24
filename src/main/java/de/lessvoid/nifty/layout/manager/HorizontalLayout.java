@@ -75,18 +75,48 @@ public class HorizontalLayout implements LayoutManager {
     }
   }
 
+  /**
+	 * Left margin.
+	 *
+	 * @param boxConstraints the box constraints
+	 * @param rootBoxWidth   the root box width
+	 * @return the int
+	 */
   private int leftMargin(@Nonnull final BoxConstraints boxConstraints, final int rootBoxWidth) {
     return boxConstraints.getMarginLeft().getValueAsInt(rootBoxWidth);
   }
 
+  /**
+	 * Right margin.
+	 *
+	 * @param boxConstraints the box constraints
+	 * @param rootBoxWidth   the root box width
+	 * @return the int
+	 */
   private int rightMargin(@Nonnull final BoxConstraints boxConstraints, final int rootBoxWidth) {
     return boxConstraints.getMarginRight().getValueAsInt(rootBoxWidth);
   }
 
+  /**
+	 * Top margin.
+	 *
+	 * @param boxConstraints the box constraints
+	 * @param rootBoxHeight  the root box height
+	 * @return the int
+	 */
   private int topMargin(@Nonnull final BoxConstraints boxConstraints, final int rootBoxHeight) {
     return boxConstraints.getMarginTop().getValueAsInt(rootBoxHeight);
   }
 
+  /**
+	 * Process height constraint.
+	 *
+	 * @param rootBoxHeight the root box height
+	 * @param box           the box
+	 * @param constraint    the constraint
+	 * @param elementWidth  the element width
+	 * @return the int
+	 */
   private int processHeightConstraint(
       final int rootBoxHeight,
       final Box box,
@@ -102,10 +132,25 @@ public class HorizontalLayout implements LayoutManager {
     }
   }
 
+  /**
+	 * Checks for height constraint.
+	 *
+	 * @param constraint the constraint
+	 * @return true, if successful
+	 */
   private boolean hasHeightConstraint(@Nullable final BoxConstraints constraint) {
     return constraint != null && constraint.getHeight().hasValue();
   }
 
+  /**
+	 * Calc element width.
+	 *
+	 * @param children       the children
+	 * @param rootBoxWidth   the root box width
+	 * @param boxConstraints the box constraints
+	 * @param elementHeight  the element height
+	 * @return the int
+	 */
   private int calcElementWidth(
       @Nonnull final List<LayoutPart> children,
       final int rootBoxWidth,
@@ -123,6 +168,15 @@ public class HorizontalLayout implements LayoutManager {
     return getMaxNonFixedWidth(children, rootBoxWidth);
   }
 
+  /**
+	 * Process vertical alignment.
+	 *
+	 * @param rootBoxY       the root box Y
+	 * @param rootBoxHeight  the root box height
+	 * @param box            the box
+	 * @param boxConstraints the box constraints
+	 * @return the int
+	 */
   private int processVerticalAlignment(
       final int rootBoxY,
       final int rootBoxHeight,
@@ -141,11 +195,12 @@ public class HorizontalLayout implements LayoutManager {
   }
 
   /**
-   * @param elements    the child elements the max width is going
-   *                    to be calculated
-   * @param parentWidth the width of the parent element
-   * @return max non fixed width
-   */
+	 * Gets the max non fixed width.
+	 *
+	 * @param elements    the child elements the max width is going to be calculated
+	 * @param parentWidth the width of the parent element
+	 * @return max non fixed width
+	 */
   private int getMaxNonFixedWidth(
       @Nonnull final List<LayoutPart> elements,
       final int parentWidth
@@ -172,9 +227,12 @@ public class HorizontalLayout implements LayoutManager {
   }
 
   /**
-   * @param children children elements of the root element
-   * @return new calculated SizeValue
-   */
+	 * Calculate constraint width.
+	 *
+	 * @param root     the root
+	 * @param children children elements of the root element
+	 * @return new calculated SizeValue
+	 */
   @Nonnull
   @Override
   public final SizeValue calculateConstraintWidth(
@@ -184,9 +242,12 @@ public class HorizontalLayout implements LayoutManager {
   }
 
   /**
-   * @param children children elements of the root element
-   * @return new calculated SizeValue
-   */
+	 * Calculate constraint height.
+	 *
+	 * @param root     the root
+	 * @param children children elements of the root element
+	 * @return new calculated SizeValue
+	 */
   @Nonnull
   @Override
   public final SizeValue calculateConstraintHeight(
@@ -195,23 +256,54 @@ public class HorizontalLayout implements LayoutManager {
     return root.getMaxHeight(children);
   }
 
+  /**
+	 * Checks if is invalid.
+	 *
+	 * @param root     the root
+	 * @param children the children
+	 * @return true, if is invalid
+	 */
   private boolean isInvalid(@Nullable final LayoutPart root, @Nullable final List<LayoutPart> children) {
     return root == null || children == null || children.size() == 0;
   }
 
+  /**
+	 * Gets the root box X.
+	 *
+	 * @param root the root
+	 * @return the root box X
+	 */
   private int getRootBoxX(@Nonnull final LayoutPart root) {
     return root.getBox().getX() + root.getBoxConstraints().getPaddingLeft().getValueAsInt(root.getBox().getWidth());
   }
 
+  /**
+	 * Gets the root box Y.
+	 *
+	 * @param root the root
+	 * @return the root box Y
+	 */
   private int getRootBoxY(@Nonnull final LayoutPart root) {
     return root.getBox().getY() + root.getBoxConstraints().getPaddingTop().getValueAsInt(root.getBox().getHeight());
   }
 
+  /**
+	 * Gets the root box width.
+	 *
+	 * @param root the root
+	 * @return the root box width
+	 */
   private int getRootBoxWidth(@Nonnull final LayoutPart root) {
     return root.getBox().getWidth() - root.getBoxConstraints().getPaddingLeft().getValueAsInt(root.getBox().getWidth
         ()) - root.getBoxConstraints().getPaddingRight().getValueAsInt(root.getBox().getWidth());
   }
 
+  /**
+	 * Gets the root box height.
+	 *
+	 * @param root the root
+	 * @return the root box height
+	 */
   private int getRootBoxHeight(@Nonnull final LayoutPart root) {
     return root.getBox().getHeight() - root.getBoxConstraints().getPaddingTop().getValueAsInt(root.getBox().getHeight
         ()) - root.getBoxConstraints().getPaddingBottom().getValueAsInt(root.getBox().getHeight());

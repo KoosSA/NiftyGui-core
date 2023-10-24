@@ -25,6 +25,11 @@ package org.bushe.swing.event;
  * @see AbstractEventServiceEvent for a simple base class
  */
 public interface EventServiceEvent {
-   /** @return The issuer of the event. */
+   
+   /**
+	 * Gets the source.
+	 *
+	 * @return The issuer of the event.
+	 */
    Object getSource();
 }

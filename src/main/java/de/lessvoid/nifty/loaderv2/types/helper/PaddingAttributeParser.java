@@ -3,23 +3,36 @@ package de.lessvoid.nifty.loaderv2.types.helper;
 import javax.annotation.Nonnull;
 
 /**
- * one value:    [applied to all]
- * two values:   [top and bottom], [left and right]
- * three values: [top], [left and right], [bottom]
- * four values:  [top], [right], [bottom], [left]
+ * one value: [applied to all] two values: [top and bottom], [left and right]
+ * three values: [top], [left and right], [bottom] four values: [top], [right],
+ * [bottom], [left].
  *
  * @author void
  */
 public class PaddingAttributeParser {
+  
+  /** The left. */
   @Nonnull
   private final String left;
+  
+  /** The right. */
   @Nonnull
   private final String right;
+  
+  /** The top. */
   @Nonnull
   private final String top;
+  
+  /** The bottom. */
   @Nonnull
   private final String bottom;
 
+  /**
+	 * Instantiates a new padding attribute parser.
+	 *
+	 * @param input the input
+	 * @throws Exception the exception
+	 */
   public PaddingAttributeParser(@Nonnull final String input) throws Exception {
 
     String[] values = input.split(",");
@@ -56,21 +69,41 @@ public class PaddingAttributeParser {
     }
   }
 
+  /**
+	 * Gets the left.
+	 *
+	 * @return the left
+	 */
   @Nonnull
   public String getLeft() {
     return left;
   }
 
+  /**
+	 * Gets the top.
+	 *
+	 * @return the top
+	 */
   @Nonnull
   public String getTop() {
     return top;
   }
 
+  /**
+	 * Gets the right.
+	 *
+	 * @return the right
+	 */
   @Nonnull
   public String getRight() {
     return right;
   }
 
+  /**
+	 * Gets the bottom.
+	 *
+	 * @return the bottom
+	 */
   @Nonnull
   public String getBottom() {
     return bottom;

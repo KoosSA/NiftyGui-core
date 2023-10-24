@@ -20,22 +20,43 @@ import de.lessvoid.nifty.render.batch.spi.core.CoreGL;
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
 public class CoreVBO {
+  
+  /** The gl. */
   @Nonnull
   private final CoreGL gl;
+  
+  /** The id. */
   private final int id;
+  
+  /** The usage. */
   private final int usage;
+  
+  /** The byte length. */
   private final long byteLength;
+  
+  /** The vertex buffer. */
   @Nonnull
   private final FloatBuffer vertexBuffer;
+  
+  /** The id buffer. */
   @Nonnull
   private final IntBuffer idBuffer;
+  
+  /** The mapped buffer cache. */
   private ByteBuffer mappedBufferCache;
 
   /**
-   * Creates a new VBO with the specified static vertex data (GL_STATIC_DRAW). This will create the vertex buffer
-   * object but does not bind or send the vertex data to the GPU. You'll need to call {@link #bind()} to bind this VBO
-   * and you'll need to call {@link #send()} to transmit the vertex data to the GPU.
-   */
+	 * Creates a new VBO with the specified static vertex data (GL_STATIC_DRAW).
+	 * This will create the vertex buffer object but does not bind or send the
+	 * vertex data to the GPU. You'll need to call {@link #bind()} to bind this VBO
+	 * and you'll need to call {@link #send()} to transmit the vertex data to the
+	 * GPU.
+	 *
+	 * @param gl            the gl
+	 * @param bufferFactory the buffer factory
+	 * @param data          the data
+	 * @return the core VBO
+	 */
   @Nonnull
   public static CoreVBO createStaticVBO(
           @Nonnull final CoreGL gl,
@@ -45,10 +66,15 @@ public class CoreVBO {
   }
 
   /**
-   * This provides the same functionality as
-   * {@link #createStaticVBO(de.lessvoid.nifty.render.batch.spi.core.CoreGL, de.lessvoid.nifty.render.batch.spi.BufferFactory, float[])},
-   * but automatically sends the specified vertex data to the GPU.
-   */
+	 * This provides the same functionality as
+	 * {@link #createStaticVBO(de.lessvoid.nifty.render.batch.spi.core.CoreGL, de.lessvoid.nifty.render.batch.spi.BufferFactory, float[])},
+	 * but automatically sends the specified vertex data to the GPU.
+	 *
+	 * @param gl            the gl
+	 * @param bufferFactory the buffer factory
+	 * @param data          the data
+	 * @return the core VBO
+	 */
   @Nonnull
   public static CoreVBO createAndSendStaticVBO(
           @Nonnull final CoreGL gl,
@@ -60,10 +86,15 @@ public class CoreVBO {
   }
 
   /**
-   * This provides the same functionality as
-   * {@link #createStaticVBO(de.lessvoid.nifty.render.batch.spi.core.CoreGL, de.lessvoid.nifty.render.batch.spi.BufferFactory, float[])},
-   * but automatically sends the specified vertex data to the GPU.
-   */
+	 * This provides the same functionality as
+	 * {@link #createStaticVBO(de.lessvoid.nifty.render.batch.spi.core.CoreGL, de.lessvoid.nifty.render.batch.spi.BufferFactory, float[])},
+	 * but automatically sends the specified vertex data to the GPU.
+	 *
+	 * @param gl            the gl
+	 * @param bufferFactory the buffer factory
+	 * @param data          the data
+	 * @return the core VBO
+	 */
   @Nonnull
   public static CoreVBO createAndSendStaticVBO(
           @Nonnull final CoreGL gl,
@@ -75,10 +106,15 @@ public class CoreVBO {
   }
 
   /**
-   * This works exactly as
-   * {@link #createStaticVBO(de.lessvoid.nifty.render.batch.spi.core.CoreGL, de.lessvoid.nifty.render.batch.spi.BufferFactory, float[])},
-   * but will use GL_DYNAMIC_DRAW instead.
-   */
+	 * This works exactly as
+	 * {@link #createStaticVBO(de.lessvoid.nifty.render.batch.spi.core.CoreGL, de.lessvoid.nifty.render.batch.spi.BufferFactory, float[])},
+	 * but will use GL_DYNAMIC_DRAW instead.
+	 *
+	 * @param gl            the gl
+	 * @param bufferFactory the buffer factory
+	 * @param data          the data
+	 * @return the core VBO
+	 */
   @Nonnull
   public static CoreVBO createDynamicVBO(
           @Nonnull final CoreGL gl,
@@ -88,10 +124,15 @@ public class CoreVBO {
   }
 
   /**
-   * This works exactly as
-   * {@link #createStaticVBO(de.lessvoid.nifty.render.batch.spi.core.CoreGL, de.lessvoid.nifty.render.batch.spi.BufferFactory, float[])},
-   * but will use GL_STREAM_DRAW instead.
-   */
+	 * This works exactly as
+	 * {@link #createStaticVBO(de.lessvoid.nifty.render.batch.spi.core.CoreGL, de.lessvoid.nifty.render.batch.spi.BufferFactory, float[])},
+	 * but will use GL_STREAM_DRAW instead.
+	 *
+	 * @param gl            the gl
+	 * @param bufferFactory the buffer factory
+	 * @param data          the data
+	 * @return the core VBO
+	 */
   @Nonnull
   public static CoreVBO createStreamVBO(
           @Nonnull final CoreGL gl,
@@ -100,6 +141,14 @@ public class CoreVBO {
     return new CoreVBO(gl, bufferFactory, gl.GL_STREAM_DRAW(), data);
   }
 
+  /**
+	 * Instantiates a new core VBO.
+	 *
+	 * @param gl            the gl
+	 * @param bufferFactory the buffer factory
+	 * @param usageType     the usage type
+	 * @param data          the data
+	 */
   private CoreVBO(
           @Nonnull final CoreGL gl,
           @Nonnull final BufferFactory bufferFactory,
@@ -124,22 +173,29 @@ public class CoreVBO {
   }
 
   /**
-   * Allows access to the internal {@link java.nio.FloatBuffer} (stored in system memory, not GPU memory) that
-   * contains the original vertex data. You can access and change this buffer if you want to update the buffer content.
-   * Just make sure that you call {@link java.nio.Buffer#rewind()} before sending your new vertex data to the GPU with
-   * the {@link #send()} method.
-   */
+	 * Allows access to the internal {@link java.nio.FloatBuffer} (stored in system
+	 * memory, not GPU memory) that contains the original vertex data. You can
+	 * access and change this buffer if you want to update the buffer content. Just
+	 * make sure that you call {@link java.nio.Buffer#rewind()} before sending your
+	 * new vertex data to the GPU with the {@link #send()} method.
+	 *
+	 * @return the buffer
+	 */
   public FloatBuffer getBuffer() {
     return vertexBuffer;
   }
 
   /**
-   * Allows access to the internal {@link java.nio.FloatBuffer} that contains the original vertex data by mapping this
-   * VBO into client space (although the actual memory is on the GPU) and returns the buffer as a
-   * {@link java.nio.FloatBuffer}. You can access and change this buffer if you want to update the buffer content. Just
-   * make sure that you call {@link java.nio.Buffer#rewind()} before sending your new vertex data to the GPU with the
-   * {@link #send()} method.
-   */
+	 * Allows access to the internal {@link java.nio.FloatBuffer} that contains the
+	 * original vertex data by mapping this VBO into client space (although the
+	 * actual memory is on the GPU) and returns the buffer as a
+	 * {@link java.nio.FloatBuffer}. You can access and change this buffer if you
+	 * want to update the buffer content. Just make sure that you call
+	 * {@link java.nio.Buffer#rewind()} before sending your new vertex data to the
+	 * GPU with the {@link #send()} method.
+	 *
+	 * @return the mapped buffer
+	 */
   @Nonnull
   public FloatBuffer getMappedBuffer() {
     ByteBuffer dataBuffer = gl.glMapBuffer(gl.GL_ARRAY_BUFFER(), gl.GL_WRITE_ONLY(), byteLength, mappedBufferCache);

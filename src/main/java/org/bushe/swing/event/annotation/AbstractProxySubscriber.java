@@ -16,18 +16,49 @@ import org.bushe.swing.event.ProxySubscriber;
  * value of 0 retains the FIFO order. 
  */
 public abstract class AbstractProxySubscriber implements ProxySubscriber, Prioritized {
+   
+   /** The proxied subscriber. */
    private Object proxiedSubscriber;
+   
+   /** The subscription method. */
    private Method subscriptionMethod;
+   
+   /** The reference strength. */
    private ReferenceStrength referenceStrength;
+   
+   /** The event service. */
    private EventService eventService;
+   
+   /** The priority. */
    private int priority;
+   
+   /** The veto. */
    protected boolean veto;
 
+   /**
+	 * Instantiates a new abstract proxy subscriber.
+	 *
+	 * @param proxiedSubscriber  the proxied subscriber
+	 * @param subscriptionMethod the subscription method
+	 * @param referenceStrength  the reference strength
+	 * @param es                 the es
+	 * @param veto               the veto
+	 */
    protected AbstractProxySubscriber(Object proxiedSubscriber, Method subscriptionMethod,
            ReferenceStrength referenceStrength, EventService es, boolean veto) {
       this(proxiedSubscriber, subscriptionMethod, referenceStrength, 0, es, veto);
    }
 
+   /**
+	 * Instantiates a new abstract proxy subscriber.
+	 *
+	 * @param proxiedSubscriber  the proxied subscriber
+	 * @param subscriptionMethod the subscription method
+	 * @param referenceStrength  the reference strength
+	 * @param priority           the priority
+	 * @param es                 the es
+	 * @param veto               the veto
+	 */
    protected AbstractProxySubscriber(Object proxiedSubscriber, Method subscriptionMethod,
            ReferenceStrength referenceStrength, int priority, EventService es, boolean veto) {
       this.referenceStrength = referenceStrength;
@@ -52,7 +83,11 @@ public abstract class AbstractProxySubscriber implements ProxySubscriber, Priori
       this.subscriptionMethod = subscriptionMethod;
    }
 
-   /** @return the object this proxy is subscribed on behalf of */
+   /**
+	 * Gets the proxied subscriber.
+	 *
+	 * @return the object this proxy is subscribed on behalf of
+	 */
    public Object getProxiedSubscriber() {
       if (proxiedSubscriber instanceof WeakReference) {
          return ((WeakReference)proxiedSubscriber).get();
@@ -60,24 +95,38 @@ public abstract class AbstractProxySubscriber implements ProxySubscriber, Priori
       return proxiedSubscriber;
    }
    
-   /** @return the subscriptionMethod passed in the constructor */
+   /**
+	 * Gets the subscription method.
+	 *
+	 * @return the subscriptionMethod passed in the constructor
+	 */
    public Method getSubscriptionMethod() {
       return subscriptionMethod;
    }
 
-   /** @return the EventService passed in the constructor */
+   /**
+	 * Gets the event service.
+	 *
+	 * @return the EventService passed in the constructor
+	 */
    public EventService getEventService() {
       return eventService;
    }
 
-   /** @return the ReferenceStrength passed in the constructor */
+   /**
+	 * Gets the reference strength.
+	 *
+	 * @return the ReferenceStrength passed in the constructor
+	 */
    public ReferenceStrength getReferenceStrength() {
       return referenceStrength;
    }
 
    /**
-    * @return the priority, no effect if priority is 0 (the default value)
-    */
+	 * Gets the priority.
+	 *
+	 * @return the priority, no effect if priority is 0 (the default value)
+	 */
    public int getPriority() {
       return priority;
    }
@@ -93,6 +142,11 @@ public abstract class AbstractProxySubscriber implements ProxySubscriber, Priori
       proxiedSubscriber = null;
    }
 
+   /**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
    @Override
    public final int hashCode() {
       throw new RuntimeException("Proxy subscribers are not allowed in Hash " +
@@ -101,6 +155,16 @@ public abstract class AbstractProxySubscriber implements ProxySubscriber, Priori
               "successive calls as required by hashCode.");
    }
 
+   /**
+	 * Retry reflective call using accessible object.
+	 *
+	 * @param args               the args
+	 * @param subscriptionMethod the subscription method
+	 * @param obj                the obj
+	 * @param e                  the e
+	 * @param message            the message
+	 * @return true, if successful
+	 */
    protected boolean retryReflectiveCallUsingAccessibleObject(Object[] args, Method subscriptionMethod, Object obj,
            IllegalAccessException e, String message) {
       boolean accessibleTriedAndFailed = false;
@@ -124,6 +188,12 @@ public abstract class AbstractProxySubscriber implements ProxySubscriber, Priori
       throw new RuntimeException(message, e);
    }
 
+   /**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
    @Override
    public boolean equals(Object obj) {
       if (obj instanceof AbstractProxySubscriber) {
@@ -155,6 +225,11 @@ public abstract class AbstractProxySubscriber implements ProxySubscriber, Priori
       }
    }
 
+   /**
+	 * To string.
+	 *
+	 * @return the string
+	 */
    @Override
    public String toString() {
       return "AbstractProxySubscriber{" +

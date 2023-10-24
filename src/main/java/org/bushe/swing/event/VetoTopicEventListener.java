@@ -1,9 +1,11 @@
 package org.bushe.swing.event;
 
 /**
- * Interface for classes that can veto publication on topic names from the {@link org.bushe.swing.event.EventService}.
+ * Interface for classes that can veto publication on topic names from the
+ * {@link org.bushe.swing.event.EventService}.
  *
  * @author Michael Bushe michael@bushe.com
+ * @param <T> the generic type
  */
 public interface VetoTopicEventListener<T> {
 

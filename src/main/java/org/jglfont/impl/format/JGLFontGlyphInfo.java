@@ -59,141 +59,182 @@ public class JGLFontGlyphInfo {
   private Map<Integer, Integer> kerning = new Hashtable<Integer, Integer>();
 
   /**
-   * @return the id
-   */
+	 * Gets the id.
+	 *
+	 * @return the id
+	 */
   public int getId() {
     return id;
   }
 
   /**
-   * @param id the id to set
-   */
+	 * Sets the id.
+	 *
+	 * @param id the id to set
+	 */
   public void setId(final int id) {
     this.id = id;
   }
 
   /**
-   * @return the x
-   */
+	 * Gets the x.
+	 *
+	 * @return the x
+	 */
   public int getX() {
     return x;
   }
 
   /**
-   * @param x the x to set
-   */
+	 * Sets the x.
+	 *
+	 * @param x the x to set
+	 */
   public void setX(final int x) {
     this.x = x;
   }
 
   /**
-   * @return the y
-   */
+	 * Gets the y.
+	 *
+	 * @return the y
+	 */
   public int getY() {
     return y;
   }
 
   /**
-   * @param y the y to set
-   */
+	 * Sets the y.
+	 *
+	 * @param y the y to set
+	 */
   public void setY(final int y) {
     this.y = y;
   }
 
   /**
-   * @return the width
-   */
+	 * Gets the width.
+	 *
+	 * @return the width
+	 */
   public int getWidth() {
     return width;
   }
 
   /**
-   * @param width the width to set
-   */
+	 * Sets the width.
+	 *
+	 * @param width the width to set
+	 */
   public void setWidth(final int width) {
     this.width = width;
   }
 
   /**
-   * @return the height
-   */
+	 * Gets the height.
+	 *
+	 * @return the height
+	 */
   public int getHeight() {
     return height;
   }
 
   /**
-   * @param height the height to set
-   */
+	 * Sets the height.
+	 *
+	 * @param height the height to set
+	 */
   public void setHeight(final int height) {
     this.height = height;
   }
 
   /**
-   * @return the xoffset
-   */
+	 * Gets the xoffset.
+	 *
+	 * @return the xoffset
+	 */
   public int getXoffset() {
     return xoffset;
   }
 
   /**
-   * @param xoffset the xoffset to set
-   */
+	 * Sets the xoffset.
+	 *
+	 * @param xoffset the xoffset to set
+	 */
   public void setXoffset(final int xoffset) {
     this.xoffset = xoffset;
   }
 
   /**
-   * @return the yoffset
-   */
+	 * Gets the yoffset.
+	 *
+	 * @return the yoffset
+	 */
   public int getYoffset() {
     return yoffset;
   }
 
   /**
-   * @param yoffset the yoffset to set
-   */
+	 * Sets the yoffset.
+	 *
+	 * @param yoffset the yoffset to set
+	 */
   public void setYoffset(final int yoffset) {
     this.yoffset = yoffset;
   }
 
   /**
-   * @return the xadvance
-   */
+	 * Gets the xadvance.
+	 *
+	 * @return the xadvance
+	 */
   public int getXadvance() {
     return xadvance;
   }
 
   /**
-   * @param xadvance the xadvance to set
-   */
+	 * Sets the xadvance.
+	 *
+	 * @param xadvance the xadvance to set
+	 */
   public void setXadvance(final int xadvance) {
     this.xadvance = xadvance;
   }
 
   /**
-   * @return the page
-   */
+	 * Gets the page.
+	 *
+	 * @return the page
+	 */
   public String getPage() {
     return page;
   }
 
   /**
-   * @param page the page to set
-   */
+	 * Sets the page.
+	 *
+	 * @param page the page to set
+	 */
   public void setPage(final String page) {
     this.page = page;
   }
 
   /**
-   * @return the kerning
-   */
+	 * Gets the kerning.
+	 *
+	 * @return the kerning
+	 */
   public Map<Integer, Integer> getKerning() {
     return kerning;
   }
 
   /**
-   * @param kerning the kerning to set
-   */
+	 * Adds the kerning.
+	 *
+	 * @param character the character
+	 * @param kerning   the kerning to set
+	 */
   public void addKerning(final Integer character, final Integer kerning) {
     this.kerning.put(character, kerning);
   }

@@ -8,19 +8,39 @@ import javax.annotation.Nonnull;
  * @author void
  */
 public class Alpha {
+  
+  /** The Constant ZERO. */
   public static final Alpha ZERO = new Alpha(0.0f);
+  
+  /** The Constant FULL. */
   public static final Alpha FULL = new Alpha(1.0f);
 
+  /** The Constant SCALE_SHORT_MODE. */
   private static final int SCALE_SHORT_MODE = 0x11;
+  
+  /** The Constant MAX_INT_VALUE. */
   private static final float MAX_INT_VALUE = 255.0f;
+  
+  /** The Constant HEX_BASE. */
   private static final int HEX_BASE = 16;
 
+  /** The alpha. */
   private float alpha = 0.0f;
 
+  /**
+	 * Instantiates a new alpha.
+	 *
+	 * @param color the color
+	 */
   public Alpha(@Nonnull final String color) {
     this.alpha = getAFromString(color);
   }
 
+  /**
+	 * Instantiates a new alpha.
+	 *
+	 * @param newAlpha the new alpha
+	 */
   public Alpha(final float newAlpha) {
     this.alpha = newAlpha;
   }

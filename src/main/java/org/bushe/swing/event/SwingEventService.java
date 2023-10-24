@@ -40,6 +40,13 @@ public class SwingEventService extends ThreadSafeEventService {
       super((long) 200, false, null, null, null);
    }
 
+   /**
+	 * Instantiates a new swing event service.
+	 *
+	 * @param timeThresholdForEventTimingEventPublication the time threshold for
+	 *                                                    event timing event
+	 *                                                    publication
+	 */
    public SwingEventService(Long timeThresholdForEventTimingEventPublication) {
       super(timeThresholdForEventTimingEventPublication, false, null, null, null);
    }
@@ -68,11 +75,19 @@ public class SwingEventService extends ThreadSafeEventService {
    }
 
    /**
-    * Same as ThreadSafeEventService.publish(), except if the call is coming from a thread that is not the Swing Event
-    * Dispatch Thread, the request is put on the EDT through a a call to SwingUtilities.invokeLater(). Otherwise this
-    * DOES NOT post a new event on the EDT.  The subscribers are called on the same EDT event, just like addXXXListeners
-    * would be.
-    */
+	 * Same as ThreadSafeEventService.publish(), except if the call is coming from a
+	 * thread that is not the Swing Event Dispatch Thread, the request is put on the
+	 * EDT through a a call to SwingUtilities.invokeLater(). Otherwise this DOES NOT
+	 * post a new event on the EDT. The subscribers are called on the same EDT
+	 * event, just like addXXXListeners would be.
+	 *
+	 * @param event           the event
+	 * @param topic           the topic
+	 * @param eventObj        the event obj
+	 * @param subscribers     the subscribers
+	 * @param vetoSubscribers the veto subscribers
+	 * @param callingStack    the calling stack
+	 */
    protected void publish(final Object event, final String topic, final Object eventObj,
            final List subscribers, final List vetoSubscribers, final StackTraceElement[] callingStack) {
       if (SwingUtilities.isEventDispatchThread()) {

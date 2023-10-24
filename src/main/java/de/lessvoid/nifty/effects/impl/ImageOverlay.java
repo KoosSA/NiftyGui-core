@@ -19,24 +19,52 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.Alpha;
 import de.lessvoid.nifty.tools.SizeValue;
 
+/**
+ * The Class ImageOverlay.
+ */
 public class ImageOverlay implements EffectImpl {
+  
+  /** The Constant log. */
   @Nonnull
   private static final Logger log = Logger.getLogger(ImageOverlay.class.getName());
+  
+  /** The image. */
   @Nullable
   private NiftyImage image;
+  
+  /** The alpha. */
   @Nullable
   private Alpha alpha;
+  
+  /** The inset. */
   @Nullable
   private SizeValue inset;
+  
+  /** The width. */
   @Nullable
   private SizeValue width;
+  
+  /** The height. */
   @Nullable
   private SizeValue height;
+  
+  /** The center. */
   private boolean center;
+  
+  /** The hide if not enough space. */
   private boolean hideIfNotEnoughSpace;
+  
+  /** The active before start delay. */
   private boolean activeBeforeStartDelay; // this will render the effect even when using a startDelay value so that
   // it will already render before the startDelay
 
+  /**
+	 * Activate.
+	 *
+	 * @param nifty     the nifty
+	 * @param element   the element
+	 * @param parameter the parameter
+	 */
   @Override
   public void activate(
       @Nonnull final Nifty nifty,
@@ -69,6 +97,14 @@ public class ImageOverlay implements EffectImpl {
     activeBeforeStartDelay = Boolean.valueOf(parameter.getProperty("activeBeforeStartDelay", "false"));
   }
 
+  /**
+	 * Execute.
+	 *
+	 * @param element        the element
+	 * @param normalizedTime the normalized time
+	 * @param falloff        the falloff
+	 * @param r              the r
+	 */
   @Override
   public void execute(
       @Nonnull final Element element,
@@ -108,6 +144,9 @@ public class ImageOverlay implements EffectImpl {
     r.restoreStates();
   }
 
+  /**
+	 * Deactivate.
+	 */
   @Override
   public void deactivate() {
     if (image != null) {

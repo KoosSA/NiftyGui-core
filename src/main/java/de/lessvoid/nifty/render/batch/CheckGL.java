@@ -14,34 +14,45 @@ import de.lessvoid.nifty.render.batch.spi.GL;
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
 public class CheckGL {
+  
+  /** The Constant log. */
   @Nonnull
   private static final Logger log = Logger.getLogger(CheckGL.class.getName());
 
   /**
-   * Check for GL error and log any errors found. You should probably call this once a frame.
-   */
+	 * Check for GL error and log any errors found. You should probably call this
+	 * once a frame.
+	 *
+	 * @param gl the gl
+	 */
   public static void checkGLError(@Nonnull final GL gl) {
     checkGLError(gl, "");
   }
 
   /**
-   * Check for GL error and log any errors found. You should probably call this once a frame.
-   *
-   * @param message a message to log
-   *                (can be used to log additional information for instance what call was executed before)
-   */
+	 * Check for GL error and log any errors found. You should probably call this
+	 * once a frame.
+	 *
+	 * @param gl      the gl
+	 * @param message a message to log (can be used to log additional information
+	 *                for instance what call was executed before)
+	 */
   public static void checkGLError(@Nonnull final GL gl, @Nonnull final String message) {
     checkGLError(gl, message, false);
   }
 
   /**
-   * Check for GL error and log any errors found. You should probably call this once a frame.
-   *
-   * @param message        a message to log
-   *                       (can be used to log additional information for instance what call was executed before)
-   * @param throwException in case this value is set {@code true} and OpenGL reports a error a exception will be thrown
-   * @throws GLException in case the {@code throwException} is set {@code true} and OpenGL reports an error
-   */
+	 * Check for GL error and log any errors found. You should probably call this
+	 * once a frame.
+	 *
+	 * @param gl             the gl
+	 * @param message        a message to log (can be used to log additional
+	 *                       information for instance what call was executed before)
+	 * @param throwException in case this value is set {@code true} and OpenGL
+	 *                       reports a error a exception will be thrown
+	 * @throws GLException in case the {@code throwException} is set {@code true}
+	 *                     and OpenGL reports an error
+	 */
   public static void checkGLError(
           @Nonnull final GL gl,
           @Nonnull final String message,
@@ -65,10 +76,13 @@ public class CheckGL {
   }
 
   /**
-   * Checks if the texture size is within the capabilities of OpenGL.
-   *
-   * @throws GLException In case the texture dimensions are too large or negative.
-   */
+	 * Checks if the texture size is within the capabilities of OpenGL.
+	 *
+	 * @param gl            the gl
+	 * @param textureWidth  the texture width
+	 * @param textureHeight the texture height
+	 * @throws GLException In case the texture dimensions are too large or negative.
+	 */
   public static void checkGLTextureSize(@Nonnull final GL gl, final int textureWidth, final int textureHeight) {
     final int maxSize = getMaxTextureSize(gl);
 
@@ -85,6 +99,12 @@ public class CheckGL {
 
   // Internal implementations
 
+  /**
+	 * Gets the max texture size.
+	 *
+	 * @param gl the gl
+	 * @return the max texture size
+	 */
   private static int getMaxTextureSize(@Nonnull final GL gl) {
     int[] params = new int[1];
     gl.glGetIntegerv(gl.GL_MAX_TEXTURE_SIZE(), params, 0);
@@ -93,6 +113,13 @@ public class CheckGL {
     return maxTextureSize;
   }
 
+  /**
+	 * Gets the gl error message.
+	 *
+	 * @param gl    the gl
+	 * @param error the error
+	 * @return the gl error message
+	 */
   @Nonnull
   private static String getGlErrorMessage(final GL gl, final int error) {
     if (error == gl.GL_INVALID_ENUM()) {

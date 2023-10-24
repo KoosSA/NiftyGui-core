@@ -7,25 +7,50 @@ import de.lessvoid.nifty.elements.render.ElementRenderer;
 import de.lessvoid.nifty.loaderv2.types.helper.ElementRendererCreator;
 import de.lessvoid.xml.xpp3.Attributes;
 
+/**
+ * The Class PanelType.
+ */
 public class PanelType extends ElementType {
+  
+  /**
+	 * Instantiates a new panel type.
+	 */
   public PanelType() {
     super();
   }
 
+  /**
+	 * Instantiates a new panel type.
+	 *
+	 * @param src the src
+	 */
   public PanelType(@Nonnull final PanelType src) {
     super(src);
   }
 
+  /**
+	 * Copy.
+	 *
+	 * @return the panel type
+	 */
   @Override
   @Nonnull
   public PanelType copy() {
     return new PanelType(this);
   }
 
+  /**
+	 * Instantiates a new panel type.
+	 *
+	 * @param attributes the attributes
+	 */
   public PanelType(@Nonnull final Attributes attributes) {
     super(attributes);
   }
 
+  /**
+	 * Make flat.
+	 */
   @Override
   protected void makeFlat() {
     super.makeFlat();

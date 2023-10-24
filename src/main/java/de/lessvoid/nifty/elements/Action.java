@@ -7,5 +7,9 @@ package de.lessvoid.nifty.elements;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public interface Action {
+  
+  /**
+	 * Perform.
+	 */
   void perform();
 }

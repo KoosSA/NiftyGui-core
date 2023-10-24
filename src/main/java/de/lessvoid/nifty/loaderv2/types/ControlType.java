@@ -12,27 +12,53 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.loaderv2.types.helper.NullElementRendererCreator;
 import de.lessvoid.xml.xpp3.Attributes;
 
+/**
+ * The Class ControlType.
+ */
 public class ControlType extends ElementType {
+  
+  /** The Constant log. */
   private static final Logger log = Logger.getLogger(ControlType.class.getName());
 
+  /**
+	 * Instantiates a new control type.
+	 */
   public ControlType() {
     super();
   }
 
+  /**
+	 * Instantiates a new control type.
+	 *
+	 * @param src the src
+	 */
   public ControlType(@Nonnull final ControlType src) {
     super(src);
   }
 
+  /**
+	 * Instantiates a new control type.
+	 *
+	 * @param attributes the attributes
+	 */
   public ControlType(@Nonnull final Attributes attributes) {
     super(attributes);
   }
 
+  /**
+	 * Copy.
+	 *
+	 * @return the element type
+	 */
   @Override
   @Nonnull
   public ElementType copy() {
     return new ControlType(this);
   }
 
+  /**
+	 * Make flat.
+	 */
   @Override
   protected void makeFlat() {
     super.makeFlat();
@@ -40,6 +66,11 @@ public class ControlType extends ElementType {
     setElementRendererCreator(new NullElementRendererCreator());
   }
 
+  /**
+	 * Gets the type.
+	 *
+	 * @return the type
+	 */
   @Nullable
   private String getType() {
     String type = getAttributes().get("type");
@@ -50,6 +81,11 @@ public class ControlType extends ElementType {
     return getAttributes().get("name");
   }
 
+  /**
+	 * Internal apply control.
+	 *
+	 * @param nifty the nifty
+	 */
   @Override
   void internalApplyControl(@Nonnull final Nifty nifty) {
     ControlDefinitionType controlDefinition = nifty.resolveControlDefinition(getType());
@@ -71,6 +107,9 @@ public class ControlType extends ElementType {
     }
   }
 
+  /**
+	 * Make flat controls internal.
+	 */
   @Override
   void makeFlatControlsInternal() {
     if (!elements.isEmpty()) {
@@ -80,6 +119,13 @@ public class ControlType extends ElementType {
     resolveIds(this, id, id);
   }
 
+  /**
+	 * Resolve ids.
+	 *
+	 * @param parent        the parent
+	 * @param parentId      the parent id
+	 * @param grantParentId the grant parent id
+	 */
   private void resolveIds(
       @Nonnull final ElementType parent,
       @Nullable final String parentId,
@@ -103,6 +149,7 @@ public class ControlType extends ElementType {
     }
   }
 
+  /** The Constant ID_SPLIT. */
   @Nonnull
   private static final Pattern ID_SPLIT = Pattern.compile("(?<=.)(?=#)");
 
@@ -145,6 +192,14 @@ public class ControlType extends ElementType {
     return child;
   }
 
+  /**
+	 * Checks if is overlapping.
+	 *
+	 * @param parentId   the parent id
+	 * @param startIndex the start index
+	 * @param childId    the child id
+	 * @return true, if is overlapping
+	 */
   @SuppressWarnings("MethodCanBeVariableArityMethod")
   private static boolean isOverlapping(
       @Nonnull final String[] parentId,
@@ -162,6 +217,14 @@ public class ControlType extends ElementType {
     return true;
   }
 
+  /**
+	 * Find in array.
+	 *
+	 * @param haystack   the haystack
+	 * @param startIndex the start index
+	 * @param needle     the needle
+	 * @return the int
+	 */
   private static int findInArray(
       @Nonnull final String[] haystack,
       final int startIndex,
@@ -174,6 +237,14 @@ public class ControlType extends ElementType {
     return -1;
   }
 
+  /**
+	 * Adds the children to child root.
+	 *
+	 * @param elementType the element type
+	 * @param childRootId the child root id
+	 * @param children    the children
+	 * @return true, if successful
+	 */
   private boolean addChildrenToChildRoot(
       @Nonnull final ElementType elementType,
       @Nonnull final String childRootId,

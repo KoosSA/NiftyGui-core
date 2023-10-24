@@ -9,25 +9,50 @@ import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.loaderv2.types.helper.ElementRendererCreator;
 import de.lessvoid.xml.xpp3.Attributes;
 
+/**
+ * The Class ImageType.
+ */
 public class ImageType extends ElementType {
+  
+  /**
+	 * Instantiates a new image type.
+	 */
   public ImageType() {
     super();
   }
 
+  /**
+	 * Instantiates a new image type.
+	 *
+	 * @param src the src
+	 */
   public ImageType(@Nonnull final ImageType src) {
     super(src);
   }
 
+  /**
+	 * Copy.
+	 *
+	 * @return the element type
+	 */
   @Override
   @Nonnull
   public ElementType copy() {
     return new ImageType(this);
   }
 
+  /**
+	 * Instantiates a new image type.
+	 *
+	 * @param attributes the attributes
+	 */
   public ImageType(@Nonnull final Attributes attributes) {
     super(attributes);
   }
 
+  /**
+	 * Make flat.
+	 */
   @Override
   protected void makeFlat() {
     super.makeFlat();
@@ -68,6 +93,11 @@ public class ImageType extends ElementType {
   //    };
   //  }
 
+  /**
+	 * Gets the filename.
+	 *
+	 * @return the filename
+	 */
   @Nullable
   private String getFilename() {
     return getAttributes().get("filename");

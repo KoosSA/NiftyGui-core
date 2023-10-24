@@ -12,15 +12,26 @@ import javax.annotation.Nonnull;
  * @author void
  */
 public class ActiveEffects {
+  
+  /** The all. */
   @Nonnull
   private final List<Effect> all = new ArrayList<Effect>();
+  
+  /** The post. */
   @Nonnull
   private final List<Effect> post = new ArrayList<Effect>();
+  
+  /** The pre. */
   @Nonnull
   private final List<Effect> pre = new ArrayList<Effect>();
+  
+  /** The overlay. */
   @Nonnull
   private final List<Effect> overlay = new ArrayList<Effect>();
 
+  /**
+	 * Clear.
+	 */
   public void clear() {
     all.clear();
     post.clear();
@@ -28,6 +39,11 @@ public class ActiveEffects {
     overlay.clear();
   }
 
+  /**
+	 * Adds the.
+	 *
+	 * @param e the e
+	 */
   public void add(@Nonnull final Effect e) {
     all.add(e);
 
@@ -40,6 +56,11 @@ public class ActiveEffects {
     }
   }
 
+  /**
+	 * Removes the.
+	 *
+	 * @param e the e
+	 */
   public void remove(final Effect e) {
     all.remove(e);
     post.remove(e);
@@ -47,18 +68,39 @@ public class ActiveEffects {
     overlay.remove(e);
   }
 
+  /**
+	 * Checks if is empty.
+	 *
+	 * @return true, if is empty
+	 */
   public boolean isEmpty() {
     return all.isEmpty();
   }
 
+  /**
+	 * Contains.
+	 *
+	 * @param e the e
+	 * @return true, if successful
+	 */
   public boolean contains(final Effect e) {
     return all.contains(e);
   }
 
+  /**
+	 * Size.
+	 *
+	 * @return the int
+	 */
   public int size() {
     return all.size();
   }
 
+  /**
+	 * Contains active effects.
+	 *
+	 * @return true, if successful
+	 */
   public boolean containsActiveEffects() {
     for (int i = 0; i < all.size(); i++) {
       Effect e = all.get(i);
@@ -69,21 +111,41 @@ public class ActiveEffects {
     return false;
   }
 
+  /**
+	 * Gets the active.
+	 *
+	 * @return the active
+	 */
   @Nonnull
   public List<Effect> getActive() {
     return all;
   }
 
+  /**
+	 * Gets the active post.
+	 *
+	 * @return the active post
+	 */
   @Nonnull
   public List<Effect> getActivePost() {
     return post;
   }
 
+  /**
+	 * Gets the active pre.
+	 *
+	 * @return the active pre
+	 */
   @Nonnull
   public List<Effect> getActivePre() {
     return pre;
   }
 
+  /**
+	 * Gets the active overlay.
+	 *
+	 * @return the active overlay
+	 */
   @Nonnull
   public List<Effect> getActiveOverlay() {
     return overlay;

@@ -8,11 +8,18 @@ import javax.annotation.Nullable;
 import javax.annotation.WillNotClose;
 
 /**
- * A resource location that searches the classpath
+ * A resource location that searches the classpath.
  *
  * @author kevin
  */
 public class ClasspathLocation implements ResourceLocation {
+  
+  /**
+	 * Gets the resource.
+	 *
+	 * @param ref the ref
+	 * @return the resource
+	 */
   @Nullable
   @Override
   public URL getResource(@Nonnull final String ref) {
@@ -20,6 +27,12 @@ public class ClasspathLocation implements ResourceLocation {
     return Thread.currentThread().getContextClassLoader().getResource(cpRef);
   }
 
+  /**
+	 * Gets the resource as stream.
+	 *
+	 * @param ref the ref
+	 * @return the resource as stream
+	 */
   @Nullable
   @Override
   @WillNotClose

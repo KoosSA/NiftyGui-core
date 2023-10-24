@@ -27,14 +27,30 @@ import javax.swing.ImageIcon;
  * @see EventServiceAction
  */
 public class EventBusAction extends EventServiceAction {
+   
+   /**
+	 * Instantiates a new event bus action.
+	 */
    public EventBusAction() {
       this(null, null);
    }
 
+   /**
+	 * Instantiates a new event bus action.
+	 *
+	 * @param actionName the action name
+	 * @param icon       the icon
+	 */
    public EventBusAction(String actionName, ImageIcon icon) {
       super(actionName, icon);
    }
 
+   /**
+	 * Gets the event service.
+	 *
+	 * @param event the event
+	 * @return the event service
+	 */
    protected EventService getEventService(ActionEvent event) {
       return EventBus.getGlobalEventService();
    }

@@ -14,13 +14,15 @@ import javax.annotation.Nullable;
 public interface NiftyMouse {
 
   /**
-   * Register, load and prepare the given file for use as a mouse cursor later.
-   *
-   * @param id       id of mouse cursor for later reference
-   * @param filename the image to load.
-   * @param hotspotX the hotspot x coordinate of the cursor image with 0 being left
-   * @param hotspotY the hotspot y coordinate of the cursor image with 0 being top
-   */
+	 * Register, load and prepare the given file for use as a mouse cursor later.
+	 *
+	 * @param id       id of mouse cursor for later reference
+	 * @param filename the image to load.
+	 * @param hotspotX the hotspot x coordinate of the cursor image with 0 being
+	 *                 left
+	 * @param hotspotY the hotspot y coordinate of the cursor image with 0 being top
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
   void registerMouseCursor(
       @Nonnull String id,
       @Nonnull String filename,

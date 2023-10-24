@@ -52,6 +52,11 @@ public class MouseOverHandler {
     mouseOverElements.add(element);
   }
 
+  /**
+	 * Adds the mouse element.
+	 *
+	 * @param element the element
+	 */
   public void addMouseElement(final Element element) {
     mouseElements.add(element);
   }
@@ -71,6 +76,12 @@ public class MouseOverHandler {
     return result.toString();
   }
 
+  /**
+	 * Output elements.
+	 *
+	 * @param result   the result
+	 * @param elements the elements
+	 */
   private void outputElements(@Nonnull final StringBuffer result, @Nonnull final ArrayList<Element> elements) {
     if (elements.isEmpty()) {
       result.append("---");
@@ -82,6 +93,13 @@ public class MouseOverHandler {
     }
   }
 
+  /**
+	 * Process mouse over event.
+	 *
+	 * @param rootElement the root element
+	 * @param mouseEvent  the mouse event
+	 * @param eventTime   the event time
+	 */
   public void processMouseOverEvent(
       final Element rootElement,
       @Nonnull final NiftyMouseInputEvent mouseEvent,
@@ -94,6 +112,12 @@ public class MouseOverHandler {
     }
   }
 
+  /**
+	 * Process mouse event.
+	 *
+	 * @param mouseEvent the mouse event
+	 * @param eventTime  the event time
+	 */
   public void processMouseEvent(@Nonnull final NiftyMouseInputEvent mouseEvent, final long eventTime) {
     // first step is to preprocess hover effects for all elements
     // this will deactivate all hover effects that are not active anymore
@@ -151,10 +175,20 @@ public class MouseOverHandler {
     return hasMouseOverElements() || interactElementInTransitAvailable;
   }
 
+  /**
+	 * Checks for mouse over elements.
+	 *
+	 * @return true, if successful
+	 */
   private boolean hasMouseOverElements() {
     return !mouseOverElements.isEmpty();
   }
 
+  /**
+	 * Can theoretically handle mouse.
+	 *
+	 * @param element the element
+	 */
   public void canTheoreticallyHandleMouse(final Element element) {
     interactElementInTransitAvailable = true;
   }

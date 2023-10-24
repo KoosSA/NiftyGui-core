@@ -6,22 +6,30 @@ import java.util.regex.Pattern;
 import org.bushe.swing.event.EventService;
 
 /**
- * A Proxy Subscriber for Annotations that use topic patterns
+ * A Proxy Subscriber for Annotations that use topic patterns.
  */
 public class ProxyTopicPatternSubscriber extends ProxyTopicSubscriber {
+   
+   /** The pattern. */
    private Pattern pattern;
 
    /**
-    * Creates a proxy.  This does not subscribe it.
-    *
-    * @param proxiedSubscriber the subscriber that the proxy will call when an event is published
-    * @param subscriptionMethod the method the proxy will call, must have an Object as it's first and only parameter
-    * @param referenceStrength if the subscription is weak, the reference from the proxy to the real subscriber should
-    * be too
-    * @param es the EventService we will be subscribed to, since we may need to unsubscribe when weak refs no longer
-    * exist
-    * @param patternString the Regular Expression for topics to subscribe to, used for unsubscription only
-    */
+	 * Creates a proxy. This does not subscribe it.
+	 *
+	 * @param proxiedSubscriber  the subscriber that the proxy will call when an
+	 *                           event is published
+	 * @param subscriptionMethod the method the proxy will call, must have an Object
+	 *                           as it's first and only parameter
+	 * @param referenceStrength  if the subscription is weak, the reference from the
+	 *                           proxy to the real subscriber should be too
+	 * @param es                 the EventService we will be subscribed to, since we
+	 *                           may need to unsubscribe when weak refs no longer
+	 *                           exist
+	 * @param patternString      the Regular Expression for topics to subscribe to,
+	 *                           used for unsubscription only
+	 * @param pattern            the pattern
+	 * @param veto               the veto
+	 */
    public ProxyTopicPatternSubscriber(Object proxiedSubscriber, Method subscriptionMethod,
            ReferenceStrength referenceStrength, EventService es, String patternString,
            Pattern pattern, boolean veto) {
@@ -29,16 +37,23 @@ public class ProxyTopicPatternSubscriber extends ProxyTopicSubscriber {
    }
 
    /**
-    * Creates a proxy.  This does not subscribe it.
-    *
-    * @param proxiedSubscriber the subscriber that the proxy will call when an event is published
-    * @param subscriptionMethod the method the proxy will call, must have an Object as it's first and only parameter
-    * @param referenceStrength if the subscription is weak, the reference from the proxy to the real subscriber should
-    * be too
-    * @param es the EventService we will be subscribed to, since we may need to unsubscribe when weak refs no longer
-    * exist
-    * @param patternString the Regular Expression for topics to subscribe to, used for unsubscription only
-    */
+	 * Creates a proxy. This does not subscribe it.
+	 *
+	 * @param proxiedSubscriber  the subscriber that the proxy will call when an
+	 *                           event is published
+	 * @param subscriptionMethod the method the proxy will call, must have an Object
+	 *                           as it's first and only parameter
+	 * @param referenceStrength  if the subscription is weak, the reference from the
+	 *                           proxy to the real subscriber should be too
+	 * @param priority           the priority
+	 * @param es                 the EventService we will be subscribed to, since we
+	 *                           may need to unsubscribe when weak refs no longer
+	 *                           exist
+	 * @param patternString      the Regular Expression for topics to subscribe to,
+	 *                           used for unsubscription only
+	 * @param pattern            the pattern
+	 * @param veto               the veto
+	 */
    public ProxyTopicPatternSubscriber(Object proxiedSubscriber, Method subscriptionMethod,
            ReferenceStrength referenceStrength, int priority,
            EventService es, String patternString, Pattern pattern, boolean veto) {
@@ -46,6 +61,11 @@ public class ProxyTopicPatternSubscriber extends ProxyTopicSubscriber {
       this.pattern = pattern;
    }
 
+   /**
+	 * Unsubscribe.
+	 *
+	 * @param topic the topic
+	 */
    protected void unsubscribe(String topic) {
       if (veto) {
          getEventService().unsubscribeVetoListener(pattern, this);
@@ -55,6 +75,12 @@ public class ProxyTopicPatternSubscriber extends ProxyTopicSubscriber {
       pattern = null;
    }
 
+   /**
+	 * Equals.
+	 *
+	 * @param o the o
+	 * @return true, if successful
+	 */
    public boolean equals(Object o) {
       if (this == o) {
          return true;
@@ -75,6 +101,11 @@ public class ProxyTopicPatternSubscriber extends ProxyTopicSubscriber {
       return true;
    }
 
+   /**
+	 * To string.
+	 *
+	 * @return the string
+	 */
    public String toString() {
       return "ProxyTopicPatternSubscriber{" +
               "pattern=" + pattern +

@@ -4,16 +4,21 @@ import javax.annotation.Nonnull;
 
 import de.lessvoid.nifty.spi.render.RenderFont;
 
+/**
+ * The Class FontHelper.
+ */
 public class FontHelper {
 
   /**
-   * Get character index into the given text that is no more pixel as the given width.
-   *
-   * @param font  font
-   * @param text  the string to check
-   * @param width the minimum width
-   * @return the character index into the string.
-   */
+	 * Get character index into the given text that is no more pixel as the given
+	 * width.
+	 *
+	 * @param font  font
+	 * @param text  the string to check
+	 * @param width the minimum width
+	 * @param size  the size
+	 * @return the character index into the string.
+	 */
   public static int getVisibleCharactersFromStart(
       @Nonnull final RenderFont font,
       @Nonnull final CharSequence text,
@@ -38,13 +43,15 @@ public class FontHelper {
   }
 
   /**
-   * Get character index into the given text that is no more pixel as the given width.
-   *
-   * @param font  font
-   * @param text  the string to check
-   * @param width the minimum width
-   * @return the character index into the string.
-   */
+	 * Get character index into the given text that is no more pixel as the given
+	 * width.
+	 *
+	 * @param font  font
+	 * @param text  the string to check
+	 * @param width the minimum width
+	 * @param size  the size
+	 * @return the character index into the string.
+	 */
   public static int getVisibleCharactersFromEnd(
       @Nonnull final RenderFont font,
       @Nonnull final CharSequence text,
@@ -101,10 +108,12 @@ public class FontHelper {
   }
 
   /**
-   * @param text
-   * @param i
-   * @return
-   */
+	 * Gets the next character.
+	 *
+	 * @param text the text
+	 * @param i    the i
+	 * @return the next character
+	 */
   public static char getNextCharacter(@Nonnull final CharSequence text, int i) {
     char nextc = 0;
     if (i < text.length() - 1) {
@@ -114,10 +123,12 @@ public class FontHelper {
   }
 
   /**
-   * @param text
-   * @param i
-   * @return
-   */
+	 * Gets the prev character.
+	 *
+	 * @param text the text
+	 * @param i    the i
+	 * @return the prev character
+	 */
   public static char getPrevCharacter(@Nonnull final CharSequence text, int i) {
     char prevc = 0;
     if (i > 0) {

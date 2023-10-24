@@ -46,24 +46,52 @@ import org.bushe.swing.event.ThreadSafeEventService;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface VetoSubscriber {
-   /** The class to subscribe to, if not specified, a subscription is created for the type of the method parameter. */
+   
+   /**
+	 * The class to subscribe to, if not specified, a subscription is created for
+	 * the type of the method parameter.
+	 *
+	 * @return the class
+	 */
    public abstract Class eventClass() default UseTheClassOfTheAnnotatedMethodsParameter.class;
 
-   /** Determines the order in which this veto subscriber is called, default is FIFO.*/
+   /**
+	 * Determines the order in which this veto subscriber is called, default is
+	 * FIFO.
+	 *
+	 * @return the int
+	 */
    public abstract int priority() default 0;
 
-   /** Whether or not to subscribe to the exact class or a class hierarchy, defaults to class hierarchy (false). */
+   /**
+	 * Whether or not to subscribe to the exact class or a class hierarchy, defaults
+	 * to class hierarchy (false).
+	 *
+	 * @return true, if successful
+	 */
    public abstract boolean exact() default false;
 
-   /** Whether to subscribe weakly or strongly. */
+   /**
+	 * Whether to subscribe weakly or strongly.
+	 *
+	 * @return the reference strength
+	 */
    public abstract ReferenceStrength referenceStrength() default ReferenceStrength.WEAK;
 
-   /** The event service to subscribe to, default to the EventServiceLocator.SERVICE_NAME_EVENT_BUS. */
+   /**
+	 * The event service to subscribe to, default to the
+	 * EventServiceLocator.SERVICE_NAME_EVENT_BUS.
+	 *
+	 * @return the string
+	 */
    public abstract String eventServiceName() default EventServiceLocator.SERVICE_NAME_EVENT_BUS;
 
    /**
-    * Whether or not to autocreate the event service if it doesn't exist on subscription, default is true. If the
-    * service needs to be created, it must have a default constructor.
-    */
+	 * Whether or not to autocreate the event service if it doesn't exist on
+	 * subscription, default is true. If the service needs to be created, it must
+	 * have a default constructor.
+	 *
+	 * @return the class<? extends event service>
+	 */
    public abstract Class<? extends EventService> autoCreateEventServiceClass() default ThreadSafeEventService.class;
 }

@@ -14,40 +14,48 @@ import java.nio.ByteBuffer;
  * @author void
  */
 public interface JGLFontRenderer {
+  
   /**
-   * Register the bitmap with the given data under the given key. This is a texture that contains all the font glyph
-   * data. It's not necessary that this call directly maps to a single actual texture since implementation can decide
-   * to pack multiple textures into a single one.
-   *
-   * @param key the key for this specific bitmap
-   * @param data the inputstream to the data
-   */
+	 * Register the bitmap with the given data under the given key. This is a
+	 * texture that contains all the font glyph data. It's not necessary that this
+	 * call directly maps to a single actual texture since implementation can decide
+	 * to pack multiple textures into a single one.
+	 *
+	 * @param key      the key for this specific bitmap
+	 * @param data     the inputstream to the data
+	 * @param filename the filename
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
   void registerBitmap(final String key, InputStream data, String filename) throws IOException;
 
   /**
-   * Registers the bitmap with the given data in form of bytebuffer, having 32 bit per pixel layout (r,g,b,a)
-   *
-   * @param key the key for this specific bitmap
-   * @param data the direct-allocated ByteBuffer having (R,G,B,A) pixel components
-   * @param width width of the image represented by ByteBuffer
-   * @param height height of the image represented by ByteBuffer
-   * @param filename name of file
-   * @throws IOException
-   */
+	 * Registers the bitmap with the given data in form of bytebuffer, having 32 bit
+	 * per pixel layout (r,g,b,a).
+	 *
+	 * @param key      the key for this specific bitmap
+	 * @param data     the direct-allocated ByteBuffer having (R,G,B,A) pixel
+	 *                 components
+	 * @param width    width of the image represented by ByteBuffer
+	 * @param height   height of the image represented by ByteBuffer
+	 * @param filename name of file
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
   void registerBitmap(final String key, ByteBuffer data, int width, int height, String filename) throws IOException;
 
   /**
-   * Register a single Character Glyph for later rendering.
-   * @param c the character
-   * @param xoff xoffset in the bitmap
-   * @param yoff yoffset in the bitmap
-   * @param w the width of the glyph
-   * @param h the height of the glyph
-   * @param u0 the x texture coordinates of the upper left point
-   * @param v0 the y texture coordinates of the upper left point
-   * @param u1 the x texture coordinates of the bottom right point
-   * @param v1 the y texture coordinates of the bottom right point
-   */
+	 * Register a single Character Glyph for later rendering.
+	 *
+	 * @param bitmapId the bitmap id
+	 * @param c        the character
+	 * @param xoff     xoffset in the bitmap
+	 * @param yoff     yoffset in the bitmap
+	 * @param w        the width of the glyph
+	 * @param h        the height of the glyph
+	 * @param u0       the x texture coordinates of the upper left point
+	 * @param v0       the y texture coordinates of the upper left point
+	 * @param u1       the x texture coordinates of the bottom right point
+	 * @param v1       the y texture coordinates of the bottom right point
+	 */
   void registerGlyph(String bitmapId, int c, int xoff, int yoff, int w, int h, float u0, float v0, float u1, float v1);
 
   /**

@@ -21,6 +21,7 @@ public class PanelRenderer implements ElementRenderer {
   @Nullable
   private Color backgroundColor;
 
+  /** The debug color. */
   @Nullable
   private Color debugColor;
 
@@ -60,6 +61,11 @@ public class PanelRenderer implements ElementRenderer {
     }
   }
 
+  /**
+	 * Gets the debug color.
+	 *
+	 * @return the debug color
+	 */
   @Nonnull
   private Color getDebugColor() {
     if (debugColor != null) {
@@ -70,10 +76,20 @@ public class PanelRenderer implements ElementRenderer {
     return debugColor;
   }
 
+  /**
+	 * Sets the background color.
+	 *
+	 * @param backgroundColor the new background color
+	 */
   public void setBackgroundColor(@Nullable final Color backgroundColor) {
     this.backgroundColor = backgroundColor;
   }
 
+  /**
+	 * Gets the background color.
+	 *
+	 * @return the background color
+	 */
   @Nullable
   public Color getBackgroundColor() {
     return backgroundColor;

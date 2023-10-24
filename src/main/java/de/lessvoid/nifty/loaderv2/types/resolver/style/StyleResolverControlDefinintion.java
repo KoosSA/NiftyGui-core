@@ -4,10 +4,23 @@ import javax.annotation.Nullable;
 
 import de.lessvoid.nifty.loaderv2.types.StyleType;
 
+/**
+ * The Class StyleResolverControlDefinintion.
+ */
 public class StyleResolverControlDefinintion implements StyleResolver {
+  
+  /** The base style resolver. */
   private final StyleResolver baseStyleResolver;
+  
+  /** The base style id. */
   private final String baseStyleId;
 
+  /**
+	 * Instantiates a new style resolver control definintion.
+	 *
+	 * @param baseStyleResolverParam the base style resolver param
+	 * @param baseStyleIdParam       the base style id param
+	 */
   public StyleResolverControlDefinintion(
       final StyleResolver baseStyleResolverParam,
       final String baseStyleIdParam) {
@@ -15,6 +28,12 @@ public class StyleResolverControlDefinintion implements StyleResolver {
     baseStyleId = baseStyleIdParam;
   }
 
+  /**
+	 * Resolve.
+	 *
+	 * @param styleId the style id
+	 * @return the style type
+	 */
   @Override
   @Nullable
   public StyleType resolve(@Nullable final String styleId) {

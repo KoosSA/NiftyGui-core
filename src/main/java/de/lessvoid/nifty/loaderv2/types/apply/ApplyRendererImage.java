@@ -16,15 +16,35 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 
+/**
+ * The Class ApplyRendererImage.
+ */
 public class ApplyRendererImage implements ApplyRenderer {
+  
+  /** The Constant log. */
   private static final Logger log = Logger.getLogger(ApplyRendererImage.class.getName());
+  
+  /** The convert. */
   @Nonnull
   private final Convert convert;
 
+  /**
+	 * Instantiates a new apply renderer image.
+	 *
+	 * @param convertParam the convert param
+	 */
   public ApplyRendererImage(@Nonnull final Convert convertParam) {
     convert = convertParam;
   }
 
+  /**
+	 * Apply.
+	 *
+	 * @param screen       the screen
+	 * @param element      the element
+	 * @param attributes   the attributes
+	 * @param renderEngine the render engine
+	 */
   @Override
   public void apply(
       @Nonnull final Screen screen,

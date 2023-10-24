@@ -24,29 +24,64 @@ public class CoreBatchInternal implements CoreBatch {
   // 4 vertices per quad and 8 vertex attributes per vertex:
   // - 2 x pos
   // - 2 x texture
+  /** The Constant PRIMITIVE_SIZE. */
   // - 4 x color
   private static final int PRIMITIVE_SIZE = 4 * 8;
+  
+  /** The Constant SIZE. */
   private static final int SIZE = 64 * 1024; // 64k
+  
+  /** The gl. */
   @Nonnull
   private final CoreGL gl;
+  
+  /** The primitive buffer. */
   @Nonnull
   private float[] primitiveBuffer = new float[PRIMITIVE_SIZE];
+  
+  /** The element index buffer. */
   @Nonnull
   private int[] elementIndexBuffer = new int[5];
+  
+  /** The blend mode. */
   @Nonnull
   private BlendMode blendMode = BlendMode.BLEND;
+  
+  /** The vao. */
   @Nonnull
   private final CoreVAO vao;
+  
+  /** The vbo. */
   @Nonnull
   private final CoreVBO vbo;
+  
+  /** The element vbo. */
   @Nonnull
   private final CoreElementVBO elementVbo;
+  
+  /** The primitive restart index. */
   private final int primitiveRestartIndex;
+  
+  /** The texture. */
   private CoreTexture2D texture;
+  
+  /** The primitive count. */
   private int primitiveCount;
+  
+  /** The index count. */
   private int indexCount;
+  
+  /** The global index. */
   private int globalIndex;
 
+  /**
+	 * Instantiates a new core batch internal.
+	 *
+	 * @param gl                    the gl
+	 * @param shader                the shader
+	 * @param bufferFactory         the buffer factory
+	 * @param primitiveRestartIndex the primitive restart index
+	 */
   public CoreBatchInternal(
           @Nonnull final CoreGL gl,
           @Nonnull final CoreShader shader,
@@ -73,6 +108,12 @@ public class CoreBatchInternal implements CoreBatch {
     vao.unbind();
   }
 
+  /**
+	 * Begin.
+	 *
+	 * @param blendMode the blend mode
+	 * @param texture   the texture
+	 */
   @Override
   public void begin(@Nonnull BlendMode blendMode, CoreTexture2D texture) {
     this.texture = texture;
@@ -87,12 +128,20 @@ public class CoreBatchInternal implements CoreBatch {
     vao.unbind();
   }
 
+  /**
+	 * Gets the blend mode.
+	 *
+	 * @return the blend mode
+	 */
   @Nonnull
   @Override
   public BlendMode getBlendMode() {
     return blendMode;
   }
 
+  /**
+	 * Render.
+	 */
   @Override
   public void render() {
     if (primitiveCount == 0) {
@@ -117,11 +166,32 @@ public class CoreBatchInternal implements CoreBatch {
     CoreRender.renderTriangleStripIndexed(gl, indexCount);
   }
 
+  /**
+	 * Can add quad.
+	 *
+	 * @return true, if successful
+	 */
   @Override
   public boolean canAddQuad() {
     return ((primitiveCount + 1) * PRIMITIVE_SIZE) < SIZE;
   }
 
+  /**
+	 * Adds the quad.
+	 *
+	 * @param x             the x
+	 * @param y             the y
+	 * @param width         the width
+	 * @param height        the height
+	 * @param color1        the color 1
+	 * @param color2        the color 2
+	 * @param color3        the color 3
+	 * @param color4        the color 4
+	 * @param textureX      the texture X
+	 * @param textureY      the texture Y
+	 * @param textureWidth  the texture width
+	 * @param textureHeight the texture height
+	 */
   @Override
   public void addQuad(
           final float x,

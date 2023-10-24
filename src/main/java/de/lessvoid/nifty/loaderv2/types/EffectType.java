@@ -18,27 +18,54 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.LinearInterpolator;
 import de.lessvoid.xml.xpp3.Attributes;
 
+/**
+ * The Class EffectType.
+ */
 public class EffectType extends XmlBaseType implements Cloneable {
+  
+  /** The Constant logger. */
   private static final Logger logger = Logger.getLogger(EffectType.class.getName());
 
+  /** The Constant DEFAULT_INHERIT. */
   private static final boolean DEFAULT_INHERIT = false;
+  
+  /** The Constant DEFAULT_POST. */
   private static final boolean DEFAULT_POST = false;
+  
+  /** The Constant DEFAULT_OVERLAY. */
   private static final boolean DEFAULT_OVERLAY = false;
 
+  /** The effect values. */
   @Nonnull
   protected List<EffectValueType> effectValues;
+  
+  /** The style id. */
   @Nullable
   private String styleId;
 
+  /**
+	 * Instantiates a new effect type.
+	 */
   public EffectType() {
     effectValues = new ArrayList<EffectValueType>();
   }
 
+  /**
+	 * Instantiates a new effect type.
+	 *
+	 * @param attributes the attributes
+	 */
   public EffectType(@Nonnull final Attributes attributes) {
     super(attributes);
     effectValues = new ArrayList<EffectValueType>();
   }
 
+  /**
+	 * Clone.
+	 *
+	 * @return the effect type
+	 * @throws CloneNotSupportedException the clone not supported exception
+	 */
   @Nonnull
   @Override
   public EffectType clone() throws CloneNotSupportedException {
@@ -57,13 +84,24 @@ public class EffectType extends XmlBaseType implements Cloneable {
   }
 
   /**
-   * This supports creating CustomControlCreator.
-   */
+	 * This supports creating CustomControlCreator.
+	 *
+	 * @return the control effect attributes
+	 */
   @Nonnull
   public ControlEffectAttributes convert() {
     return new ControlEffectAttributes(getAttributes(), effectValues);
   }
 
+  /**
+	 * Materialize.
+	 *
+	 * @param nifty                 the nifty
+	 * @param element               the element
+	 * @param effectEventId         the effect event id
+	 * @param effectsTypeAttributes the effects type attributes
+	 * @param controllers           the controllers
+	 */
   public void materialize(
       @Nonnull final Nifty nifty,
       @Nonnull final Element element,
@@ -109,6 +147,13 @@ public class EffectType extends XmlBaseType implements Cloneable {
     }
   }
 
+  /**
+	 * Gets the registered effect type.
+	 *
+	 * @param nifty      the nifty
+	 * @param attributes the attributes
+	 * @return the registered effect type
+	 */
   @Nullable
   private RegisterEffectType getRegisteredEffectType(@Nonnull final Nifty nifty, @Nonnull final Attributes attributes) {
     String name = getEffectName(attributes);
@@ -120,37 +165,85 @@ public class EffectType extends XmlBaseType implements Cloneable {
     return registerEffectType;
   }
 
+  /**
+	 * Gets the inherit.
+	 *
+	 * @param attributes the attributes
+	 * @return the inherit
+	 */
   private boolean getInherit(@Nonnull final Attributes attributes) {
     return attributes.getAsBoolean("inherit", DEFAULT_INHERIT);
   }
 
+  /**
+	 * Gets the post.
+	 *
+	 * @param attributes the attributes
+	 * @return the post
+	 */
   private boolean getPost(@Nonnull final Attributes attributes) {
     return attributes.getAsBoolean("post", DEFAULT_POST);
   }
 
+  /**
+	 * Gets the overlay.
+	 *
+	 * @param attributes the attributes
+	 * @return the overlay
+	 */
   private boolean getOverlay(@Nonnull final Attributes attributes) {
     return attributes.getAsBoolean("overlay", DEFAULT_OVERLAY);
   }
 
+  /**
+	 * Gets the alternate enable.
+	 *
+	 * @param attributes the attributes
+	 * @return the alternate enable
+	 */
   @Nullable
   private String getAlternateEnable(@Nonnull final Attributes attributes) {
     return attributes.get("alternateEnable");
   }
 
+  /**
+	 * Gets the alternate disable.
+	 *
+	 * @param attributes the attributes
+	 * @return the alternate disable
+	 */
   @Nullable
   private String getAlternateDisable(@Nonnull final Attributes attributes) {
     return attributes.get("alternateDisable");
   }
 
+  /**
+	 * Gets the custom key.
+	 *
+	 * @param attributes the attributes
+	 * @return the custom key
+	 */
   @Nullable
   private String getCustomKey(@Nonnull final Attributes attributes) {
     return attributes.get("customKey");
   }
 
+  /**
+	 * Gets the never stop rendering.
+	 *
+	 * @param attributes the attributes
+	 * @return the never stop rendering
+	 */
   private boolean getNeverStopRendering(@Nonnull final Attributes attributes) {
     return attributes.getAsBoolean("neverStopRendering", false);
   }
 
+  /**
+	 * Initialize effect.
+	 *
+	 * @param effect        the effect
+	 * @param effectEventId the effect event id
+	 */
   protected void initializeEffect(@Nonnull final Effect effect, final EffectEventId effectEventId) {
     if (EffectEventId.onFocus.equals(effectEventId) ||
         EffectEventId.onActive.equals(effectEventId) ||
@@ -163,6 +256,12 @@ public class EffectType extends XmlBaseType implements Cloneable {
     }
   }
 
+  /**
+	 * Creates the effect impl.
+	 *
+	 * @param effectClass the effect class
+	 * @return the effect impl
+	 */
   @Nullable
   private EffectImpl createEffectImpl(@Nonnull final Class<?> effectClass) {
     try {
@@ -180,11 +279,22 @@ public class EffectType extends XmlBaseType implements Cloneable {
     return null;
   }
 
+  /**
+	 * Gets the effect name.
+	 *
+	 * @param attributes the attributes
+	 * @return the effect name
+	 */
   @Nullable
   private String getEffectName(@Nonnull final Attributes attributes) {
     return attributes.get("name");
   }
 
+  /**
+	 * Resolve parameters.
+	 *
+	 * @param src the src
+	 */
   public void resolveParameters(@Nonnull final Attributes src) {
     getAttributes().resolveParameters(src);
 
@@ -193,14 +303,29 @@ public class EffectType extends XmlBaseType implements Cloneable {
     }
   }
 
+  /**
+	 * Adds the value.
+	 *
+	 * @param elementValueType the element value type
+	 */
   public void addValue(@Nonnull final EffectValueType elementValueType) {
     effectValues.add(elementValueType);
   }
 
+  /**
+	 * Adds the values.
+	 *
+	 * @param effectValueTypes the effect value types
+	 */
   public void addValues(@Nonnull final Collection<EffectValueType> effectValueTypes) {
     effectValues.addAll(effectValueTypes);
   }
 
+  /**
+	 * Apply effect values.
+	 *
+	 * @param effectProperties the effect properties
+	 */
   void applyEffectValues(@Nonnull final EffectProperties effectProperties) {
     if (!effectValues.isEmpty()) {
       for (EffectValueType effectValueType : effectValues) {
@@ -215,10 +340,20 @@ public class EffectType extends XmlBaseType implements Cloneable {
     }
   }
 
+  /**
+	 * Sets the style id.
+	 *
+	 * @param styleId the new style id
+	 */
   public void setStyleId(@Nullable final String styleId) {
     this.styleId = styleId;
   }
 
+  /**
+	 * Gets the style id.
+	 *
+	 * @return the style id
+	 */
   @Nullable
   public String getStyleId() {
     return styleId;

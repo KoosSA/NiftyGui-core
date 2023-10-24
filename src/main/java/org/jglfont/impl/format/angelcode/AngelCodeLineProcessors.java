@@ -12,9 +12,17 @@ import org.jglfont.impl.format.angelcode.line.KerningsLine;
 import org.jglfont.impl.format.angelcode.line.PageLine;
 
 
+/**
+ * The Class AngelCodeLineProcessors.
+ */
 public class AngelCodeLineProcessors {
+  
+  /** The line processors. */
   private Map<String, AngelCodeLine> lineProcessors = new Hashtable<String, AngelCodeLine>();
 
+  /**
+	 * Instantiates a new angel code line processors.
+	 */
   public AngelCodeLineProcessors() {
     lineProcessors.put("char", new CharLine());
     lineProcessors.put("chars", new CharsLine());
@@ -25,6 +33,12 @@ public class AngelCodeLineProcessors {
     lineProcessors.put("page", new PageLine());
   }
 
+  /**
+	 * Gets the.
+	 *
+	 * @param lineId the line id
+	 * @return the angel code line
+	 */
   public AngelCodeLine get(final String lineId) {
     return lineProcessors.get(lineId);
   }

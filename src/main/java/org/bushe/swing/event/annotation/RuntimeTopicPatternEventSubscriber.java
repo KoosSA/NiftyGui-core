@@ -9,30 +9,58 @@ import org.bushe.swing.event.EventService;
 import org.bushe.swing.event.EventServiceLocator;
 import org.bushe.swing.event.ThreadSafeEventService;
 
+/**
+ * The Interface RuntimeTopicPatternEventSubscriber.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface RuntimeTopicPatternEventSubscriber {
+    
     /**
-     * @return name of a method (which should return a String) and whose return value will become the subscription topic.
-     */
+	 * Method name.
+	 *
+	 * @return name of a method (which should return a String) and whose return
+	 *         value will become the subscription topic.
+	 */
     String methodName() default "getTopicPatternName";
 
-    /** @return Whether to subscribe weakly or strongly. */
+    /**
+	 * Reference strength.
+	 *
+	 * @return Whether to subscribe weakly or strongly.
+	 */
     ReferenceStrength referenceStrength() default ReferenceStrength.WEAK;
 
     /**
-     * @return event service to subscribe to, default to the EventServiceLocator.SERVICE_NAME_EVENT_BUS.
-     */
+	 * Event service name.
+	 *
+	 * @return event service to subscribe to, default to the
+	 *         EventServiceLocator.SERVICE_NAME_EVENT_BUS.
+	 */
     String eventServiceName() default EventServiceLocator.SERVICE_NAME_EVENT_BUS;
 
-    /** @return Determines the order in which this subscriber is called, default is FIFO.*/
+    /**
+	 * Priority.
+	 *
+	 * @return Determines the order in which this subscriber is called, default is
+	 *         FIFO.
+	 */
     int priority() default 0;
 
-    /** @return Whether or not to subscribe to the exact class or a class hierarchy, defaults to class hierarchy (false). */
+    /**
+	 * Exact.
+	 *
+	 * @return Whether or not to subscribe to the exact class or a class hierarchy,
+	 *         defaults to class hierarchy (false).
+	 */
     boolean exact() default false;
 
     /**
-     * @return Whether or not to autocreate the event service if it doesn't exist on subscription, default is true. If the service needs to be created, it must have a default constructor.
-     */
+	 * Auto create event service class.
+	 *
+	 * @return Whether or not to autocreate the event service if it doesn't exist on
+	 *         subscription, default is true. If the service needs to be created, it
+	 *         must have a default constructor.
+	 */
     Class<? extends EventService> autoCreateEventServiceClass() default ThreadSafeEventService.class;
 }

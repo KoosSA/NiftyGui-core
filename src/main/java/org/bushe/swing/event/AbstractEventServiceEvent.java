@@ -24,30 +24,49 @@ package org.bushe.swing.event;
  */
 public abstract class AbstractEventServiceEvent implements EventServiceEvent, PublicationStatusTracker {
 
+   /** The source. */
    private Object source = null;
+   
+   /** The state lock. */
    protected final Object stateLock = new Object();
+   
+   /** The publication status. */
    private PublicationStatus publicationStatus = PublicationStatus.Unpublished;
 
    /**
-    * Default constructor
-    *
-    * @param source the source of the event
-    */
+	 * Default constructor.
+	 *
+	 * @param source the source of the event
+	 */
    public AbstractEventServiceEvent(Object source) {
       this.source = source;
    }
 
-   /** @return the source of this event */
+   /**
+	 * Gets the source.
+	 *
+	 * @return the source of this event
+	 */
    public Object getSource() {
       return source;
    }
 
+   /**
+	 * Gets the publication status.
+	 *
+	 * @return the publication status
+	 */
    public PublicationStatus getPublicationStatus() {
       synchronized (stateLock) {
          return publicationStatus;
       }
    }
 
+   /**
+	 * Sets the publication status.
+	 *
+	 * @param status the new publication status
+	 */
    public void setPublicationStatus(PublicationStatus status) {
       synchronized (stateLock) {
          publicationStatus = status;

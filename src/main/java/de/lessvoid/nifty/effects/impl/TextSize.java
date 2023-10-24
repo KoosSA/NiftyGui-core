@@ -21,11 +21,23 @@ import de.lessvoid.nifty.tools.SizeValue;
  */
 public class TextSize implements EffectImpl {
 
+  /** The start size. */
   private float startSize;
+  
+  /** The end size. */
   private float endSize;
+  
+  /** The text size. */
   @Nonnull
   private SizeValue textSize = SizeValue.percent(100);
 
+  /**
+	 * Activate.
+	 *
+	 * @param nifty     the nifty
+	 * @param element   the element
+	 * @param parameter the parameter
+	 */
   @Override
   public void activate(
       @Nonnull final Nifty nifty,
@@ -41,6 +53,14 @@ public class TextSize implements EffectImpl {
     }
   }
 
+  /**
+	 * Execute.
+	 *
+	 * @param element        the element
+	 * @param normalizedTime the normalized time
+	 * @param falloff        the falloff
+	 * @param r              the r
+	 */
   @Override
   public void execute(
       @Nonnull final Element element,
@@ -72,6 +92,9 @@ public class TextSize implements EffectImpl {
     }
   }
 
+  /**
+	 * Deactivate.
+	 */
   @Override
   public void deactivate() {
   }

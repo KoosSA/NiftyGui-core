@@ -29,7 +29,11 @@ import org.bushe.swing.event.annotation.ReferenceStrength;
  */
 public interface ProxySubscriber {
 
-   /** @return the object this proxy is subscribed on behalf of */
+   /**
+	 * Gets the proxied subscriber.
+	 *
+	 * @return the object this proxy is subscribed on behalf of
+	 */
    public Object getProxiedSubscriber();
 
    /**
@@ -39,7 +43,9 @@ public interface ProxySubscriber {
    public void proxyUnsubscribed();
 
    /**
-    * @return the reference strength from this proxy to the proxied subscriber
-    */
+	 * Gets the reference strength.
+	 *
+	 * @return the reference strength from this proxy to the proxied subscriber
+	 */
    public ReferenceStrength getReferenceStrength();  
 }

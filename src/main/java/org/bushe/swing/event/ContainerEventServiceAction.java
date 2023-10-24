@@ -41,13 +41,29 @@ import javax.swing.ImageIcon;
  * @see ContainerEventServiceFinder on how the service is found
  */
 public class ContainerEventServiceAction extends EventServiceAction {
+   
+   /**
+	 * Instantiates a new container event service action.
+	 */
    public ContainerEventServiceAction() {
    }
 
+   /**
+	 * Instantiates a new container event service action.
+	 *
+	 * @param actionName the action name
+	 * @param icon       the icon
+	 */
    public ContainerEventServiceAction(String actionName, ImageIcon icon) {
       super(actionName, icon);
    }
 
+   /**
+	 * Gets the event service.
+	 *
+	 * @param event the event
+	 * @return the event service
+	 */
    protected EventService getEventService(ActionEvent event) {
       Component comp = null;
       try {

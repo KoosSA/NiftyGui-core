@@ -360,10 +360,11 @@ public final class SizeValue {
   }
 
   /**
-   * Do we need to know the size of the parent element to calculate this value?
-   *
-   * @return {@code true} if the size of this value can be calculated without knowing about the parent.
-   */
+	 * Do we need to know the size of the parent element to calculate this value?.
+	 *
+	 * @return {@code true} if the size of this value can be calculated without
+	 *         knowing about the parent.
+	 */
   public boolean isIndependentFromParent() {
     return type.isIndependent();
   }
@@ -489,30 +490,66 @@ public final class SizeValue {
     return builder.toString();
   }
 
+  /**
+	 * Checks for default.
+	 *
+	 * @return true, if successful
+	 */
   public boolean hasDefault() {
     return type == SizeValueType.Default;
   }
 
+  /**
+	 * Checks for width suffix.
+	 *
+	 * @return true, if successful
+	 */
   public boolean hasWidthSuffix() {
     return type == SizeValueType.PercentWidth;
   }
 
+  /**
+	 * Checks for height suffix.
+	 *
+	 * @return true, if successful
+	 */
   public boolean hasHeightSuffix() {
     return type == SizeValueType.PercentHeight;
   }
 
+  /**
+	 * Checks for wildcard.
+	 *
+	 * @return true, if successful
+	 */
   public boolean hasWildcard() {
     return type == SizeValueType.Wildcard;
   }
 
+  /**
+	 * Checks for sum.
+	 *
+	 * @return true, if successful
+	 */
   public boolean hasSum() {
     return type == SizeValueType.Sum;
   }
 
+  /**
+	 * Checks for max.
+	 *
+	 * @return true, if successful
+	 */
   public boolean hasMax() {
     return type == SizeValueType.Maximum;
   }
 
+  /**
+	 * Equals.
+	 *
+	 * @param o the o
+	 * @return true, if successful
+	 */
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -528,6 +565,11 @@ public final class SizeValue {
     return true;
   }
 
+  /**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
   @Override
   public int hashCode() {
     int result = type.hashCode();

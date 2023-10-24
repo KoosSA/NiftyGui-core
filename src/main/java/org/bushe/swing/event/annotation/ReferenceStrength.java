@@ -6,6 +6,10 @@ package org.bushe.swing.event.annotation;
  * @author Michael Bushe
  */
 public enum ReferenceStrength {
+   
+   /** The weak. */
    WEAK,
+   
+   /** The strong. */
    STRONG
 }

@@ -5,9 +5,9 @@ import javax.annotation.Nonnull;
 /**
  * This is the common definition for a factory in the Nifty-GUI.
  *
- * @param <T> the type of objects created by this factory
  * @author void
  * @author Martin Karing &lt;nitram@illarion.org&gt;
+ * @param <T> the type of objects created by this factory
  */
 public interface Factory<T> {
   /**

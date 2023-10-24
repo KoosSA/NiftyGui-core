@@ -13,22 +13,43 @@ import javax.annotation.Nonnull;
 import de.lessvoid.nifty.elements.Element;
 
 /**
+ * The Class ElementTreeTraverser.
  *
  * @author telamon
  */
 public class ElementTreeTraverser implements Iterator<Element>{
+    
+    /** The iterators. */
     @Nonnull
     private final ArrayList<Iterator<Element>> iterators =  new ArrayList<Iterator<Element>>();
+    
+    /** The current. */
     private Iterator<Element> current;
+    
+    /**
+	 * Instantiates a new element tree traverser.
+	 *
+	 * @param e the e
+	 */
     public ElementTreeTraverser(@Nonnull Element e){
         current = e.getChildren().listIterator();
     }
 
+    /**
+	 * Checks for next.
+	 *
+	 * @return true, if successful
+	 */
     @Override
     public boolean hasNext() {
         return current.hasNext() || !iterators.isEmpty();
     }
 
+    /**
+	 * Next.
+	 *
+	 * @return the element
+	 */
     @Override
     public Element next() {
         if(current.hasNext()){
@@ -44,6 +65,9 @@ public class ElementTreeTraverser implements Iterator<Element>{
         throw new NoSuchElementException();
     }
 
+    /**
+	 * Removes the.
+	 */
     @Override
     public void remove() {
         throw new UnsupportedOperationException();

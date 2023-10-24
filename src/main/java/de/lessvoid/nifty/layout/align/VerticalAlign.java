@@ -6,9 +6,8 @@ package de.lessvoid.nifty.layout.align;
  * @author void
  */
 public enum VerticalAlign {
-  /**
-   * default value - the actual alignment is decided later
-   */
+  
+  /** default value - the actual alignment is decided later. */
   verticalDefault,
 
   /**

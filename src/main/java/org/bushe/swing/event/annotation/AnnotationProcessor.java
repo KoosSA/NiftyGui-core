@@ -43,6 +43,7 @@ import org.bushe.swing.event.Logger;
  */
 public class AnnotationProcessor {
 
+   /** The Constant LOG. */
    protected static final Logger LOG = Logger.getLogger(EventService.class.getName());
 
    /**
@@ -63,6 +64,12 @@ public class AnnotationProcessor {
       processOrUnprocess(obj, false);
    }
 
+   /**
+	 * Process or unprocess.
+	 *
+	 * @param obj the obj
+	 * @param add the add
+	 */
    private static void processOrUnprocess(Object obj, boolean add) {
       if (obj == null) {
          return;
@@ -150,6 +157,14 @@ public class AnnotationProcessor {
    }
 
 
+   /**
+	 * Process.
+	 *
+	 * @param topicPatternAnnotation the topic pattern annotation
+	 * @param obj                    the obj
+	 * @param method                 the method
+	 * @param add                    the add
+	 */
    private static void process(EventTopicPatternSubscriber topicPatternAnnotation, Object obj,
            Method method, boolean add) {
       //Check args
@@ -180,6 +195,14 @@ public class AnnotationProcessor {
       }
    }
 
+   /**
+	 * Process.
+	 *
+	 * @param topicAnnotation the topic annotation
+	 * @param obj             the obj
+	 * @param method          the method
+	 * @param add             the add
+	 */
    private static void process(EventTopicSubscriber topicAnnotation, Object obj, Method method, boolean add) {
       //Check args
       String topic = topicAnnotation.topic();
@@ -208,6 +231,14 @@ public class AnnotationProcessor {
       }
    }
 
+   /**
+	 * Process.
+	 *
+	 * @param annotation the annotation
+	 * @param obj        the obj
+	 * @param method     the method
+	 * @param add        the add
+	 */
    private static void process(EventSubscriber annotation, Object obj, Method method, boolean add) {
       //Check args
       Class eventClass = annotation.eventClass();
@@ -256,6 +287,14 @@ public class AnnotationProcessor {
 
 
 
+   /**
+	 * Process.
+	 *
+	 * @param annotation the annotation
+	 * @param subscriber the subscriber
+	 * @param method     the method
+	 * @param add        the add
+	 */
    private static void process(final RuntimeTopicEventSubscriber annotation, final Object subscriber, final Method method, boolean add) {
        EventTopicSubscriber eventTopicSubscriber = new EventTopicSubscriber() {
            //TODO uncomment when language level is set to 1.6 (2.0) @Override
@@ -291,6 +330,14 @@ public class AnnotationProcessor {
        process(eventTopicSubscriber, subscriber, method, add);
    }
 
+   /**
+	 * Process.
+	 *
+	 * @param annotation the annotation
+	 * @param subscriber the subscriber
+	 * @param method     the method
+	 * @param add        the add
+	 */
    private static void process(final RuntimeTopicPatternEventSubscriber annotation, final Object subscriber, final Method method, boolean add) {
        EventTopicPatternSubscriber eventTopicPatternSubscriber = new EventTopicPatternSubscriber() {
            //TODO uncomment when language level is set to 1.6 (2.0) @Override
@@ -331,6 +378,14 @@ public class AnnotationProcessor {
        process(eventTopicPatternSubscriber, subscriber, method, add);
    }
 
+   /**
+	 * Process.
+	 *
+	 * @param topicPatternAnnotation the topic pattern annotation
+	 * @param obj                    the obj
+	 * @param method                 the method
+	 * @param add                    the add
+	 */
    /* This is a cut and paste from above practically, sure which Annotations could be extended.
     * TODO: When Java 7 comes out, or whatever JSR-308 is delivered, reduce this file by 70% */  
    private static void process(VetoTopicPatternSubscriber topicPatternAnnotation, Object obj, Method method, boolean add) {
@@ -361,6 +416,14 @@ public class AnnotationProcessor {
       }
    }
 
+   /**
+	 * Process.
+	 *
+	 * @param topicAnnotation the topic annotation
+	 * @param obj             the obj
+	 * @param method          the method
+	 * @param add             the add
+	 */
    private static void process(VetoTopicSubscriber topicAnnotation, Object obj, Method method, boolean add) {
       //Check args
       String topic = topicAnnotation.topic();
@@ -389,6 +452,14 @@ public class AnnotationProcessor {
       }
    }
 
+   /**
+	 * Process.
+	 *
+	 * @param annotation the annotation
+	 * @param obj        the obj
+	 * @param method     the method
+	 * @param add        the add
+	 */
    private static void process(VetoSubscriber annotation, Object obj, Method method, boolean add) {
       //Check args
       Class eventClass = annotation.eventClass();
@@ -436,6 +507,14 @@ public class AnnotationProcessor {
    }
 
 
+   /**
+	 * Process.
+	 *
+	 * @param annotation the annotation
+	 * @param subscriber the subscriber
+	 * @param method     the method
+	 * @param add        the add
+	 */
    private static void process(final VetoRuntimeTopicSubscriber annotation, final Object subscriber, final Method method, boolean add) {
        VetoTopicSubscriber eventTopicSubscriber = new VetoTopicSubscriber() {
            //TODO uncomment when language level is set to 1.6 (2.0) @Override
@@ -471,6 +550,14 @@ public class AnnotationProcessor {
        process(eventTopicSubscriber, subscriber, method, add);
    }
 
+   /**
+	 * Process.
+	 *
+	 * @param annotation the annotation
+	 * @param subscriber the subscriber
+	 * @param method     the method
+	 * @param add        the add
+	 */
    private static void process(final VetoRuntimeTopicPatternSubscriber annotation, final Object subscriber, final Method method, boolean add) {
       VetoTopicPatternSubscriber eventTopicPatternSubscriber = new VetoTopicPatternSubscriber() {
          //TODO uncomment when language level is set to 1.6 (2.0) @Override
@@ -512,6 +599,14 @@ public class AnnotationProcessor {
    }
 
 
+   /**
+	 * Gets the topic.
+	 *
+	 * @param methodName the method name
+	 * @param subscriber the subscriber
+	 * @param method     the method
+	 * @return the topic
+	 */
    private static String getTopic(String methodName, Object subscriber, Method method) {
        try {
            Method runtimeEvalMethod = subscriber.getClass().getMethod(methodName, new Class[0]);
@@ -532,6 +627,13 @@ public class AnnotationProcessor {
    }
 
 
+   /**
+	 * Gets the event service from annotation.
+	 *
+	 * @param eventServiceName  the event service name
+	 * @param eventServiceClass the event service class
+	 * @return the event service from annotation
+	 */
    private static EventService getEventServiceFromAnnotation(String eventServiceName,
            Class<? extends EventService> eventServiceClass) {
       EventService eventService = EventServiceLocator.getEventService(eventServiceName);

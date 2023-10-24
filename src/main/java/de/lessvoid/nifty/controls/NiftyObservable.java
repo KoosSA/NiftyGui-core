@@ -11,11 +11,18 @@ import java.util.Observable;
  * @author void256
  */
 public class NiftyObservable extends Observable {
+  
+  /**
+	 * Clear changed.
+	 */
   @Override
   public synchronized void clearChanged() {
     super.clearChanged();
   }
 
+  /**
+	 * Sets the changed.
+	 */
   @Override
   public synchronized void setChanged() {
     super.setChanged();

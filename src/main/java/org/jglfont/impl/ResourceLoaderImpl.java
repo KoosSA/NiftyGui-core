@@ -7,8 +7,17 @@ import java.io.InputStream;
 
 import org.jglfont.spi.ResourceLoader;
 
+/**
+ * The Class ResourceLoaderImpl.
+ */
 public class ResourceLoaderImpl implements ResourceLoader {
 
+  /**
+	 * Load.
+	 *
+	 * @param filename the filename
+	 * @return the input stream
+	 */
   @Override
   public InputStream load(final String filename) {
     InputStream is = Thread.currentThread().getClass().getResourceAsStream("/" + filename);

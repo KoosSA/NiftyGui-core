@@ -143,6 +143,7 @@ public class CoreTexture2D {
    */
   private static final int AUTO = -1;
 
+  /** The Constant LOG. */
   @Nonnull
   private static final Logger LOG = Logger.getLogger(CoreTexture2D.class.getName());
 
@@ -156,6 +157,7 @@ public class CoreTexture2D {
    */
   private static boolean errorChecks = true;
 
+  /** The gl. */
   @Nonnull
   private final CoreGL gl;
 
@@ -197,27 +199,47 @@ public class CoreTexture2D {
    * We remember the parameters used for the glTexture2D call so we can easily update the texture if we need later.
    */
   private boolean textureCanBeUpdated;
+  
+  /** The tex image target. */
   private int texImageTarget;
+  
+  /** The tex image level. */
   private int texImageLevel;
+  
+  /** The tex image internal format. */
   private int texImageInternalFormat;
+  
+  /** The tex image width. */
   private int texImageWidth;
+  
+  /** The tex image height. */
   private int texImageHeight;
+  
+  /** The tex border. */
   private int texBorder;
+  
+  /** The tex format. */
   private int texFormat;
+  
+  /** The tex type. */
   private int texType;
 
   /**
-   * This is one of the simple constructors that only allow very limited possibilities for settings. However, they use
-   * settings that should cover most use cases.
-   *
-   * @param format The texture format.
-   * @param width  The width of the texture.
-   * @param height The height of the texture.
-   * @param data   The pixel data.
-   * @param filter The used filter.
-   *
-   * @throws de.lessvoid.nifty.render.batch.GLException In case the creation of the texture fails for any reason.
-   */
+	 * This is one of the simple constructors that only allow very limited
+	 * possibilities for settings. However, they use settings that should cover most
+	 * use cases.
+	 *
+	 * @param gl            the gl
+	 * @param bufferFactory the buffer factory
+	 * @param format        The texture format.
+	 * @param width         The width of the texture.
+	 * @param height        The height of the texture.
+	 * @param data          The pixel data.
+	 * @param filter        The used filter.
+	 * @throws de.lessvoid.nifty.render.batch.GLException In case the creation of
+	 *                                                    the texture fails for any
+	 *                                                    reason.
+	 */
   public CoreTexture2D(
           @Nonnull final CoreGL gl,
           @Nonnull final BufferFactory bufferFactory,
@@ -230,18 +252,23 @@ public class CoreTexture2D {
   }
 
   /**
-   * This is one of the simple constructors that only allow very limited possibilities for settings. However, they use
-   * settings that should cover most use cases.
-   *
-   * @param format     The texture format.
-   * @param compressed {@code true} In case the internal texture data is supposed to be compressed if possible.
-   * @param width      The width of the texture.
-   * @param height     The height of the texture.
-   * @param data       The pixel data.
-   * @param filter     The used filter.
-   *
-   * @throws de.lessvoid.nifty.render.batch.GLException In case the creation of the texture fails for any reason.
-   */
+	 * This is one of the simple constructors that only allow very limited
+	 * possibilities for settings. However, they use settings that should cover most
+	 * use cases.
+	 *
+	 * @param gl            the gl
+	 * @param bufferFactory the buffer factory
+	 * @param format        The texture format.
+	 * @param compressed    {@code true} In case the internal texture data is
+	 *                      supposed to be compressed if possible.
+	 * @param width         The width of the texture.
+	 * @param height        The height of the texture.
+	 * @param data          The pixel data.
+	 * @param filter        The used filter.
+	 * @throws de.lessvoid.nifty.render.batch.GLException In case the creation of
+	 *                                                    the texture fails for any
+	 *                                                    reason.
+	 */
   public CoreTexture2D(
           @Nonnull final CoreGL gl,
           @Nonnull final BufferFactory bufferFactory,
@@ -263,17 +290,21 @@ public class CoreTexture2D {
   }
 
   /**
-   * This constructor is a slightly reduced version that defines some common options automatically.
-   *
-   * @param internalFormat The internal format of the texture.
-   * @param width          The width of the texture in pixels.
-   * @param height         The height of the texture in pixels.
-   * @param format         The format of the pixel data.
-   * @param data           The pixel data.
-   * @param filter         The used filter.
-   *
-   * @throws de.lessvoid.nifty.render.batch.GLException In case the creation of the texture fails for any reason.
-   */
+	 * This constructor is a slightly reduced version that defines some common
+	 * options automatically.
+	 *
+	 * @param gl             the gl
+	 * @param bufferFactory  the buffer factory
+	 * @param internalFormat The internal format of the texture.
+	 * @param width          The width of the texture in pixels.
+	 * @param height         The height of the texture in pixels.
+	 * @param format         The format of the pixel data.
+	 * @param data           The pixel data.
+	 * @param filter         The used filter.
+	 * @throws de.lessvoid.nifty.render.batch.GLException In case the creation of
+	 *                                                    the texture fails for any
+	 *                                                    reason.
+	 */
   public CoreTexture2D(
           @Nonnull final CoreGL gl,
           @Nonnull final BufferFactory bufferFactory,
@@ -297,18 +328,22 @@ public class CoreTexture2D {
   }
 
   /**
-   * This constructor is a slightly reduced version that defines some common options automatically.
-   *
-   * @param internalFormat The internal format of the texture.
-   * @param width          The width of the texture in pixels.
-   * @param height         The height of the texture in pixels.
-   * @param format         The format of the pixel data.
-   * @param data           The pixel data.
-   * @param magFilter      The magnifying filter.
-   * @param minFilter      The minimizing filter.
-   *
-   * @throws de.lessvoid.nifty.render.batch.GLException In case the creation of the texture fails for any reason.
-   */
+	 * This constructor is a slightly reduced version that defines some common
+	 * options automatically.
+	 *
+	 * @param gl             the gl
+	 * @param bufferFactory  the buffer factory
+	 * @param internalFormat The internal format of the texture.
+	 * @param width          The width of the texture in pixels.
+	 * @param height         The height of the texture in pixels.
+	 * @param format         The format of the pixel data.
+	 * @param data           The pixel data.
+	 * @param magFilter      The magnifying filter.
+	 * @param minFilter      The minimizing filter.
+	 * @throws de.lessvoid.nifty.render.batch.GLException In case the creation of
+	 *                                                    the texture fails for any
+	 *                                                    reason.
+	 */
   public CoreTexture2D(
           @Nonnull final CoreGL gl,
           @Nonnull final BufferFactory bufferFactory,
@@ -323,19 +358,24 @@ public class CoreTexture2D {
   }
 
   /**
-   * This constructor is a slightly reduced version that defines some common options automatically.
-   *
-   * @param target         The target type of the texture operations, has to be a valid 2D texture target.
-   * @param internalFormat The internal format of the texture.
-   * @param width          The width of the texture in pixels.
-   * @param height         The height of the texture in pixels.
-   * @param format         The format of the pixel data.
-   * @param data           The pixel data.
-   * @param magFilter      The magnifying filter.
-   * @param minFilter      The minimizing filter.
-   *
-   * @throws de.lessvoid.nifty.render.batch.GLException In case the creation of the texture fails for any reason.
-   */
+	 * This constructor is a slightly reduced version that defines some common
+	 * options automatically.
+	 *
+	 * @param gl             the gl
+	 * @param bufferFactory  the buffer factory
+	 * @param target         The target type of the texture operations, has to be a
+	 *                       valid 2D texture target.
+	 * @param internalFormat The internal format of the texture.
+	 * @param width          The width of the texture in pixels.
+	 * @param height         The height of the texture in pixels.
+	 * @param format         The format of the pixel data.
+	 * @param data           The pixel data.
+	 * @param magFilter      The magnifying filter.
+	 * @param minFilter      The minimizing filter.
+	 * @throws de.lessvoid.nifty.render.batch.GLException In case the creation of
+	 *                                                    the texture fails for any
+	 *                                                    reason.
+	 */
   public CoreTexture2D(
           @Nonnull final CoreGL gl,
           @Nonnull final BufferFactory bufferFactory,
@@ -351,26 +391,34 @@ public class CoreTexture2D {
   }
 
   /**
-   * This constructor allows you to define all the settings required to create a texture. Using this causes the class
-   * to disable all assumptions and do exactly what you want.
-   *
-   * @param textureId      The ID that is supposed to be used with the texture, it has to be a valid texture ID for the
-   *                       selected target. Use {@link #AUTO} to tell the class to fetch a texture ID in its own.
-   * @param target         The target type of the texture operations, has to be a valid 2D texture target.
-   * @param level          The mipmap level of the texture, in case you want the automated mipmap generation to kick
-   *                       in leave this value on {@code 0} and selected a fitting minimizing filter.
-   * @param internalFormat The internal format of the texture.
-   * @param width          The width of the texture in pixels.
-   * @param height         The height of the texture in pixels.
-   * @param border         The width of the border of the texture.
-   * @param format         The format of the pixel data.
-   * @param type           The data type of the pixel data.
-   * @param data           The pixel data.
-   * @param magFilter      The magnifying filter.
-   * @param minFilter      The minimizing filter.
-   *
-   * @throws de.lessvoid.nifty.render.batch.GLException In case the creation of the texture fails for any reason.
-   */
+	 * This constructor allows you to define all the settings required to create a
+	 * texture. Using this causes the class to disable all assumptions and do
+	 * exactly what you want.
+	 *
+	 * @param gl             the gl
+	 * @param bufferFactory  the buffer factory
+	 * @param textureId      The ID that is supposed to be used with the texture, it
+	 *                       has to be a valid texture ID for the selected target.
+	 *                       Use {@link #AUTO} to tell the class to fetch a texture
+	 *                       ID in its own.
+	 * @param target         The target type of the texture operations, has to be a
+	 *                       valid 2D texture target.
+	 * @param level          The mipmap level of the texture, in case you want the
+	 *                       automated mipmap generation to kick in leave this value
+	 *                       on {@code 0} and selected a fitting minimizing filter.
+	 * @param internalFormat The internal format of the texture.
+	 * @param width          The width of the texture in pixels.
+	 * @param height         The height of the texture in pixels.
+	 * @param border         The width of the border of the texture.
+	 * @param format         The format of the pixel data.
+	 * @param type           The data type of the pixel data.
+	 * @param data           The pixel data.
+	 * @param magFilter      The magnifying filter.
+	 * @param minFilter      The minimizing filter.
+	 * @throws de.lessvoid.nifty.render.batch.GLException In case the creation of
+	 *                                                    the texture fails for any
+	 *                                                    reason.
+	 */
   public CoreTexture2D(
           @Nonnull final CoreGL gl,
           @Nonnull final BufferFactory bufferFactory,
@@ -407,12 +455,14 @@ public class CoreTexture2D {
   }
 
   /**
-   * Fetches the maximum allowed size of a texture.
-   *
-   * @return The maximum size of a texture in pixels.
-   *
-   * @throws de.lessvoid.nifty.render.batch.GLException In case reading the maximal texture size from OpenGL failed.
-   */
+	 * Fetches the maximum allowed size of a texture.
+	 *
+	 * @param gl the gl
+	 * @return The maximum size of a texture in pixels.
+	 * @throws de.lessvoid.nifty.render.batch.GLException In case reading the
+	 *                                                    maximal texture size from
+	 *                                                    OpenGL failed.
+	 */
   public static int getMaxTextureSize(@Nonnull final CoreGL gl) {
     if (maxTextureSize == -1) {
       int[] params = new int[1];
@@ -464,32 +514,48 @@ public class CoreTexture2D {
   }
 
   /**
-   * Gets the height of this texture.
-   */
+	 * Gets the height of this texture.
+	 *
+	 * @return the height
+	 */
   public int getHeight() {
     return height;
   }
 
   /**
-   * Gets the width of this texture.
-   */
+	 * Gets the width of this texture.
+	 *
+	 * @return the width
+	 */
   public int getWidth() {
     return width;
   }
 
   /**
-   * Gets the OpenGL ID of this texture.
-   */
+	 * Gets the OpenGL ID of this texture.
+	 *
+	 * @return the id
+	 */
   public int getId() {
     return textureId;
   }
 
+  /**
+	 * To string.
+	 *
+	 * @return the string
+	 */
   @Nonnull
   @Override
   public String toString() {
     return CoreTexture2D.class.getName() + '(' + "id:" + textureId + ", " + "w:" + width + ", " + "h:" + height + ')';
   }
 
+  /**
+	 * Finalize.
+	 *
+	 * @throws Throwable the throwable
+	 */
   @Override
   protected void finalize() throws Throwable {
     if (!isDisposed) {
@@ -550,12 +616,13 @@ public class CoreTexture2D {
   }
 
   /**
-   * Checks the format, the size and the data type value.
-   *
-   * @param format The selected format.
-   * @param type   The selected data type.
-   * @throws GLException In case the parameters don't work together.
-   */
+	 * Checks the format, the size and the data type value.
+	 *
+	 * @param format The selected format.
+	 * @param type   The selected data type.
+	 * @param data   the data
+	 * @throws GLException In case the parameters don't work together.
+	 */
   private void checkFormatSizeData(final int format, final int type, @Nullable final Buffer data) {
     if (data == null) {
       throw new GLException("Pixeldata must not be NULL");
@@ -605,11 +672,13 @@ public class CoreTexture2D {
   }
 
   /**
-   * Checks OpenGL errors if error checking is enabled.
-   *
-   * @param message        The message in case an error is detected.
-   * @param throwException {@code true} In case an exception is supposed to be thrown in case a error is detected.
-   */
+	 * Checks OpenGL errors if error checking is enabled.
+	 *
+	 * @param gl             the gl
+	 * @param message        The message in case an error is detected.
+	 * @param throwException {@code true} In case an exception is supposed to be
+	 *                       thrown in case a error is detected.
+	 */
   private static void checkGLError(
           @Nonnull final CoreGL gl,
           @Nonnull final String message,
@@ -715,8 +784,10 @@ public class CoreTexture2D {
   }
 
   /**
-   * Deletes the texture with the specified ID.
-   */
+	 * Deletes the texture with the specified ID.
+	 *
+	 * @param textureId the texture id
+	 */
   private void deleteTexture(final int textureId) {
     textureIdBuffer.clear();
     textureIdBuffer.put(0, textureId);
@@ -806,6 +877,11 @@ public class CoreTexture2D {
     updateTextureData(pixels);
   }
 
+  /**
+	 * Update texture data.
+	 *
+	 * @param pixels the pixels
+	 */
   public void updateTextureData(final Buffer pixels) {
     if (!textureCanBeUpdated) {
       throw new GLException("updateTextureData() call can only be used to update texture data");
@@ -890,8 +966,12 @@ public class CoreTexture2D {
   }
 
   /**
-   * Gets the minimizing filter.
-   */
+	 * Gets the minimizing filter.
+	 *
+	 * @param gl           the gl
+	 * @param resizeFilter the resize filter
+	 * @return the min filter
+	 */
   private static int getMinFilter(@Nonnull final CoreGL gl, @Nonnull final ResizeFilter resizeFilter) {
     switch(resizeFilter) {
       case Nearest: {
@@ -919,8 +999,12 @@ public class CoreTexture2D {
   }
 
   /**
-   * Gets the magnifying filter.
-   */
+	 * Gets the magnifying filter.
+	 *
+	 * @param gl           the gl
+	 * @param resizeFilter the resize filter
+	 * @return the mag filter
+	 */
   private static int getMagFilter(@Nonnull final CoreGL gl, @Nonnull final ResizeFilter resizeFilter) {
     switch(resizeFilter) {
       case Nearest: {
@@ -948,8 +1032,12 @@ public class CoreTexture2D {
   }
 
   /**
-   * Gets the pixel data format.
-   */
+	 * Gets the pixel data format.
+	 *
+	 * @param gl          the gl
+	 * @param colorFormat the color format
+	 * @return the format
+	 */
   private static  int getFormat(@Nonnull final CoreGL gl, @Nonnull final ColorFormat colorFormat) {
     switch(colorFormat) {
       case Red: {
@@ -989,8 +1077,12 @@ public class CoreTexture2D {
   }
 
   /**
-   * Gets the internal texture format.
-   */
+	 * Gets the internal texture format.
+	 *
+	 * @param gl          the gl
+	 * @param colorFormat the color format
+	 * @return the internal format
+	 */
   private static int getInternalFormat(@Nonnull final CoreGL gl, @Nonnull final ColorFormat colorFormat) {
     switch(colorFormat) {
       case Red: {
@@ -1030,8 +1122,12 @@ public class CoreTexture2D {
   }
 
   /**
-   * Gets the compressed internal texture format.
-   */
+	 * Gets the compressed internal texture format.
+	 *
+	 * @param gl          the gl
+	 * @param colorFormat the color format
+	 * @return the compressed internal format
+	 */
   private static int getCompressedInternalFormat(@Nonnull final CoreGL gl, @Nonnull final ColorFormat colorFormat) {
     switch(colorFormat) {
       case Red: {

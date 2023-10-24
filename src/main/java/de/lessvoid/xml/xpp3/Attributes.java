@@ -26,19 +26,34 @@ import de.lessvoid.xml.tools.SpecialValuesReplace;
 // TODO: This class should be modified to implement the Map<String, String> interface (renaming all concerned method),
 // and should not expose its attributes member anymore.
 public class Attributes {
+  
+  /** The Constant ORIGINAL_VALUE_MARKER. */
   private static final String ORIGINAL_VALUE_MARKER = "$$$originalValue->";
 
+  /** The Constant controlParameter. */
   private final static ControlParameter controlParameter = new ControlParameter();
+  
+  /** The attributes. */
   @Nonnull
   private final Map<String, String> attributes;
+  
+  /** The tagged attributes. */
   @Nonnull
   private final Map<String, Set<String>> taggedAttributes;
 
+  /**
+	 * Instantiates a new attributes.
+	 */
   public Attributes() {
     attributes = new HashMap<String, String>();
     taggedAttributes = new HashMap<String, Set<String>>();
   }
 
+  /**
+	 * Instantiates a new attributes.
+	 *
+	 * @param values the values
+	 */
   public Attributes(@Nonnull final String ... values) {
     this();
     for (int i = 0; i < values.length / 2; i++) {
@@ -70,6 +85,14 @@ public class Attributes {
     taggedAttributes.putAll(source.taggedAttributes);
   }
 
+  /**
+	 * Translate special values.
+	 *
+	 * @param resourceBundle   the resource bundle
+	 * @param screenController the screen controller
+	 * @param globalProperties the global properties
+	 * @param loc              the loc
+	 */
   public void translateSpecialValues(
       @Nonnull final Map<String, BundleInfo> resourceBundle,
       @Nullable final ScreenController screenController,
@@ -115,6 +138,13 @@ public class Attributes {
     return attributes.get(name);
   }
 
+  /**
+	 * Gets the with default.
+	 *
+	 * @param name         the name
+	 * @param defaultValue the default value
+	 * @return the with default
+	 */
   @Nonnull
   public String getWithDefault(@Nonnull final String name, @Nonnull final String defaultValue) {
     String value = get(name);
@@ -229,6 +259,12 @@ public class Attributes {
     }
   }
 
+  /**
+	 * Gets the as color.
+	 *
+	 * @param name the name
+	 * @return the as color
+	 */
   @Nullable
   public Color getAsColor(@Nonnull final String name) {
     String value = get(name);
@@ -248,6 +284,11 @@ public class Attributes {
     setAttribute(name, value);
   }
 
+  /**
+	 * Overwrite.
+	 *
+	 * @param src the src
+	 */
   public void overwrite(@Nonnull final Attributes src) {
     attributes.clear();
     taggedAttributes.clear();
@@ -255,14 +296,30 @@ public class Attributes {
     taggedAttributes.putAll(src.taggedAttributes);
   }
 
+  /**
+	 * Merge.
+	 *
+	 * @param src the src
+	 */
   public void merge(@Nonnull final Attributes src) {
     merge(src, false);
   }
 
+  /**
+	 * Merge and override.
+	 *
+	 * @param src the src
+	 */
   public void mergeAndOverride(@Nonnull final Attributes src) {
     merge(src, true);
   }
 
+  /**
+	 * Merge.
+	 *
+	 * @param src      the src
+	 * @param override the override
+	 */
   private void merge(@Nonnull final Attributes src, boolean override) {
     for (Map.Entry<String, String> srcAttribute : src.attributes.entrySet()) {
       String srcKey = srcAttribute.getKey();
@@ -282,6 +339,12 @@ public class Attributes {
     }
   }
 
+  /**
+	 * Merge and tag.
+	 *
+	 * @param src the src
+	 * @param tag the tag
+	 */
   public void mergeAndTag(@Nonnull final Attributes src, @Nonnull final String tag) {
     for (Map.Entry<String, String> entry : src.attributes.entrySet()) {
       String srcKey = entry.getKey();
@@ -294,6 +357,12 @@ public class Attributes {
     }
   }
 
+  /**
+	 * Tag attribute.
+	 *
+	 * @param srcKey the src key
+	 * @param tag    the tag
+	 */
   private void tagAttribute(@Nonnull final String srcKey, @Nonnull final String tag) {
     Set<String> attribForTag = taggedAttributes.get(tag);
     if (attribForTag == null) {
@@ -303,6 +372,11 @@ public class Attributes {
     attribForTag.add(srcKey);
   }
 
+  /**
+	 * Refresh from attributes.
+	 *
+	 * @param src the src
+	 */
   public void refreshFromAttributes(@Nonnull final Attributes src) {
     Map<String, String> srcAttributes = src.attributes;
     for (Map.Entry<String, String> srcAttribute : srcAttributes.entrySet()) {
@@ -317,10 +391,21 @@ public class Attributes {
     }
   }
 
+  /**
+	 * Sets the attribute.
+	 *
+	 * @param key   the key
+	 * @param value the value
+	 */
   private void setAttribute(final String key, final String value) {
     attributes.put(key, value);
   }
 
+  /**
+	 * To string.
+	 *
+	 * @return the string
+	 */
   @Override
   @Nonnull
   public String toString() {
@@ -343,6 +428,12 @@ public class Attributes {
     return result.toString();
   }
 
+  /**
+	 * Resolve tag.
+	 *
+	 * @param key the key
+	 * @return the string
+	 */
   @Nullable
   private String resolveTag(final String key) {
     for (Map.Entry < String, Set < String >> tag : taggedAttributes.entrySet()) {
@@ -353,30 +444,66 @@ public class Attributes {
     return null;
   }
 
+  /**
+	 * The Class Parameter.
+	 */
   public static class Parameter {
+    
+    /** The original value. */
     private final String originalValue;
+    
+    /** The key. */
     private final String key;
+    
+    /** The value. */
     private final String value;
 
+    /**
+	 * Instantiates a new parameter.
+	 *
+	 * @param originalValue the original value
+	 * @param key           the key
+	 * @param value         the value
+	 */
     private Parameter(final String originalValue, final String key, final String value) {
       this.originalValue = originalValue;
       this.key = key;
       this.value = value;
     }
 
+    /**
+	 * Gets the original value.
+	 *
+	 * @return the original value
+	 */
     public String getOriginalValue() {
       return originalValue;
     }
 
+    /**
+	 * Gets the key.
+	 *
+	 * @return the key
+	 */
     public String getKey() {
       return key;
     }
 
+    /**
+	 * Gets the value.
+	 *
+	 * @return the value
+	 */
     public String getValue() {
       return value;
     }
   }
 
+  /**
+	 * Extract parameters.
+	 *
+	 * @return the list
+	 */
   @Nonnull
   public List<Parameter> extractParameters() {
     List<Parameter> parameters = new ArrayList<Parameter>();
@@ -392,19 +519,42 @@ public class Attributes {
     return parameters;
   }
 
+  /**
+	 * Checks if is parameter definition.
+	 *
+	 * @param value the value
+	 * @return true, if is parameter definition
+	 */
   private boolean isParameterDefinition(@Nonnull final String value) {
     return controlParameter.isParameter(value);
   }
 
+  /**
+	 * Gets the attributes.
+	 *
+	 * @return the attributes
+	 */
   @Nonnull
   public Map < String, String > getAttributes() {
     return attributes;
   }
 
+  /**
+	 * Removes the.
+	 *
+	 * @param key the key
+	 */
   public void remove(final String key) {
     attributes.remove(key);
   }
 
+  /**
+	 * Gets the with tag.
+	 *
+	 * @param name the name
+	 * @param tag  the tag
+	 * @return the with tag
+	 */
   @Nullable
   public String getWithTag(final String name, final String tag) {
     Set < String > attributesWithTag = taggedAttributes.get(tag);
@@ -417,6 +567,11 @@ public class Attributes {
     return attributes.get(name);
   }
 
+  /**
+	 * Resolve parameters.
+	 *
+	 * @param attributes the attributes
+	 */
   @SuppressWarnings("ConstantConditions")
   public void resolveParameters(@Nonnull final Attributes attributes) {
     List<Parameter> entrySet = getParameterSet();
@@ -435,11 +590,21 @@ public class Attributes {
     }
   }
 
+  /**
+	 * Gets the parameter set.
+	 *
+	 * @return the parameter set
+	 */
   @Nonnull
   List<Parameter> getParameterSet() {
     return extractParameters();
   }
 
+  /**
+	 * Removes the with tag.
+	 *
+	 * @param tag the tag
+	 */
   public void removeWithTag(final String tag) {
     Set < String > tagged = taggedAttributes.get(tag);
     if (tagged != null) {

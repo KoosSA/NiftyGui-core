@@ -10,15 +10,35 @@ import de.lessvoid.nifty.loaderv2.types.ElementType;
 import de.lessvoid.nifty.loaderv2.types.PanelType;
 import de.lessvoid.nifty.screen.Screen;
 
+/**
+ * The Class PanelCreator.
+ */
 public class PanelCreator extends ControlAttributes {
+  
+  /**
+	 * Instantiates a new panel creator.
+	 */
   public PanelCreator() {
     setAutoId();
   }
 
+  /**
+	 * Instantiates a new panel creator.
+	 *
+	 * @param id the id
+	 */
   public PanelCreator(@Nonnull final String id) {
     setId(id);
   }
 
+  /**
+	 * Creates the.
+	 *
+	 * @param nifty  the nifty
+	 * @param screen the screen
+	 * @param parent the parent
+	 * @return the element
+	 */
   @Nonnull
   public Element create(
       @Nonnull final Nifty nifty,
@@ -36,6 +56,11 @@ public class PanelCreator extends ControlAttributes {
     });
   }
 
+  /**
+	 * Creates the type.
+	 *
+	 * @return the element type
+	 */
   @Nonnull
   @Override
   public ElementType createType() {

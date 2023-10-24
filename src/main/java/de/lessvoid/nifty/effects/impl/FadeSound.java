@@ -18,9 +18,18 @@ import de.lessvoid.nifty.spi.sound.SoundHandle;
  * @author void
  */
 public class FadeSound implements EffectImpl {
+  
+  /** The sound handle. */
   @Nullable
   private SoundHandle soundHandle;
 
+  /**
+	 * Activate.
+	 *
+	 * @param nifty     the nifty
+	 * @param element   the element
+	 * @param parameter the parameter
+	 */
   @Override
   public void activate(
       @Nonnull final Nifty nifty,
@@ -30,6 +39,14 @@ public class FadeSound implements EffectImpl {
     soundHandle = nifty.getSoundSystem().getSound(soundId);
   }
 
+  /**
+	 * Execute.
+	 *
+	 * @param element        the element
+	 * @param normalizedTime the normalized time
+	 * @param falloff        the falloff
+	 * @param r              the r
+	 */
   @Override
   public void execute(
       @Nonnull final Element element,
@@ -45,6 +62,9 @@ public class FadeSound implements EffectImpl {
     }
   }
 
+  /**
+	 * Deactivate.
+	 */
   @Override
   public void deactivate() {
   }

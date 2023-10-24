@@ -115,6 +115,9 @@ public class ColorValidator {
     return colorPattern.matcher(toCheck).matches();
   }
 
+  /**
+	 * Instantiates a new color validator.
+	 */
   private ColorValidator() {
   }
 }

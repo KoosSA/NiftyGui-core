@@ -11,26 +11,31 @@ import javax.annotation.Nullable;
 import javax.annotation.WillNotClose;
 
 /**
- * A resource loading location that searches somewhere on the classpath
+ * A resource loading location that searches somewhere on the classpath.
  *
  * @author kevin
  */
 public class FileSystemLocation implements ResourceLocation {
-  /**
-   * The root of the file system to search
-   */
+  
+  /** The root of the file system to search. */
   @Nonnull
   private final File root;
 
   /**
-   * Create a new resource location based on the file system
-   *
-   * @param root The root of the file system to search
-   */
+	 * Create a new resource location based on the file system.
+	 *
+	 * @param root The root of the file system to search
+	 */
   public FileSystemLocation(@Nonnull final File root) {
     this.root = root;
   }
 
+  /**
+	 * Gets the resource.
+	 *
+	 * @param ref the ref
+	 * @return the resource
+	 */
   @Nullable
   @Override
   public URL getResource(@Nonnull final String ref) {
@@ -49,6 +54,12 @@ public class FileSystemLocation implements ResourceLocation {
     }
   }
 
+  /**
+	 * Gets the resource as stream.
+	 *
+	 * @param ref the ref
+	 * @return the resource as stream
+	 */
   @Nullable
   @Override
   @WillNotClose

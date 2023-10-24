@@ -9,13 +9,30 @@ import de.lessvoid.xml.xpp3.Attributes;
 import de.lessvoid.xml.xpp3.XmlParser;
 import de.lessvoid.xml.xpp3.XmlProcessor;
 
+/**
+ * The Class TypeProcessorElement.
+ */
 public class TypeProcessorElement implements XmlProcessor {
+  
+  /** The parent. */
   private final Type parent;
 
+  /**
+	 * Instantiates a new type processor element.
+	 *
+	 * @param parentParam the parent param
+	 */
   public TypeProcessorElement(final Type parentParam) {
     parent = parentParam;
   }
 
+  /**
+	 * Process.
+	 *
+	 * @param xmlParser  the xml parser
+	 * @param attributes the attributes
+	 * @throws Exception the exception
+	 */
   @Override
   public void process(@Nonnull final XmlParser xmlParser, @Nonnull final Attributes attributes) throws Exception {
     String name = attributes.get("name");

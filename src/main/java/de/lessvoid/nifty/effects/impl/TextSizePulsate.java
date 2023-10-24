@@ -45,6 +45,13 @@ public class TextSizePulsate implements EffectImpl {
    */
   private boolean activated = false;
 
+  /**
+	 * Activate.
+	 *
+	 * @param nifty     the nifty
+	 * @param element   the element
+	 * @param parameter the parameter
+	 */
   @Override
   public void activate(
       @Nonnull final Nifty nifty,
@@ -62,6 +69,14 @@ public class TextSizePulsate implements EffectImpl {
     pulsator = new Pulsator(parameter, nifty.getTimeProvider());
   }
 
+  /**
+	 * Execute.
+	 *
+	 * @param element        the element
+	 * @param normalizedTime the normalized time
+	 * @param falloff        the falloff
+	 * @param r              the r
+	 */
   @Override
   public void execute(
       @Nonnull final Element element,
@@ -97,6 +112,9 @@ public class TextSizePulsate implements EffectImpl {
     }
   }
 
+  /**
+	 * Deactivate.
+	 */
   @Override
   public void deactivate() {
     activated = true;

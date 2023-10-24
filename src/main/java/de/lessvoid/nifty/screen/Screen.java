@@ -36,19 +36,34 @@ import de.lessvoid.nifty.tools.StringHelper;
  * @author void
  */
 public class Screen {
+  
+  /** The layout layers call count. */
   public int layoutLayersCallCount = 0;
+  
+  /** The Constant log. */
   @Nonnull
   private static final Logger log = Logger.getLogger(Screen.class.getName());
+  
+  /** The screen id. */
   @Nonnull
   private final String screenId;
+  
+  /** The screen controller. */
   @Nonnull
   private final ScreenController screenController;
+  
+  /** The screen controller bound. */
   private boolean screenControllerBound = false;
 
+  /** The layer elements. */
   @Nonnull
   private final List<Element> layerElements = new ArrayList<Element>();
+  
+  /** The layer elements to add. */
   @Nonnull
   private final Queue<Element> layerElementsToAdd = new LinkedList<Element>();
+  
+  /** The layer elements to remove. */
   @Nonnull
   private final Queue<Element> layerElementsToRemove = new LinkedList<Element>();
 
@@ -60,32 +75,65 @@ public class Screen {
    */
   @Nonnull
   private final List<Element> popupElements = new ArrayList<Element>();
+  
+  /** The popup elements to add. */
   @Nonnull
   private final Queue<Element> popupElementsToAdd = new LinkedList<Element>();
+  
+  /** The popup elements to remove. */
   @Nonnull
   private final Deque<ElementWithEndNotify> popupElementsToRemove = new LinkedList<ElementWithEndNotify>();
+  
+  /** The time provider. */
   @Nonnull
   private final TimeProvider timeProvider;
+  
+  /** The focus handler. */
   @Nonnull
   private final FocusHandler focusHandler;
+  
+  /** The mouse over handler. */
   @Nonnull
   private final MouseOverHandler mouseOverHandler;
+  
+  /** The nifty. */
   @Nonnull
   private final Nifty nifty;
+  
+  /** The post input handlers. */
   @Nonnull
   private final List<InputHandlerWithMapping> postInputHandlers = new ArrayList<InputHandlerWithMapping>();
+  
+  /** The pre input handlers. */
   @Nonnull
   private final List<InputHandlerWithMapping> preInputHandlers = new ArrayList<InputHandlerWithMapping>();
+  
+  /** The root element. */
   @Nullable
   private Element rootElement;
+  
+  /** The default focus element id. */
   @Nullable
   private String defaultFocusElementId;
+  
+  /** The running. */
   private boolean running = false;
+  
+  /** The registered ids. */
   @Nonnull
   private final Set<String> registeredIds = new HashSet<String>();
 
+  /** The bound. */
   private boolean bound;
 
+  /**
+	 * Instantiates a new screen.
+	 *
+	 * @param newNifty            the new nifty
+	 * @param newId               the new id
+	 * @param newScreenController the new screen controller
+	 * @param newTimeProvider     the new time provider
+	 */
   public Screen(
       @Nonnull final Nifty newNifty,
       @Nonnull final String newId,
@@ -99,6 +147,11 @@ public class Screen {
     mouseOverHandler = new MouseOverHandler();
   }
 
+  /**
+	 * Register element id.
+	 *
+	 * @param id the id
+	 */
   public void registerElementId(@Nonnull final String id) {
     if (registeredIds.contains(id)) {
       log.warning("Possible conflicting id [" + id + "] detected. Consider making all Ids unique or use #id in " +
@@ -108,28 +161,58 @@ public class Screen {
     }
   }
 
+  /**
+	 * Unregister element id.
+	 *
+	 * @param id the id
+	 */
   public void unregisterElementId(@Nonnull final String id) {
     registeredIds.remove(id);
   }
 
+  /**
+	 * Gets the screen id.
+	 *
+	 * @return the screen id
+	 */
   @Nonnull
   public String getScreenId() {
     return screenId;
   }
 
+  /**
+	 * Gets the layer elements.
+	 *
+	 * @return the layer elements
+	 */
   @Nonnull
   public List<Element> getLayerElements() {
     return layerElements;
   }
 
+  /**
+	 * Adds the layer element.
+	 *
+	 * @param layerElement the layer element
+	 */
   public void addLayerElement(@Nonnull final Element layerElement) {
     layerElementsToAdd.add(layerElement);
   }
 
+  /**
+	 * Removes the layer element.
+	 *
+	 * @param layerElement the layer element
+	 */
   public void removeLayerElement(@Nonnull final Element layerElement) {
     layerElementsToRemove.add(layerElement);
   }
 
+  /**
+	 * Removes the layer element.
+	 *
+	 * @param layerId the layer id
+	 */
   public void removeLayerElement(@Nonnull final String layerId) {
     for (int i = 0; i < layerElements.size(); i++) {
       Element layer = layerElements.get(i);
@@ -140,6 +223,12 @@ public class Screen {
     }
   }
 
+  /**
+	 * Adds the popup.
+	 *
+	 * @param popup               the popup
+	 * @param defaultFocusElement the default focus element
+	 */
   public void addPopup(@Nonnull final Element popup, @Nullable final Element defaultFocusElement) {
 
     // This enforced all mouse buttons to the released state when a new popup
@@ -198,10 +287,21 @@ public class Screen {
     addPopupElement(popup);
   }
 
+  /**
+	 * Adds the popup element.
+	 *
+	 * @param popup the popup
+	 */
   void addPopupElement(final Element popup) {
     popupElementsToAdd.add(popup);
   }
 
+  /**
+	 * Close popup.
+	 *
+	 * @param popup       the popup
+	 * @param closeNotify the close notify
+	 */
   public void closePopup(@Nonnull final Element popup, final EndNotify closeNotify) {
     popup.onEndScreen(this);
     nifty.resetMouseInputEvents();
@@ -209,14 +309,27 @@ public class Screen {
     schedulePopupElementRemoval(new ElementWithEndNotify(popup, closeNotify));
   }
 
+  /**
+	 * Schedule popup element removal.
+	 *
+	 * @param elementWithEndNotify the element with end notify
+	 */
   private void schedulePopupElementRemoval(final ElementWithEndNotify elementWithEndNotify) {
     popupElementsToRemove.add(elementWithEndNotify);
   }
 
+  /**
+	 * Start screen.
+	 */
   public void startScreen() {
     startScreen(null);
   }
 
+  /**
+	 * Start screen.
+	 *
+	 * @param startScreenEndNotify the start screen end notify
+	 */
   public void startScreen(final EndNotify startScreenEndNotify) {
     NiftyStopwatch.start();
     running = false;
@@ -248,12 +361,20 @@ public class Screen {
     NiftyStopwatch.stop("Screen.startScreen(" + layoutLayersCallCount + ")");
   }
 
+  /**
+	 * End screen.
+	 *
+	 * @param callback the callback
+	 */
   public void endScreen(final EndNotify callback) {
     resetLayers();
     final EndScreenEndNotify endNotify = createScreenEndNotify(callback);
     startLayers(EffectEventId.onEndScreen, endNotify);
   }
 
+  /**
+	 * Layout layers.
+	 */
   public void layoutLayers() {
     NiftyStopwatch.start();
     layoutLayersCallCount++;
@@ -265,6 +386,9 @@ public class Screen {
     NiftyStopwatch.stop("Screen.layoutLayers()");
   }
 
+  /**
+	 * Reset layers.
+	 */
   private void resetLayers() {
     nifty.resetMouseInputEvents();
 
@@ -275,6 +399,12 @@ public class Screen {
     }
   }
 
+  /**
+	 * Start layers.
+	 *
+	 * @param effectEventId the effect event id
+	 * @param endNotify     the end notify
+	 */
   private void startLayers(@Nonnull final EffectEventId effectEventId, final EndNotify endNotify) {
     // create the callback
     LocalEndNotify localEndNotify = new LocalEndNotify(effectEventId, endNotify);
@@ -294,6 +424,9 @@ public class Screen {
     localEndNotify.perform();
   }
 
+  /**
+	 * Sets the default focus.
+	 */
   public void setDefaultFocus() {
     if (focusHandler.getKeyboardFocusElement() != null) {
       return;
@@ -341,6 +474,9 @@ public class Screen {
     }
   }
 
+  /**
+	 * Reset layout.
+	 */
   public void resetLayout() {
     for (int i = 0; i < layerElements.size(); i++) {
       Element layer = layerElements.get(i);
@@ -434,6 +570,12 @@ public class Screen {
     return null;
   }
 
+  /**
+	 * Find elements by style.
+	 *
+	 * @param styleIds the style ids
+	 * @return the list
+	 */
   public List<Element> findElementsByStyle(@Nullable final String... styleIds) {
     if (styleIds == null || styleIds.length == 0) {
       return Collections.emptyList();
@@ -447,6 +589,14 @@ public class Screen {
     return elements;
   }
 
+  /**
+	 * Find control.
+	 *
+	 * @param <T>                   the generic type
+	 * @param elementName           the element name
+	 * @param requestedControlClass the requested control class
+	 * @return the t
+	 */
   @Nullable
   public <T extends Controller> T findControl(final String elementName, @Nonnull final Class<T> requestedControlClass) {
     Element element = findElementById(elementName);
@@ -494,10 +644,11 @@ public class Screen {
   }
 
   /**
-   * keyboard event.
-   *
-   * @param inputEvent keyboard event
-   */
+	 * keyboard event.
+	 *
+	 * @param inputEvent keyboard event
+	 * @return true, if successful
+	 */
   public boolean keyEvent(@Nonnull final KeyboardInputEvent inputEvent) {
     for (int i = 0; i < preInputHandlers.size(); i++) {
       InputHandlerWithMapping handler = preInputHandlers.get(i);
@@ -529,6 +680,11 @@ public class Screen {
     postInputHandlers.add(new InputHandlerWithMapping(mapping, handler));
   }
 
+  /**
+	 * Removes the keyboard input handler.
+	 *
+	 * @param handler the handler
+	 */
   public void removeKeyboardInputHandler(final KeyInputHandler handler) {
     for (int i = 0; i < postInputHandlers.size(); i++) {
       if (postInputHandlers.get(i).getKeyInputHandler().equals(handler)) {
@@ -550,6 +706,11 @@ public class Screen {
     preInputHandlers.add(new InputHandlerWithMapping(mapping, handler));
   }
 
+  /**
+	 * Removes the pre keyboard input handler.
+	 *
+	 * @param handler the handler
+	 */
   public void removePreKeyboardInputHandler(final KeyInputHandler handler) {
     for (int i = 0; i < preInputHandlers.size(); i++) {
       if (preInputHandlers.get(i).getKeyInputHandler().equals(handler)) {
@@ -559,16 +720,33 @@ public class Screen {
     }
   }
 
+  /**
+	 * Debug output.
+	 *
+	 * @return the string
+	 */
   @Nonnull
   public String debugOutput() {
     return debugOutput(".*", ".*");
   }
 
+  /**
+	 * Debug output focus elements.
+	 *
+	 * @return the string
+	 */
   @Nonnull
   public String debugOutputFocusElements() {
     return focusHandler.toString();
   }
 
+  /**
+	 * Debug output.
+	 *
+	 * @param regexpElement   the regexp element
+	 * @param regexpAttribute the regexp attribute
+	 * @return the string
+	 */
   @Nonnull
   public String debugOutput(@Nonnull final String regexpElement, @Nonnull final String regexpAttribute) {
     StringBuffer result = new StringBuffer();
@@ -579,6 +757,14 @@ public class Screen {
     return result.toString();
   }
 
+  /**
+	 * Debug output layer elements.
+	 *
+	 * @param regexpElement   the regexp element
+	 * @param regexpAttribute the regexp attribute
+	 * @param result          the result
+	 * @param layers          the layers
+	 */
   private void debugOutputLayerElements(
       @Nonnull final String regexpElement,
       @Nonnull final String regexpAttribute,
@@ -597,6 +783,15 @@ public class Screen {
     }
   }
 
+  /**
+	 * Output element.
+	 *
+	 * @param w               the w
+	 * @param offset          the offset
+	 * @param regexpElement   the regexp element
+	 * @param regexpAttribute the regexp attribute
+	 * @return the string
+	 */
   @Nonnull
   public String outputElement(
       @Nonnull final Element w,
@@ -622,6 +817,12 @@ public class Screen {
     return result.toString();
   }
 
+  /**
+	 * Gets the id text.
+	 *
+	 * @param ww the ww
+	 * @return the id text
+	 */
   @Nonnull
   private String getIdText(@Nonnull final Element ww) {
     String id = ww.getId();
@@ -696,6 +897,11 @@ public class Screen {
     }
   }
 
+  /**
+	 * Checks for dynamic elements.
+	 *
+	 * @return true, if successful
+	 */
   public boolean hasDynamicElements() {
     if (!layerElementsToAdd.isEmpty() || !layerElementsToRemove.isEmpty() || !popupElementsToAdd.isEmpty() ||
         !popupElementsToRemove.isEmpty()) {
@@ -704,31 +910,62 @@ public class Screen {
     return false;
   }
 
+  /**
+	 * Sets the default focus element.
+	 *
+	 * @param defaultFocusElementIdParam the new default focus element
+	 */
   public void setDefaultFocusElement(@Nullable final String defaultFocusElementIdParam) {
     defaultFocusElementId = defaultFocusElementIdParam;
   }
 
+  /**
+	 * Gets the default focus element id.
+	 *
+	 * @return the default focus element id
+	 */
   @Nullable
   public String getDefaultFocusElementId() {
     return defaultFocusElementId;
   }
 
+  /**
+	 * The Class LocalEndNotify.
+	 */
   private class LocalEndNotify implements EndNotify {
+    
+    /** The enabled. */
     private boolean enabled = false;
+    
+    /** The effect event id. */
     @Nonnull
     private final EffectEventId effectEventId;
+    
+    /** The end notify. */
     @Nullable
     private final EndNotify endNotify;
 
+    /**
+	 * Instantiates a new local end notify.
+	 *
+	 * @param effectEventIdParam the effect event id param
+	 * @param endNotifyParam     the end notify param
+	 */
     public LocalEndNotify(@Nonnull final EffectEventId effectEventIdParam, @Nullable final EndNotify endNotifyParam) {
       effectEventId = effectEventIdParam;
       endNotify = endNotifyParam;
     }
 
+    /**
+	 * Enable.
+	 */
     public void enable() {
       enabled = true;
     }
 
+    /**
+	 * Perform.
+	 */
     @Override
     public void perform() {
       if (enabled) {
@@ -745,19 +982,38 @@ public class Screen {
     }
   }
 
+  /**
+	 * Creates the screen start end notify.
+	 *
+	 * @param startScreenEndNotify the start screen end notify
+	 * @return the start screen end notify
+	 */
   @Nonnull
   StartScreenEndNotify createScreenStartEndNotify(final EndNotify startScreenEndNotify) {
     return new StartScreenEndNotify(startScreenEndNotify);
   }
 
+  /**
+	 * The Class StartScreenEndNotify.
+	 */
   class StartScreenEndNotify implements EndNotify {
+    
+    /** The additional end notify. */
     @Nullable
     private final EndNotify additionalEndNotify;
 
+    /**
+	 * Instantiates a new start screen end notify.
+	 *
+	 * @param additionalEndNotify the additional end notify
+	 */
     public StartScreenEndNotify(@Nullable final EndNotify additionalEndNotify) {
       this.additionalEndNotify = additionalEndNotify;
     }
 
+    /**
+	 * Perform.
+	 */
     @Override
     public void perform() {
       log.fine("onStartScreen has ended");
@@ -770,19 +1026,38 @@ public class Screen {
     }
   }
 
+  /**
+	 * Creates the screen end notify.
+	 *
+	 * @param endScreenEndNotify the end screen end notify
+	 * @return the end screen end notify
+	 */
   @Nonnull
   EndScreenEndNotify createScreenEndNotify(final EndNotify endScreenEndNotify) {
     return new EndScreenEndNotify(endScreenEndNotify);
   }
 
+  /**
+	 * The Class EndScreenEndNotify.
+	 */
   class EndScreenEndNotify implements EndNotify {
+    
+    /** The additional end notify. */
     @Nullable
     private final EndNotify additionalEndNotify;
 
+    /**
+	 * Instantiates a new end screen end notify.
+	 *
+	 * @param additionalEndNotify the additional end notify
+	 */
     public EndScreenEndNotify(@Nullable final EndNotify additionalEndNotify) {
       this.additionalEndNotify = additionalEndNotify;
     }
 
+    /**
+	 * Perform.
+	 */
     @Override
     public void perform() {
       log.fine("onEndScreen has ended - schedule further processing as end of frame action");
@@ -821,6 +1096,11 @@ public class Screen {
       handler = newHandler;
     }
 
+    /**
+	 * Gets the key input handler.
+	 *
+	 * @return the key input handler
+	 */
     @Nonnull
     public KeyInputHandler getKeyInputHandler() {
       return handler;
@@ -841,10 +1121,18 @@ public class Screen {
     }
   }
 
+  /**
+	 * Checks if is running.
+	 *
+	 * @return true, if is running
+	 */
   public boolean isRunning() {
     return running;
   }
 
+  /**
+	 * On start screen has ended.
+	 */
   void onStartScreenHasEnded() {
     nifty.subscribeAnnotations(screenController);
 
@@ -861,6 +1149,9 @@ public class Screen {
     running = true;
   }
 
+  /**
+	 * Force mouse hover update.
+	 */
   private void forceMouseHoverUpdate() {
     NiftyMouseInputEvent event = new NiftyMouseInputEvent();
     event.initialize(nifty.getRenderEngine().convertFromNativeX(nifty.getNiftyMouse().getX()),
@@ -868,6 +1159,9 @@ public class Screen {
     mouseEvent(event);
   }
 
+  /**
+	 * On end screen has ended.
+	 */
   void onEndScreenHasEnded() {
     log.fine("onEndScreenHasEnded()");
 
@@ -883,6 +1177,12 @@ public class Screen {
     nifty.getRenderEngine().screenEnded(this);
   }
 
+  /**
+	 * Checks if is effect active.
+	 *
+	 * @param effectEventId the effect event id
+	 * @return true, if is effect active
+	 */
   public boolean isEffectActive(@Nonnull final EffectEventId effectEventId) {
     if (!popupElements.isEmpty()) {
       return isEffectActive(popupElements, effectEventId);
@@ -891,6 +1191,13 @@ public class Screen {
     }
   }
 
+  /**
+	 * Checks if is effect active.
+	 *
+	 * @param elements      the elements
+	 * @param effectEventId the effect event id
+	 * @return true, if is effect active
+	 */
   private boolean isEffectActive(@Nonnull final List<Element> elements, @Nonnull final EffectEventId effectEventId) {
     for (int i = 0; i < elements.size(); i++) {
       Element element = elements.get(i);
@@ -901,6 +1208,11 @@ public class Screen {
     return false;
   }
 
+  /**
+	 * Gets the top most popup.
+	 *
+	 * @return the top most popup
+	 */
   @Nullable
   public Element getTopMostPopup() {
     if (popupElements.isEmpty()) {
@@ -909,6 +1221,12 @@ public class Screen {
     return popupElements.get(popupElements.size() - 1);
   }
 
+  /**
+	 * Checks if is active popup.
+	 *
+	 * @param id the id
+	 * @return true, if is active popup
+	 */
   public boolean isActivePopup(@Nonnull final String id) {
     for (int i = 0; i < popupElements.size(); i++) {
       if (id.equals(popupElements.get(i).getId())) {
@@ -918,6 +1236,12 @@ public class Screen {
     return false;
   }
 
+  /**
+	 * Checks if is active popup.
+	 *
+	 * @param element the element
+	 * @return true, if is active popup
+	 */
   public boolean isActivePopup(final Element element) {
     return popupElements.contains(element);
   }
@@ -944,15 +1268,31 @@ public class Screen {
     return mouseOverHandler.getInfoString();
   }
 
+  /**
+	 * The Class ElementWithEndNotify.
+	 */
   public class ElementWithEndNotify {
+    
+    /** The element. */
     private final Element element;
+    
+    /** The close notify. */
     private final EndNotify closeNotify;
 
+    /**
+	 * Instantiates a new element with end notify.
+	 *
+	 * @param element     the element
+	 * @param closeNotify the close notify
+	 */
     public ElementWithEndNotify(final Element element, final EndNotify closeNotify) {
       this.element = element;
       this.closeNotify = closeNotify;
     }
 
+    /**
+	 * Removes the.
+	 */
     public void remove() {
       popupElements.remove(element);
       focusHandler.popState();
@@ -963,6 +1303,9 @@ public class Screen {
     }
   }
 
+  /**
+	 * Bind controls.
+	 */
   private void bindControls() {
     bound = true;
     for (int i = 0; i < layerElements.size(); i++) {
@@ -973,10 +1316,18 @@ public class Screen {
     }
   }
 
+  /**
+	 * Checks if is bound.
+	 *
+	 * @return true, if is bound
+	 */
   public boolean isBound() {
     return bound;
   }
 
+  /**
+	 * Reset mouse down.
+	 */
   public void resetMouseDown() {
     for (int i = 0; i < layerElements.size(); i++) {
       layerElements.get(i).resetMouseDown();

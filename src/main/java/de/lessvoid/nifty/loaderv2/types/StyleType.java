@@ -7,33 +7,71 @@ import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolver;
 import de.lessvoid.nifty.tools.StringHelper;
 import de.lessvoid.xml.xpp3.Attributes;
 
+/**
+ * The Class StyleType.
+ */
 public class StyleType extends XmlBaseType {
+  
+  /** The attributes type. */
   @Nullable
   private AttributesType attributesType;
+  
+  /** The effects type. */
   @Nullable
   private EffectsType effectsType;
+  
+  /** The interact type. */
   @Nullable
   private InteractType interactType;
 
+  /**
+	 * Instantiates a new style type.
+	 */
   public StyleType() {
   }
 
+  /**
+	 * Instantiates a new style type.
+	 *
+	 * @param attributes the attributes
+	 */
   public StyleType(@Nonnull final Attributes attributes) {
     super(attributes);
   }
 
+  /**
+	 * Sets the attributes.
+	 *
+	 * @param styleAttributesTypeParam the new attributes
+	 */
   public void setAttributes(@Nonnull final AttributesType styleAttributesTypeParam) {
     attributesType = styleAttributesTypeParam;
   }
 
+  /**
+	 * Sets the effect.
+	 *
+	 * @param effectTypeParam the new effect
+	 */
   public void setEffect(@Nonnull final EffectsType effectTypeParam) {
     effectsType = effectTypeParam;
   }
 
+  /**
+	 * Sets the interact.
+	 *
+	 * @param interactTypeParam the new interact
+	 */
   public void setInteract(@Nonnull final InteractType interactTypeParam) {
     interactType = interactTypeParam;
   }
 
+  /**
+	 * Output.
+	 *
+	 * @param offset the offset
+	 * @return the string
+	 */
   @Override
   @Nonnull
   public String output(final int offset) {
@@ -50,21 +88,42 @@ public class StyleType extends XmlBaseType {
     return result;
   }
 
+  /**
+	 * Gets the style id.
+	 *
+	 * @return the style id
+	 */
   @Nullable
   public String getStyleId() {
     return getAttributes().get("id");
   }
 
+  /**
+	 * Gets the base style id.
+	 *
+	 * @return the base style id
+	 */
   @Nullable
   public String getBaseStyleId() {
     return getAttributes().get("base");
   }
 
+  /**
+	 * Apply to.
+	 *
+	 * @param elementType   the element type
+	 * @param styleResolver the style resolver
+	 */
   public void applyTo(@Nonnull final ElementType elementType, @Nonnull final StyleResolver styleResolver) {
     applyToBaseStyleInternal(styleResolver, elementType);
     applyToInternal(elementType);
   }
 
+  /**
+	 * Apply to internal.
+	 *
+	 * @param elementType the element type
+	 */
   void applyToInternal(@Nonnull final ElementType elementType) {
     String styleId = getStyleId();
     if (styleId == null) {
@@ -82,6 +141,12 @@ public class StyleType extends XmlBaseType {
     }
   }
 
+  /**
+	 * Apply to base style internal.
+	 *
+	 * @param styleResolver the style resolver
+	 * @param elementType   the element type
+	 */
   void applyToBaseStyleInternal(@Nonnull final StyleResolver styleResolver, @Nonnull final ElementType elementType) {
     StyleType baseStyle = styleResolver.resolve(getBaseStyleId());
     if (baseStyle != null) {
@@ -89,6 +154,11 @@ public class StyleType extends XmlBaseType {
     }
   }
 
+  /**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
   @Override
   public int hashCode() {
     int hash = 5;
@@ -99,6 +169,12 @@ public class StyleType extends XmlBaseType {
     return hash;
   }
 
+  /**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {

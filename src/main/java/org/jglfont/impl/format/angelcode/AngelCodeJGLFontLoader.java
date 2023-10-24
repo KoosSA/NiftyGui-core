@@ -19,15 +19,41 @@ import org.jglfont.spi.ResourceLoader;
  * @author void
  */
 public class AngelCodeJGLFontLoader implements JGLFontLoader {
+  
+  /** The Constant log. */
   private final static Logger log = Logger.getLogger(AngelCodeJGLFontLoader.class.getName());
+  
+  /** The parser. */
   private final AngelCodeLineParser parser = new AngelCodeLineParser();
+  
+  /** The parsed. */
   private final AngelCodeLineData parsed = new AngelCodeLineData();
+  
+  /** The line processors. */
   private final AngelCodeLineProcessors lineProcessors;
 
+  /**
+	 * Instantiates a new angel code JGL font loader.
+	 *
+	 * @param lineProcessors the line processors
+	 */
   public AngelCodeJGLFontLoader(final AngelCodeLineProcessors lineProcessors) {
     this.lineProcessors = lineProcessors;
   }
 
+  /**
+	 * Load.
+	 *
+	 * @param renderer       the renderer
+	 * @param resourceLoader the resource loader
+	 * @param in             the in
+	 * @param filename       the filename
+	 * @param size           the size
+	 * @param style          the style
+	 * @param params         the params
+	 * @return the JGL abstract font data
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
   public JGLAbstractFontData load(
           final JGLFontRenderer renderer,
           final ResourceLoader resourceLoader,
@@ -43,6 +69,13 @@ public class AngelCodeJGLFontLoader implements JGLFontLoader {
     return result;
   }
 
+  /**
+	 * Load.
+	 *
+	 * @param in         the in
+	 * @param bitmapFont the bitmap font
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
   private void load(final InputStream in, final JGLAbstractFontData bitmapFont) throws IOException {
     if (in == null) {
       throw new IOException("InputStream is null");

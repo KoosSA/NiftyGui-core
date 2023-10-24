@@ -20,13 +20,26 @@ import de.lessvoid.nifty.tools.LinearInterpolator;
  * @author void
  */
 public class Fade implements EffectImpl {
+  
+  /** The start. */
   @Nonnull
   private Alpha start = Alpha.ZERO;
+  
+  /** The end. */
   @Nonnull
   private Alpha end = Alpha.FULL;
+  
+  /** The interpolator. */
   @Nullable
   private LinearInterpolator interpolator;
 
+  /**
+	 * Activate.
+	 *
+	 * @param nifty     the nifty
+	 * @param element   the element
+	 * @param parameter the parameter
+	 */
   @Override
   public void activate(
       @Nonnull final Nifty nifty,
@@ -49,6 +62,14 @@ public class Fade implements EffectImpl {
     interpolator = parameter.getInterpolator();
   }
 
+  /**
+	 * Execute.
+	 *
+	 * @param element        the element
+	 * @param normalizedTime the normalized time
+	 * @param falloff        the falloff
+	 * @param r              the r
+	 */
   @Override
   public void execute(
       @Nonnull final Element element,
@@ -63,6 +84,9 @@ public class Fade implements EffectImpl {
     }
   }
 
+  /**
+	 * Deactivate.
+	 */
   @Override
   public void deactivate() {
   }

@@ -17,15 +17,23 @@ import de.lessvoid.nifty.spi.sound.SoundHandle;
  * @author void
  */
 public class SoundSystem {
+  
+  /** The Constant log. */
   @Nonnull
   private static final Logger log = Logger.getLogger(SoundSystem.class.getName());
 
+  /** The sound device. */
   @Nonnull
   private final SoundDevice soundDevice;
+  
+  /** The sound lookup. */
   @Nonnull
   private final Map<String, SoundHandle> soundLookup;
 
+  /** The sound volume. */
   private float soundVolume;
+  
+  /** The music volume. */
   private float musicVolume;
 
   /**
@@ -80,6 +88,12 @@ public class SoundSystem {
     return true;
   }
 
+  /**
+	 * Gets the sound.
+	 *
+	 * @param name the name
+	 * @return the sound
+	 */
   @Nullable
   public SoundHandle getSound(@Nullable final String name) {
     if (name == null) {
@@ -96,6 +110,12 @@ public class SoundSystem {
     return sound;
   }
 
+  /**
+	 * Gets the music.
+	 *
+	 * @param name the name
+	 * @return the music
+	 */
   @Nullable
   public SoundHandle getMusic(@Nullable final String name) {
     if (name == null) {
@@ -148,6 +168,11 @@ public class SoundSystem {
     this.musicVolume = newMusicVolume;
   }
 
+  /**
+	 * Update.
+	 *
+	 * @param delta the delta
+	 */
   public void update(final int delta) {
     soundDevice.update(delta);
   }

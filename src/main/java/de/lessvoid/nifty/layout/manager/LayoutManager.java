@@ -33,26 +33,26 @@ public interface LayoutManager {
   void layoutElements(@Nonnull LayoutPart root, @Nonnull List<LayoutPart> children);
 
   /**
-   * Calculates a new Width constraint. Note that it is the callers
-   * responsibility to find out if this is possible. At the moment
-   * this is only possible when all child elements have a width constraint
-   * set in px.
-   *
-   * @param children children elements of the root element
-   * @return new calculated SizeValue
-   */
+	 * Calculates a new Width constraint. Note that it is the callers responsibility
+	 * to find out if this is possible. At the moment this is only possible when all
+	 * child elements have a width constraint set in px.
+	 *
+	 * @param root     the root
+	 * @param children children elements of the root element
+	 * @return new calculated SizeValue
+	 */
   @Nonnull
   SizeValue calculateConstraintWidth(@Nonnull LayoutPart root, @Nonnull List<LayoutPart> children);
 
   /**
-   * Calculates a new Height constraint. Note that it is the callers
-   * responsibility to find out if this is possible. At the moment
-   * this is only possible when all child elements have a Height constraint
-   * set in px.
-   *
-   * @param children children elements of the root element
-   * @return new calculated SizeValue
-   */
+	 * Calculates a new Height constraint. Note that it is the callers
+	 * responsibility to find out if this is possible. At the moment this is only
+	 * possible when all child elements have a Height constraint set in px.
+	 *
+	 * @param root     the root
+	 * @param children children elements of the root element
+	 * @return new calculated SizeValue
+	 */
   @Nonnull
   SizeValue calculateConstraintHeight(@Nonnull LayoutPart root, @Nonnull List<LayoutPart> children);
 }

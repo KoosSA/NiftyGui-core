@@ -22,23 +22,46 @@ import de.lessvoid.nifty.tools.SizeValue;
  * @author void
  */
 public class ColorBar implements EffectImpl {
+  
+  /** The Constant log. */
   @Nonnull
   private static final Logger log = Logger.getLogger(ColorBar.class.getName());
+  
+  /** The color. */
   @Nullable
   private Color color;
+  
+  /** The temp color. */
   @Nonnull
   private final Color tempColor = new Color("#000f");
+  
+  /** The width. */
   @Nonnull
   private SizeValue width = SizeValue.def();
+  
+  /** The inset left. */
   @Nonnull
   private SizeValue insetLeft = SizeValue.px(0);
+  
+  /** The inset right. */
   @Nonnull
   private SizeValue insetRight = SizeValue.px(0);
+  
+  /** The inset top. */
   @Nonnull
   private SizeValue insetTop = SizeValue.px(0);
+  
+  /** The inset bottom. */
   @Nonnull
   private SizeValue insetBottom = SizeValue.px(0);
 
+  /**
+	 * Activate.
+	 *
+	 * @param nifty     the nifty
+	 * @param element   the element
+	 * @param parameter the parameter
+	 */
   @Override
   public void activate(
       @Nonnull final Nifty nifty,
@@ -57,6 +80,14 @@ public class ColorBar implements EffectImpl {
     }
   }
 
+  /**
+	 * Execute.
+	 *
+	 * @param element        the element
+	 * @param normalizedTime the normalized time
+	 * @param falloff        the falloff
+	 * @param r              the r
+	 */
   @Override
   public void execute(
       @Nonnull final Element element,
@@ -109,6 +140,9 @@ public class ColorBar implements EffectImpl {
     r.restoreStates();
   }
 
+  /**
+	 * Deactivate.
+	 */
   @Override
   public void deactivate() {
   }

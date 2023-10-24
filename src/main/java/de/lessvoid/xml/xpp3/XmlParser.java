@@ -173,11 +173,11 @@ public class XmlParser {
   }
 
   /**
-   * Does the current tag matches the given one?
-   *
-   * @param tag tag to check
-   * @return true if tags match and false otherwise
-   */
+	 * Does the current tag matches the given one?.
+	 *
+	 * @param tag tag to check
+	 * @return true if tags match and false otherwise
+	 */
   private boolean matchesTag(@Nonnull final String tag) {
     return tag.equals(xpp.getName());
   }

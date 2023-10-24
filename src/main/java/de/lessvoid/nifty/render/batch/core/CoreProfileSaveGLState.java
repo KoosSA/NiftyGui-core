@@ -9,31 +9,64 @@ import de.lessvoid.nifty.render.batch.spi.BufferFactory;
 import de.lessvoid.nifty.render.batch.spi.core.CoreGL;
 
 /**
+ * The Class CoreProfileSaveGLState.
+ *
  * @author void
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
- *
- * Note: Requires OpenGL 3.2 or greater.
+ * 
+ *         Note: Requires OpenGL 3.2 or greater.
  */
 public class CoreProfileSaveGLState {
+  
+  /** The gl. */
   @Nonnull
   private final CoreGL gl;
+  
+  /** The params. */
   @Nonnull
   private final IntBuffer params;
+  
+  /** The current program. */
   private int currentProgram;
+  
+  /** The texture binding. */
   private int textureBinding;
+  
+  /** The active texture. */
   private int activeTexture;
+  
+  /** The sampler binding tex 0. */
   private int samplerBindingTex0;
+  
+  /** The blending. */
   private boolean blending;
+  
+  /** The blending src factor. */
   private int blendingSrcFactor;
+  
+  /** The blending dst factor. */
   private int blendingDstFactor;
+  
+  /** The primitive restart. */
   private boolean primitiveRestart;
+  
+  /** The primitive restart index. */
   private int primitiveRestartIndex;
 
+  /**
+	 * Instantiates a new core profile save GL state.
+	 *
+	 * @param gl            the gl
+	 * @param bufferFactory the buffer factory
+	 */
   public CoreProfileSaveGLState(@Nonnull final CoreGL gl, @Nonnull final BufferFactory bufferFactory) {
     this.gl = gl;
     params = bufferFactory.createNativeOrderedIntBuffer(16);
   }
 
+  /**
+	 * Save core.
+	 */
   public void saveCore() {
     params.clear();
     gl.glGetIntegerv(gl.GL_CURRENT_PROGRAM(), params);
@@ -72,6 +105,9 @@ public class CoreProfileSaveGLState {
     CheckGL.checkGLError(gl, "Failed to save OpenGL Core Profile state!", true);
   }
 
+  /**
+	 * Restore core.
+	 */
   public void restoreCore() {
     gl.glUseProgram(currentProgram);
     gl.glActiveTexture(activeTexture);
@@ -84,6 +120,12 @@ public class CoreProfileSaveGLState {
     CheckGL.checkGLError(gl, "Failed to restore OpenGL Core Profile state!", true);
   }
 
+  /**
+	 * Enable.
+	 *
+	 * @param state the state
+	 * @param value the value
+	 */
   private void enable(final int state, final boolean value) {
     if (value) {
       gl.glEnable(state);

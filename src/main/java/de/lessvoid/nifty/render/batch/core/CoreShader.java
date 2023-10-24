@@ -29,39 +29,61 @@ import de.lessvoid.nifty.render.batch.spi.core.CoreMatrix4f;
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
 public class CoreShader {
+  
+  /** The Constant log. */
   @Nonnull
   private static final Logger log = Logger.getLogger(CoreShader.class.getName());
+  
+  /** The gl. */
   @Nonnull
   private final CoreGL gl;
+  
+  /** The buffer factory. */
   @Nonnull
   private final BufferFactory bufferFactory;
+  
+  /** The parameter. */
   @Nonnull
   private final HashMap<String, Integer> parameter = new HashMap<String, Integer>();
+  
+  /** The matrix buffer. */
   @Nonnull
   private final FloatBuffer matrixBuffer;
+  
+  /** The attributes. */
   private final String[] attributes;
+  
+  /** The program. */
   private final int program;
+  
+  /** The params. */
   private IntBuffer params;
 
   /**
-   * Creates a new Shader.
-   *
-   * @return The new CoreShader instance.
-   */
+	 * Creates a new Shader.
+	 *
+	 * @param gl            the gl
+	 * @param bufferFactory the buffer factory
+	 * @return The new CoreShader instance.
+	 */
   @Nonnull
   public static CoreShader createShader(@Nonnull final CoreGL gl, @Nonnull final BufferFactory bufferFactory) {
     return new CoreShader(gl, bufferFactory);
   }
 
   /**
-   * Creates a new Shader with the specified vertex attributes that automatically binds to the generic attribute
-   * indices in ascending order beginning with 0. This method can be used when you want to control the vertex attribute
-   * binding on your own.
-   *
-   * @param vertexAttributes The name of the vertex attribute. The first String gets generic attribute index 0. The
-   *                         second String gets generic attribute index 1 and so on.
-   * @return The CoreShader instance.
-   */
+	 * Creates a new Shader with the specified vertex attributes that automatically
+	 * binds to the generic attribute indices in ascending order beginning with 0.
+	 * This method can be used when you want to control the vertex attribute binding
+	 * on your own.
+	 *
+	 * @param gl               the gl
+	 * @param bufferFactory    the buffer factory
+	 * @param vertexAttributes The name of the vertex attribute. The first String
+	 *                         gets generic attribute index 0. The second String
+	 *                         gets generic attribute index 1 and so on.
+	 * @return The CoreShader instance.
+	 */
   @Nonnull
   public static CoreShader createShaderWithVertexAttributes(
           @Nonnull final CoreGL gl,
@@ -71,71 +93,88 @@ public class CoreShader {
   }
 
   /**
-   * Attaches the specified vertex shader file to this CoreShader. This calls glCreateShader(), loads and compiles the
-   * shader source, and finally attaches the shader.
-   *
-   * @param filename The filename of the shader.
-   */
+	 * Attaches the specified vertex shader file to this CoreShader. This calls
+	 * glCreateShader(), loads and compiles the shader source, and finally attaches
+	 * the shader.
+	 *
+	 * @param filename The filename of the shader.
+	 * @return the int
+	 */
   public int vertexShader(@Nonnull final String filename) {
     return vertexShader(getStream(filename));
   }
 
   /**
-   * Attaches the specified fragment shader file to this CoreShader. This calls glCreateShader(), loads and compiles
-   * the shader source, and finally attaches the shader.
-   *
-   * @param filename The filename of the shader.
-   */
+	 * Attaches the specified fragment shader file to this CoreShader. This calls
+	 * glCreateShader(), loads and compiles the shader source, and finally attaches
+	 * the shader.
+	 *
+	 * @param filename The filename of the shader.
+	 * @return the int
+	 */
   public int fragmentShader(@Nonnull final String filename) {
     return fragmentShader(getStream(filename));
   }
 
   /**
-   * Attaches the specified geometry shader file to this CoreShader. This calls glCreateShader(), loads and compiles
-   * the shader source, and finally attaches the shader.
-   *
-   * @param filename The filename of the shader.
-   */
+	 * Attaches the specified geometry shader file to this CoreShader. This calls
+	 * glCreateShader(), loads and compiles the shader source, and finally attaches
+	 * the shader.
+	 *
+	 * @param filename The filename of the shader.
+	 * @return the int
+	 */
   public int geometryShader(@Nonnull final String filename) {
     return geometryShader(getStream(filename));
   }
 
   /**
-   * Attaches the specified vertex shader file to this CoreShader. This calls glCreateShader(), loads and compiles the
-   * shader source, and finally attaches the shader.
-   *
-   * @param file The file of the shader.
-   */
+	 * Attaches the specified vertex shader file to this CoreShader. This calls
+	 * glCreateShader(), loads and compiles the shader source, and finally attaches
+	 * the shader.
+	 *
+	 * @param file The file of the shader.
+	 * @return the int
+	 * @throws FileNotFoundException the file not found exception
+	 */
   public int vertexShader(@Nonnull final File file) throws FileNotFoundException {
     return vertexShader(getStream(file));
   }
 
   /**
-   * Attaches the specified fragment shader file to this CoreShader. This calls glCreateShader(), loads and compiles
-   * the shader source, and finally attaches the shader.
-   *
-   * @param file The file of the shader.
-   */
+	 * Attaches the specified fragment shader file to this CoreShader. This calls
+	 * glCreateShader(), loads and compiles the shader source, and finally attaches
+	 * the shader.
+	 *
+	 * @param file The file of the shader.
+	 * @return the int
+	 * @throws FileNotFoundException the file not found exception
+	 */
   public int fragmentShader(@Nonnull final File file) throws FileNotFoundException {
     return fragmentShader(getStream(file));
   }
 
   /**
-   * Attaches the specified geometry shader file to this CoreShader. This calls glCreateShader(), loads and compiles
-   * the shader source, and finally attaches the shader.
-   *
-   * @param file The file of the shader.
-   */
+	 * Attaches the specified geometry shader file to this CoreShader. This calls
+	 * glCreateShader(), loads and compiles the shader source, and finally attaches
+	 * the shader.
+	 *
+	 * @param file The file of the shader.
+	 * @return the int
+	 * @throws FileNotFoundException the file not found exception
+	 */
   public int geometryShader(@Nonnull final File file) throws FileNotFoundException {
     return geometryShader(getStream(file));
   }
 
   /**
-   * Attaches the specified vertex shader file to this CoreShader. This calls glCreateShader(), loads and compiles the
-   * shader source, and finally attaches the shader.
-   *
-   * @param source The file of the shader.
-   */
+	 * Attaches the specified vertex shader file to this CoreShader. This calls
+	 * glCreateShader(), loads and compiles the shader source, and finally attaches
+	 * the shader.
+	 *
+	 * @param source The file of the shader.
+	 * @return the int
+	 */
   public int vertexShader(@Nonnull final InputStream source) {
     int shaderId = gl.glCreateShader(gl.GL_VERTEX_SHADER());
     checkGLError("glCreateShader(GL_VERTEX_SHADER)");
@@ -146,11 +185,13 @@ public class CoreShader {
   }
 
   /**
-   * Attaches the specified fragment shader file to this CoreShader. This calls glCreateShader(), loads and compiles
-   * the shader source, and finally attaches the shader.
-   *
-   * @param source The file of the shader.
-   */
+	 * Attaches the specified fragment shader file to this CoreShader. This calls
+	 * glCreateShader(), loads and compiles the shader source, and finally attaches
+	 * the shader.
+	 *
+	 * @param source The file of the shader.
+	 * @return the int
+	 */
   public int fragmentShader(@Nonnull final InputStream source) {
     int shaderId = gl.glCreateShader(gl.GL_FRAGMENT_SHADER());
     checkGLError("glCreateShader(GL_FRAGMENT_SHADER)");
@@ -161,11 +202,13 @@ public class CoreShader {
   }
 
   /**
-   * Attaches the specified geometry shader file to this CoreShader. This calls glCreateShader(), loads and compiles
-   * the shader source, and finally attaches the shader.
-   *
-   * @param source The file of the shader.
-   */
+	 * Attaches the specified geometry shader file to this CoreShader. This calls
+	 * glCreateShader(), loads and compiles the shader source, and finally attaches
+	 * the shader.
+	 *
+	 * @param source The file of the shader.
+	 * @return the int
+	 */
   public int geometryShader(@Nonnull final InputStream source) {
     int shaderId = gl.glCreateShader(gl.GL_GEOMETRY_SHADER());
     checkGLError("glCreateShader(GL_GEOMETRY_SHADER)");
@@ -176,91 +219,112 @@ public class CoreShader {
   }
 
   /**
-   * Attaches the specified vertex shader file to this CoreShader. This calls glCreateShader(), loads and compiles the
-   * shader source and finally attaches the shader.
-   *
-   * @param filename The filename of the shader.
-   */
+	 * Attaches the specified vertex shader file to this CoreShader. This calls
+	 * glCreateShader(), loads and compiles the shader source and finally attaches
+	 * the shader.
+	 *
+	 * @param shaderId the shader id
+	 * @param filename The filename of the shader.
+	 */
   public void vertexShader(final int shaderId, @Nonnull final String filename) {
     vertexShader(shaderId, getStream(filename));
   }
 
   /**
-   * Attaches the specified fragment shader file to this CoreShader. This calls glCreateShader(), loads and compiles
-   * the shader source and finally attaches the shader.
-   *
-   * @param filename The filename of the shader.
-   */
+	 * Attaches the specified fragment shader file to this CoreShader. This calls
+	 * glCreateShader(), loads and compiles the shader source and finally attaches
+	 * the shader.
+	 *
+	 * @param shaderId the shader id
+	 * @param filename The filename of the shader.
+	 */
   public void fragmentShader(final int shaderId, @Nonnull final String filename) {
     fragmentShader(shaderId, getStream(filename));
   }
 
   /**
-   * Attaches the specified geometry shader file to this CoreShader. This calls glCreateShader(), loads and compiles
-   * the shader source and finally attaches the shader.
-   *
-   * @param filename The filename of the shader.
-   */
+	 * Attaches the specified geometry shader file to this CoreShader. This calls
+	 * glCreateShader(), loads and compiles the shader source and finally attaches
+	 * the shader.
+	 *
+	 * @param shaderId the shader id
+	 * @param filename The filename of the shader.
+	 */
   public void geometryShader(final int shaderId, @Nonnull final String filename) {
     geometryShader(shaderId, getStream(filename));
   }
 
   /**
-   * Attaches the specified vertex shader file to this CoreShader. This calls glCreateShader(), loads and compiles the
-   * shader source and finally attaches the shader.
-   *
-   * @param file The file of the shader.
-   */
+	 * Attaches the specified vertex shader file to this CoreShader. This calls
+	 * glCreateShader(), loads and compiles the shader source and finally attaches
+	 * the shader.
+	 *
+	 * @param shaderId the shader id
+	 * @param file     The file of the shader.
+	 * @throws FileNotFoundException the file not found exception
+	 */
   public void vertexShader(final int shaderId, @Nonnull final File file) throws FileNotFoundException {
     vertexShader(shaderId, getStream(file));
   }
 
   /**
-   * Attaches the specified fragment shader file to this CoreShader. This calls glCreateShader(), loads and compiles
-   * the shader source and finally attaches the shader.
-   *
-   * @param file The file of the shader.
-   */
+	 * Attaches the specified fragment shader file to this CoreShader. This calls
+	 * glCreateShader(), loads and compiles the shader source and finally attaches
+	 * the shader.
+	 *
+	 * @param shaderId the shader id
+	 * @param file     The file of the shader.
+	 * @throws FileNotFoundException the file not found exception
+	 */
   public void fragmentShader(final int shaderId, @Nonnull final File file) throws FileNotFoundException {
     fragmentShader(shaderId, getStream(file));
   }
 
   /**
-   * Attaches the specified geometry shader file to this CoreShader. This calls glCreateShader(), loads and compiles
-   * the shader source and finally attaches the shader.
-   *
-   * @param file The file of the shader.
-   */
+	 * Attaches the specified geometry shader file to this CoreShader. This calls
+	 * glCreateShader(), loads and compiles the shader source and finally attaches
+	 * the shader.
+	 *
+	 * @param shaderId the shader id
+	 * @param file     The file of the shader.
+	 * @throws FileNotFoundException the file not found exception
+	 */
   public void geometryShader(final int shaderId, @Nonnull final File file) throws FileNotFoundException {
     geometryShader(shaderId, getStream(file));
   }
 
   /**
-   * Attaches the specified vertex shader file to this CoreShader. This calls glCreateShader(), loads and compiles the
-   * shader source and finally attaches the shader.
-   *
-   * @param source The file of the shader.
-   */
+	 * Attaches the specified vertex shader file to this CoreShader. This calls
+	 * glCreateShader(), loads and compiles the shader source and finally attaches
+	 * the shader.
+	 *
+	 * @param shaderId the shader id
+	 * @param source   The file of the shader.
+	 */
   public void vertexShader(final int shaderId, @Nonnull final InputStream source) {
     prepareShader(source, shaderId);
   }
 
   /**
-   * Attaches the specified fragment shader file to this CoreShader. This calls glCreateShader(), loads and compiles
-   * the shader source and finally attaches the shader.
-   *
-   * @param source The file of the shader.
-   */
+	 * Attaches the specified fragment shader file to this CoreShader. This calls
+	 * glCreateShader(), loads and compiles the shader source and finally attaches
+	 * the shader.
+	 *
+	 * @param shaderId the shader id
+	 * @param source   The file of the shader.
+	 */
   public void fragmentShader(final int shaderId, @Nonnull final InputStream source) {
     prepareShader(source, shaderId);
   }
 
   /**
-   * Attaches the specified geometry shader file to this CoreShader. This calls glCreateShader(), loads and compiles
-   * the shader source and finally attaches the shader.
-   *
-   * @param source The file of the shader.
-   */
+	 * Attaches the specified geometry shader file to this CoreShader. This calls
+	 * glCreateShader(), loads and compiles the shader source and finally attaches
+	 * the shader.
+	 *
+	 * @param shaderId the shader id
+	 * @param source   The file of the shader.
+	 */
   public void geometryShader(final int shaderId, @Nonnull InputStream source) {
     prepareShader(source, shaderId);
   }
@@ -448,6 +512,13 @@ public class CoreShader {
     checkGLError("glUseProgram");
   }
 
+  /**
+	 * Instantiates a new core shader.
+	 *
+	 * @param gl               the gl
+	 * @param bufferFactory    the buffer factory
+	 * @param vertexAttributes the vertex attributes
+	 */
   private CoreShader(
           @Nonnull final CoreGL gl,
           @Nonnull final BufferFactory bufferFactory,
@@ -461,12 +532,24 @@ public class CoreShader {
     checkGLError("glCreateProgram");
   }
 
+  /**
+	 * Register parameter.
+	 *
+	 * @param name the name
+	 * @return the int
+	 */
   private int registerParameter(@Nonnull final String name) {
     int location = getUniform(name);
     parameter.put(name, location);
     return location;
   }
 
+  /**
+	 * Gets the location.
+	 *
+	 * @param name the name
+	 * @return the location
+	 */
   private int getLocation(@Nonnull final String name) {
     Integer value = parameter.get(name);
     if (value == null) {
@@ -475,6 +558,12 @@ public class CoreShader {
     return value;
   }
 
+  /**
+	 * Gets the uniform.
+	 *
+	 * @param uniformName the uniform name
+	 * @return the uniform
+	 */
   private int getUniform(@Nonnull final String uniformName) {
     int result = gl.glGetUniformLocation(program, uniformName);
     checkGLError("glGetUniformLocation for [" + uniformName + "] failed");
@@ -482,6 +571,12 @@ public class CoreShader {
     return result;
   }
 
+  /**
+	 * Prepare shader.
+	 *
+	 * @param source   the source
+	 * @param shaderId the shader id
+	 */
   private void prepareShader(@Nonnull final InputStream source, final int shaderId) {
     gl.glShaderSource(shaderId, loadShader(source));
     checkGLError("glShaderSource");
@@ -500,11 +595,23 @@ public class CoreShader {
     checkGLError(String.valueOf(shaderId));
   }
 
+  /**
+	 * Load shader.
+	 *
+	 * @param source the source
+	 * @return the string
+	 */
   private String loadShader(@Nonnull final InputStream source) {
     byte[] data = read(source);
     return new String(data, Charset.forName("UTF-8"));
   }
 
+  /**
+	 * Read.
+	 *
+	 * @param dataStream the data stream
+	 * @return the byte[]
+	 */
   private byte[] read(@Nonnull final InputStream dataStream) {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
 
@@ -526,27 +633,55 @@ public class CoreShader {
     return out.toByteArray();
   }
 
+  /**
+	 * Prints the log info.
+	 *
+	 * @param obj the obj
+	 */
   private void printLogInfo(final int obj) {
     String infoLog = gl.glGetShaderInfoLog(obj);
     checkGLError("glGetShaderInfoLog");
     log.info(getLoggingPrefix() + "Info log:\n" + infoLog);
   }
 
+  /**
+	 * Check GL error.
+	 *
+	 * @param message the message
+	 */
   private void checkGLError(@Nonnull final String message) {
     CheckGL.checkGLError(gl, getLoggingPrefix() + message);
   }
 
+  /**
+	 * Gets the logging prefix.
+	 *
+	 * @return the logging prefix
+	 */
   @Nonnull
   private String getLoggingPrefix() {
     return "[" + program + "] ";
   }
 
+  /**
+	 * Gets the stream.
+	 *
+	 * @param file the file
+	 * @return the stream
+	 * @throws FileNotFoundException the file not found exception
+	 */
   @Nonnull
   private InputStream getStream(@Nonnull final File file) throws FileNotFoundException {
     log.fine("loading shader file [" + file + "]");
     return new ByteArrayInputStream(read(new FileInputStream(file)));
   }
 
+  /**
+	 * Gets the stream.
+	 *
+	 * @param filename the filename
+	 * @return the stream
+	 */
   @Nullable
   private InputStream getStream(@Nonnull final String filename) {
     return Thread.currentThread().getContextClassLoader().getResourceAsStream(filename);

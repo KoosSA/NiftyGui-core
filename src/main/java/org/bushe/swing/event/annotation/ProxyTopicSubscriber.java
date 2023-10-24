@@ -13,6 +13,8 @@ import org.bushe.swing.event.VetoTopicEventListener;
  * {@link AnnotationProcessor} instead, it may suit your needs and be easier.*/
 public class ProxyTopicSubscriber extends AbstractProxySubscriber
         implements org.bushe.swing.event.EventTopicSubscriber, VetoTopicEventListener {
+   
+   /** The topic. */
    private String topic;
 
    /**
@@ -33,17 +35,22 @@ public class ProxyTopicSubscriber extends AbstractProxySubscriber
    }
 
    /**
-    * Creates a proxy.  This does not subscribe it.
-    *
-    * @param proxiedSubscriber the subscriber that the proxy will call when an event is published
-    * @param subscriptionMethod the method the proxy will call, must have an Object as it's first and only parameter
-    * @param referenceStrength if the subscription is weak, the reference from the proxy to the real subscriber should
-    * be too
-    * @param es the EventService we will be subscribed to, since we may need to unsubscribe when weak refs no longer
-    * exist
-    * @param topic the topic to subscribe to, used for unsubscription only
-    * @param veto if this proxy is for a veto subscriber
-    */
+	 * Creates a proxy. This does not subscribe it.
+	 *
+	 * @param proxiedSubscriber  the subscriber that the proxy will call when an
+	 *                           event is published
+	 * @param subscriptionMethod the method the proxy will call, must have an Object
+	 *                           as it's first and only parameter
+	 * @param referenceStrength  if the subscription is weak, the reference from the
+	 *                           proxy to the real subscriber should be too
+	 * @param priority           the priority
+	 * @param es                 the EventService we will be subscribed to, since we
+	 *                           may need to unsubscribe when weak refs no longer
+	 *                           exist
+	 * @param topic              the topic to subscribe to, used for unsubscription
+	 *                           only
+	 * @param veto               if this proxy is for a veto subscriber
+	 */
    public ProxyTopicSubscriber(Object proxiedSubscriber, Method subscriptionMethod, ReferenceStrength referenceStrength,
            int priority, EventService es, String topic, boolean veto) {
       super(proxiedSubscriber, subscriptionMethod, referenceStrength, priority, es, veto);
@@ -83,6 +90,13 @@ public class ProxyTopicSubscriber extends AbstractProxySubscriber
    }
 
 
+   /**
+	 * Should veto.
+	 *
+	 * @param topic the topic
+	 * @param data  the data
+	 * @return true, if successful
+	 */
    public boolean shouldVeto(String topic, Object data) {
       Object[] args = new Object[]{topic, data};
       Object obj = null;
@@ -102,6 +116,11 @@ public class ProxyTopicSubscriber extends AbstractProxySubscriber
       }
    }
 
+   /**
+	 * Unsubscribe.
+	 *
+	 * @param topic the topic
+	 */
    protected void unsubscribe(String topic) {
       if (veto) {
          getEventService().unsubscribeVetoListener(topic, this);
@@ -110,6 +129,12 @@ public class ProxyTopicSubscriber extends AbstractProxySubscriber
       }
    }
 
+   /**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
    @Override
    public boolean equals(Object obj) {
       if (obj instanceof ProxyTopicSubscriber) {
@@ -133,6 +158,11 @@ public class ProxyTopicSubscriber extends AbstractProxySubscriber
    }
 
 
+   /**
+	 * To string.
+	 *
+	 * @return the string
+	 */
    @Override
    public String toString() {
       return "ProxyTopicSubscriber{" +

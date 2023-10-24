@@ -30,18 +30,17 @@ public class NiftyStopwatch {
   @Nonnull
   private static final Level usedLogLevel = Level.FINE;
 
-  /**
-   * The LIFO queue used to store the time values
-   */
+  /** The LIFO queue used to store the time values. */
   @Nonnull
   private static final Queue<Long> stack = Collections.asLifoQueue(new LinkedList<Long>());
 
+  /** The time provider. */
   @Nonnull
   private static TimeProvider timeProvider = new AccurateTimeProvider();
 
   /**
-   * Private constructor
-   */
+	 * Private constructor.
+	 */
   private NiftyStopwatch() {
   }
 

@@ -10,29 +10,64 @@ import de.lessvoid.nifty.loaderv2.types.helper.OnClickType;
 import de.lessvoid.nifty.tools.StringHelper;
 import de.lessvoid.xml.xpp3.Attributes;
 
+/**
+ * The Class InteractType.
+ */
 public class InteractType extends XmlBaseType {
+  
+  /**
+	 * Instantiates a new interact type.
+	 */
   public InteractType() {
     super();
   }
 
+  /**
+	 * Instantiates a new interact type.
+	 *
+	 * @param src the src
+	 */
   public InteractType(@Nonnull final InteractType src) {
     super(src);
   }
 
+  /**
+	 * Instantiates a new interact type.
+	 *
+	 * @param attributes the attributes
+	 */
   public InteractType(@Nonnull final Attributes attributes) {
     super(attributes);
   }
 
+  /**
+	 * Merge from interact type.
+	 *
+	 * @param interact the interact
+	 */
   public void mergeFromInteractType(@Nonnull final InteractType interact) {
     mergeFromAttributes(interact.getAttributes());
   }
 
+  /**
+	 * Output.
+	 *
+	 * @param offset the offset
+	 * @return the string
+	 */
   @Override
   @Nonnull
   public String output(final int offset) {
     return StringHelper.whitespace(offset) + "<interact> " + super.output(offset);
   }
 
+  /**
+	 * Materialize.
+	 *
+	 * @param nifty      the nifty
+	 * @param element    the element
+	 * @param controller the controller
+	 */
   public void materialize(
       final Nifty nifty,
       @Nonnull final Element element,
@@ -62,6 +97,19 @@ public class InteractType extends XmlBaseType {
     }
   }
 
+  /**
+	 * Materialize methods.
+	 *
+	 * @param nifty                the nifty
+	 * @param element              the element
+	 * @param handler              the handler
+	 * @param onClickName          the on click name
+	 * @param onClickRepeatName    the on click repeat name
+	 * @param onReleaseName        the on release name
+	 * @param onClickMouseMoveName the on click mouse move name
+	 * @param onMultiClickName     the on multi click name
+	 * @param controller           the controller
+	 */
   private void materializeMethods(
       final Nifty nifty,
       @Nonnull final Element element,
@@ -102,6 +150,12 @@ public class InteractType extends XmlBaseType {
     }
   }
 
+  /**
+	 * Gets the on click type.
+	 *
+	 * @param key the key
+	 * @return the on click type
+	 */
   @Nullable
   private OnClickType getOnClickType(@Nonnull final String key) {
     String onClick = getAttributes().get(key);
@@ -111,10 +165,21 @@ public class InteractType extends XmlBaseType {
     return new OnClickType(onClick);
   }
 
+  /**
+	 * Apply.
+	 *
+	 * @param interact the interact
+	 * @param styleId  the style id
+	 */
   public void apply(@Nonnull final InteractType interact, @Nonnull final String styleId) {
     interact.getAttributes().mergeAndTag(getAttributes(), styleId);
   }
 
+  /**
+	 * Resolve parameters.
+	 *
+	 * @param src the src
+	 */
   public void resolveParameters(@Nonnull final Attributes src) {
     getAttributes().resolveParameters(src);
   }

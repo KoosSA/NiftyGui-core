@@ -17,13 +17,28 @@ import de.lessvoid.nifty.spi.sound.SoundHandle;
  * @author void
  */
 public class PlayMusic implements EffectImpl {
+  
+  /** The done. */
   private boolean done;
+  
+  /** The repeat. */
   private boolean repeat;
+  
+  /** The music handle. */
   @Nullable
   private SoundHandle musicHandle;
+  
+  /** The nifty. */
   @Nullable
   private Nifty nifty;
 
+  /**
+	 * Activate.
+	 *
+	 * @param nifty     the nifty
+	 * @param element   the element
+	 * @param parameter the parameter
+	 */
   @Override
   public void activate(
       @Nonnull final Nifty nifty,
@@ -35,6 +50,14 @@ public class PlayMusic implements EffectImpl {
     done = false;
   }
 
+  /**
+	 * Execute.
+	 *
+	 * @param element        the element
+	 * @param normalizedTime the normalized time
+	 * @param falloff        the falloff
+	 * @param r              the r
+	 */
   @Override
   public void execute(
       @Nonnull final Element element,
@@ -58,6 +81,9 @@ public class PlayMusic implements EffectImpl {
     }
   }
 
+  /**
+	 * Play music.
+	 */
   private void playMusic() {
     if (musicHandle != null && nifty != null) {
       musicHandle.setVolume(nifty.getSoundSystem().getMusicVolume());
@@ -65,6 +91,9 @@ public class PlayMusic implements EffectImpl {
     }
   }
 
+  /**
+	 * Deactivate.
+	 */
   @Override
   public void deactivate() {
   }

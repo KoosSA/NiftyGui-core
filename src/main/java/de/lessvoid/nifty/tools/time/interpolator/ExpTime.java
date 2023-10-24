@@ -16,15 +16,30 @@ public class ExpTime implements Interpolator {
    */
   private float factorParam = 0;
 
+  /**
+	 * Initialize.
+	 *
+	 * @param parameter the parameter
+	 */
   @Override
   public final void initialize(@Nonnull final Properties parameter) {
     this.factorParam = Float.parseFloat(parameter.getProperty("factor", "1"));
   }
 
+  /**
+	 * Start.
+	 */
   @Override
   public void start() {
   }
 
+  /**
+	 * Gets the value.
+	 *
+	 * @param lengthParameter the length parameter
+	 * @param timePassed      the time passed
+	 * @return the value
+	 */
   @Override
   public final float getValue(final long lengthParameter, final long timePassed) {
     return (float) Math.pow(1.0f - ((lengthParameter - timePassed) / (float) lengthParameter), factorParam);

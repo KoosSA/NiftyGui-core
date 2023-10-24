@@ -25,15 +25,30 @@ import de.lessvoid.nifty.render.image.ImageModeHelper;
  * @author void
  */
 public class ChangeImage implements EffectImpl {
+  
+  /** The Constant log. */
   @Nonnull
   private static final Logger log = Logger.getLogger(ChangeImage.class.getName());
+  
+  /** The element. */
   @Nonnull
   private Element element;
+  
+  /** The active image. */
   @Nullable
   private NiftyImage activeImage;
+  
+  /** The inactive image. */
   @Nullable
   private NiftyImage inactiveImage;
 
+  /**
+	 * Activate.
+	 *
+	 * @param nifty     the nifty
+	 * @param element   the element
+	 * @param parameter the parameter
+	 */
   @Override
   public void activate(
       @Nonnull final Nifty nifty,
@@ -44,6 +59,14 @@ public class ChangeImage implements EffectImpl {
     this.inactiveImage = loadImage("inactive", nifty, parameter);
   }
 
+  /**
+	 * Execute.
+	 *
+	 * @param element        the element
+	 * @param normalizedTime the normalized time
+	 * @param falloff        the falloff
+	 * @param r              the r
+	 */
   @Override
   public void execute(
       @Nonnull final Element element,
@@ -53,6 +76,9 @@ public class ChangeImage implements EffectImpl {
     changeElementImage(activeImage);
   }
 
+  /**
+	 * Deactivate.
+	 */
   @Override
   public void deactivate() {
     changeElementImage(inactiveImage);
@@ -64,6 +90,14 @@ public class ChangeImage implements EffectImpl {
     }
   }
 
+  /**
+	 * Load image.
+	 *
+	 * @param name      the name
+	 * @param nifty     the nifty
+	 * @param parameter the parameter
+	 * @return the nifty image
+	 */
   @Nullable
   private NiftyImage loadImage(
       @Nonnull final String name,
@@ -77,6 +111,14 @@ public class ChangeImage implements EffectImpl {
     return image;
   }
 
+  /**
+	 * Creates the image.
+	 *
+	 * @param name      the name
+	 * @param nifty     the nifty
+	 * @param parameter the parameter
+	 * @return the nifty image
+	 */
   @Nullable
   private NiftyImage createImage(
       @Nonnull final String name,
@@ -85,6 +127,13 @@ public class ChangeImage implements EffectImpl {
     return nifty.createImage(parameter.getProperty(name), false);
   }
 
+  /**
+	 * Sets the image mode.
+	 *
+	 * @param image     the image
+	 * @param name      the name
+	 * @param parameter the parameter
+	 */
   private void setImageMode(
       @Nonnull final NiftyImage image,
       @Nonnull final String name,
@@ -97,16 +146,37 @@ public class ChangeImage implements EffectImpl {
     }
   }
 
+  /**
+	 * Gets the area provider property.
+	 *
+	 * @param name      the name
+	 * @param parameter the parameter
+	 * @return the area provider property
+	 */
   @Nullable
   private String getAreaProviderProperty(@Nonnull final String name, @Nonnull final EffectProperties parameter) {
     return ImageModeHelper.getAreaProviderProperty(getImageModeProperty(name, parameter));
   }
 
+  /**
+	 * Gets the render strategy property.
+	 *
+	 * @param name      the name
+	 * @param parameter the parameter
+	 * @return the render strategy property
+	 */
   @Nullable
   private String getRenderStrategyProperty(@Nonnull final String name, @Nonnull final EffectProperties parameter) {
     return ImageModeHelper.getRenderStrategyProperty(getImageModeProperty(name, parameter));
   }
 
+  /**
+	 * Gets the image mode property.
+	 *
+	 * @param name      the name
+	 * @param parameter the parameter
+	 * @return the image mode property
+	 */
   @Nullable
   private String getImageModeProperty(@Nonnull final String name, @Nonnull final EffectProperties parameter) {
     String imageModeProperty = null;
@@ -124,6 +194,13 @@ public class ChangeImage implements EffectImpl {
     return imageModeProperty;
   }
 
+  /**
+	 * Creates the image mode.
+	 *
+	 * @param areaProviderProperty   the area provider property
+	 * @param renderStrategyProperty the render strategy property
+	 * @return the image mode
+	 */
   @Nonnull
   private ImageMode createImageMode(
       @Nullable final String areaProviderProperty,
@@ -131,6 +208,11 @@ public class ChangeImage implements EffectImpl {
     return ImageModeFactory.getSharedInstance().createImageMode(areaProviderProperty, renderStrategyProperty);
   }
 
+  /**
+	 * Change element image.
+	 *
+	 * @param image the image
+	 */
   private void changeElementImage(@Nullable final NiftyImage image) {
     ImageRenderer imageRenderer = element.getRenderer(ImageRenderer.class);
     if (imageRenderer == null) {

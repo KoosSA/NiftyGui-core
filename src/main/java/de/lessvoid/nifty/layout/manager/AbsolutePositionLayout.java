@@ -17,15 +17,27 @@ import de.lessvoid.nifty.tools.SizeValue;
  * @author void
  */
 public class AbsolutePositionLayout implements LayoutManager {
+  
+  /** The Constant defaultPostProcess. */
   @Nonnull
   private static final DefaultPostProcess defaultPostProcess = new DefaultPostProcess();
+  
+  /** The post. */
   @Nonnull
   private final PostProcess post;
 
+  /**
+	 * Instantiates a new absolute position layout.
+	 */
   public AbsolutePositionLayout() {
     this.post = defaultPostProcess;
   }
 
+  /**
+	 * Instantiates a new absolute position layout.
+	 *
+	 * @param post the post
+	 */
   public AbsolutePositionLayout(@Nonnull final PostProcess post) {
     this.post = post;
   }
@@ -99,9 +111,12 @@ public class AbsolutePositionLayout implements LayoutManager {
   }
 
   /**
-   * @param children children elements of the root element
-   * @return new calculated SizeValue
-   */
+	 * Calculate constraint width.
+	 *
+	 * @param root     the root
+	 * @param children children elements of the root element
+	 * @return new calculated SizeValue
+	 */
   @Nonnull
   @Override
   public final SizeValue calculateConstraintWidth(
@@ -111,9 +126,12 @@ public class AbsolutePositionLayout implements LayoutManager {
   }
 
   /**
-   * @param children children elements of the root element
-   * @return new calculated SizeValue
-   */
+	 * Calculate constraint height.
+	 *
+	 * @param root     the root
+	 * @param children children elements of the root element
+	 * @return new calculated SizeValue
+	 */
   @Nonnull
   @Override
   public final SizeValue calculateConstraintHeight(
@@ -122,29 +140,79 @@ public class AbsolutePositionLayout implements LayoutManager {
     return SizeValue.def();
   }
 
+  /**
+	 * Gets the root box X.
+	 *
+	 * @param root the root
+	 * @return the root box X
+	 */
   private int getRootBoxX(@Nonnull final LayoutPart root) {
     return root.getBox().getX() + root.getBoxConstraints().getPaddingLeft().getValueAsInt(root.getBox().getWidth());
   }
 
+  /**
+	 * Gets the root box Y.
+	 *
+	 * @param root the root
+	 * @return the root box Y
+	 */
   private int getRootBoxY(@Nonnull final LayoutPart root) {
     return root.getBox().getY() + root.getBoxConstraints().getPaddingTop().getValueAsInt(root.getBox().getHeight());
   }
 
+  /**
+	 * Gets the root box width.
+	 *
+	 * @param root the root
+	 * @return the root box width
+	 */
   private int getRootBoxWidth(@Nonnull final LayoutPart root) {
     return root.getBox().getWidth() - root.getBoxConstraints().getPaddingLeft().getValueAsInt(root.getBox().getWidth
         ()) - root.getBoxConstraints().getPaddingRight().getValueAsInt(root.getBox().getWidth());
   }
 
+  /**
+	 * Gets the root box height.
+	 *
+	 * @param root the root
+	 * @return the root box height
+	 */
   private int getRootBoxHeight(@Nonnull final LayoutPart root) {
     return root.getBox().getHeight() - root.getBoxConstraints().getPaddingTop().getValueAsInt(root.getBox().getHeight
         ()) - root.getBoxConstraints().getPaddingBottom().getValueAsInt(root.getBox().getHeight());
   }
 
+  /**
+	 * The Interface PostProcess.
+	 */
   public interface PostProcess {
+    
+    /**
+	 * Process.
+	 *
+	 * @param rootBoxX      the root box X
+	 * @param rootBoxY      the root box Y
+	 * @param rootBoxWidth  the root box width
+	 * @param rootBoxHeight the root box height
+	 * @param box           the box
+	 */
     void process(int rootBoxX, int rootBoxY, int rootBoxWidth, int rootBoxHeight, @Nonnull Box box);
   }
 
+  /**
+	 * The Class DefaultPostProcess.
+	 */
   public static class DefaultPostProcess implements PostProcess {
+    
+    /**
+	 * Process.
+	 *
+	 * @param rootBoxX      the root box X
+	 * @param rootBoxY      the root box Y
+	 * @param rootBoxWidth  the root box width
+	 * @param rootBoxHeight the root box height
+	 * @param box           the box
+	 */
     @Override
     public void process(
         final int rootBoxX,
@@ -155,7 +223,20 @@ public class AbsolutePositionLayout implements LayoutManager {
     }
   }
 
+  /**
+	 * The Class KeepInsidePostProcess.
+	 */
   public static class KeepInsidePostProcess implements PostProcess {
+    
+    /**
+	 * Process.
+	 *
+	 * @param rootBoxX      the root box X
+	 * @param rootBoxY      the root box Y
+	 * @param rootBoxWidth  the root box width
+	 * @param rootBoxHeight the root box height
+	 * @param box           the box
+	 */
     @Override
     public void process(
         final int rootBoxX,

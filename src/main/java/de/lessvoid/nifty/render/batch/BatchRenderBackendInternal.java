@@ -43,44 +43,94 @@ import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
 public class BatchRenderBackendInternal implements BatchRenderBackend {
+  
+  /** The Constant log. */
   @Nonnull
   private static final Logger log = Logger.getLogger(BatchRenderBackendInternal.class.getName());
+  
+  /** The Constant INVALID_TEXTURE_ID. */
   private static final int INVALID_TEXTURE_ID = -1;
+  
+  /** The gl. */
   @Nonnull
   private final GL gl;
+  
+  /** The buffer factory. */
   @Nonnull
   private final BufferFactory bufferFactory;
+  
+  /** The image factory. */
   @Nonnull
   private final ImageFactory imageFactory;
+  
+  /** The mouse cursor factory. */
   @Nonnull
   private final MouseCursorFactory mouseCursorFactory;
+  
+  /** The viewport buffer. */
   @Nonnull
   private final IntBuffer viewportBuffer;
+  
+  /** The single texture id buffer. */
   @Nonnull
   private final IntBuffer singleTextureIdBuffer;
+  
+  /** The batch pool. */
   @Nonnull
   private final ObjectPool<Batch> batchPool;
+  
+  /** The batches. */
   @Nonnull
   private final List<Batch> batches = new ArrayList<Batch>();
+  
+  /** The non atlas texture ids. */
   @Nonnull
   private final ArrayList<Integer> nonAtlasTextureIds = new ArrayList<Integer>();
+  
+  /** The atlas widths. */
   @Nonnull
   private final Map<Integer, Integer> atlasWidths = new HashMap<Integer, Integer>();
+  
+  /** The atlas heights. */
   @Nonnull
   private final Map<Integer, Integer> atlasHeights = new HashMap<Integer, Integer>();
+  
+  /** The cursor cache. */
   @Nonnull
   private final Map<String, MouseCursor> cursorCache = new HashMap<String, MouseCursor>();
+  
+  /** The mouse cursor. */
   @Nullable
   private MouseCursor mouseCursor;
+  
+  /** The resource loader. */
   @Nullable
   private NiftyResourceLoader resourceLoader;
+  
+  /** The current batch. */
   @Nullable
   private Batch currentBatch;
+  
+  /** The viewport width. */
   private int viewportWidth;
+  
+  /** The viewport height. */
   private int viewportHeight;
+  
+  /** The should use high quality textures. */
   private boolean shouldUseHighQualityTextures = false;
+  
+  /** The should fill removed images in atlas. */
   private boolean shouldFillRemovedImagesInAtlas = false;
 
+  /**
+	 * Instantiates a new batch render backend internal.
+	 *
+	 * @param gl                 the gl
+	 * @param bufferFactory      the buffer factory
+	 * @param imageFactory       the image factory
+	 * @param mouseCursorFactory the mouse cursor factory
+	 */
   public BatchRenderBackendInternal(
           @Nonnull final GL gl,
           @Nonnull final BufferFactory bufferFactory,
@@ -103,12 +153,22 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     initializeOpenGL();
   }
 
+  /**
+	 * Sets the resource loader.
+	 *
+	 * @param resourceLoader the new resource loader
+	 */
   @Override
   public void setResourceLoader(@Nonnull final NiftyResourceLoader resourceLoader) {
     log.fine("setResourceLoader()");
     this.resourceLoader = resourceLoader;
   }
 
+  /**
+	 * Gets the width.
+	 *
+	 * @return the width
+	 */
   @Override
   public int getWidth() {
     log.fine("getWidth()");
@@ -116,6 +176,11 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     return viewportWidth;
   }
 
+  /**
+	 * Gets the height.
+	 *
+	 * @return the height
+	 */
   @Override
   public int getHeight() {
     log.fine("getHeight()");
@@ -123,24 +188,42 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     return viewportHeight;
   }
 
+  /**
+	 * Begin frame.
+	 */
   @Override
   public void beginFrame() {
     log.fine("beginFrame()");
     deleteBatches();
   }
 
+  /**
+	 * End frame.
+	 */
   @Override
   public void endFrame() {
     log.fine("endFrame()");
     CheckGL.checkGLError(gl);
   }
 
+  /**
+	 * Clear.
+	 */
   @Override
   public void clear() {
     log.fine("clear()");
     clearGlColorBufferWithBlack();
   }
 
+  /**
+	 * Creates the mouse cursor.
+	 *
+	 * @param filename the filename
+	 * @param hotspotX the hotspot X
+	 * @param hotspotY the hotspot Y
+	 * @return the mouse cursor
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
   @Nullable
   @Override
   public MouseCursor createMouseCursor(@Nonnull final String filename, final int hotspotX, final int hotspotY)
@@ -149,6 +232,11 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     return existsCursor(filename) ? getCursor(filename) : createCursor(filename, hotspotX, hotspotY);
   }
 
+  /**
+	 * Enable mouse cursor.
+	 *
+	 * @param mouseCursor the mouse cursor
+	 */
   @Override
   public void enableMouseCursor(@Nonnull final MouseCursor mouseCursor) {
     log.fine("enableMouseCursor()");
@@ -156,6 +244,9 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     mouseCursor.enable();
   }
 
+  /**
+	 * Disable mouse cursor.
+	 */
   @Override
   public void disableMouseCursor() {
     if (mouseCursor != null) {
@@ -164,6 +255,13 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     }
   }
 
+  /**
+	 * Creates the texture atlas.
+	 *
+	 * @param atlasWidth  the atlas width
+	 * @param atlasHeight the atlas height
+	 * @return the int
+	 */
   @Override
   public int createTextureAtlas(final int atlasWidth, final int atlasHeight) {
     log.fine("createTextureAtlas()");
@@ -175,6 +273,11 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     }
   }
 
+  /**
+	 * Clear texture atlas.
+	 *
+	 * @param atlasTextureId the atlas texture id
+	 */
   @Override
   public void clearTextureAtlas(final int atlasTextureId) {
     log.fine("clearTextureAtlas()");
@@ -185,6 +288,12 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
             getAtlasHeight(atlasTextureId));
   }
 
+  /**
+	 * Load image.
+	 *
+	 * @param filename the filename
+	 * @return the image
+	 */
   @Nonnull
   @Override
   public Image loadImage(@Nonnull final String filename) {
@@ -192,6 +301,14 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     return createImageFromFile(filename);
   }
 
+  /**
+	 * Load image.
+	 *
+	 * @param imageData   the image data
+	 * @param imageWidth  the image width
+	 * @param imageHeight the image height
+	 * @return the image
+	 */
   @Nullable
   @Override
   public Image loadImage(@Nonnull final ByteBuffer imageData, final int imageWidth, final int imageHeight) {
@@ -199,6 +316,14 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     return imageFactory.create(imageData, imageWidth, imageHeight);
   }
 
+  /**
+	 * Adds the image to atlas.
+	 *
+	 * @param image          the image
+	 * @param atlasX         the atlas X
+	 * @param atlasY         the atlas Y
+	 * @param atlasTextureId the atlas texture id
+	 */
   @Override
   public void addImageToAtlas(
           @Nonnull final Image image,
@@ -215,6 +340,12 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
             image.getHeight());
   }
 
+  /**
+	 * Creates the non atlas texture.
+	 *
+	 * @param image the image
+	 * @return the int
+	 */
   @Override
   public int createNonAtlasTexture(@Nonnull final Image image) {
     log.fine("createNonAtlasTexture()");
@@ -226,6 +357,11 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     }
   }
 
+  /**
+	 * Delete non atlas texture.
+	 *
+	 * @param textureId the texture id
+	 */
   @Override
   public void deleteNonAtlasTexture(final int textureId) {
     log.fine("deleteNonAtlasTexture()");
@@ -236,12 +372,35 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     }
   }
 
+  /**
+	 * Exists non atlas texture.
+	 *
+	 * @param textureId the texture id
+	 * @return true, if successful
+	 */
   @Override
   public boolean existsNonAtlasTexture(final int textureId) {
     log.fine("existsNonAtlasTexture()");
     return nonAtlasTextureIds.contains(textureId);
   }
 
+  /**
+	 * Adds the quad.
+	 *
+	 * @param x             the x
+	 * @param y             the y
+	 * @param width         the width
+	 * @param height        the height
+	 * @param color1        the color 1
+	 * @param color2        the color 2
+	 * @param color3        the color 3
+	 * @param color4        the color 4
+	 * @param textureX      the texture X
+	 * @param textureY      the texture Y
+	 * @param textureWidth  the texture width
+	 * @param textureHeight the texture height
+	 * @param textureId     the texture id
+	 */
   @Override
   public void addQuad(
           final float x,
@@ -274,6 +433,12 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
             textureHeight);
   }
 
+  /**
+	 * Begin batch.
+	 *
+	 * @param blendMode the blend mode
+	 * @param textureId the texture id
+	 */
   @Override
   public void beginBatch(@Nonnull final BlendMode blendMode, final int textureId) {
     log.fine("beginBatch()");
@@ -282,6 +447,11 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     currentBatch.begin(blendMode, textureId);
   }
 
+  /**
+	 * Render.
+	 *
+	 * @return the int
+	 */
   @Override
   public int render() {
     log.fine("render()");
@@ -291,6 +461,16 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     return getTotalBatchesRendered();
   }
 
+  /**
+	 * Removes the image from atlas.
+	 *
+	 * @param image          the image
+	 * @param atlasX         the atlas X
+	 * @param atlasY         the atlas Y
+	 * @param imageWidth     the image width
+	 * @param imageHeight    the image height
+	 * @param atlasTextureId the atlas texture id
+	 */
   @Override
   public void removeImageFromAtlas(
           @Nonnull final Image image,
@@ -314,6 +494,11 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
             imageHeight);
   }
 
+  /**
+	 * Use high quality textures.
+	 *
+	 * @param shouldUseHighQualityTextures the should use high quality textures
+	 */
   @Override
   public void useHighQualityTextures(final boolean shouldUseHighQualityTextures) {
     log.fine("useHighQualityTextures()");
@@ -322,6 +507,11 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     this.shouldUseHighQualityTextures = shouldUseHighQualityTextures;
   }
 
+  /**
+	 * Fill removed images in atlas.
+	 *
+	 * @param shouldFill the should fill
+	 */
   @Override
   public void fillRemovedImagesInAtlas(final boolean shouldFill) {
     log.fine("fillRemovedImagesInAtlas()");
@@ -331,6 +521,9 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
 
   // Internal implementations
 
+  /**
+	 * Initialize open GL.
+	 */
   private void initializeOpenGL() {
     gl.glViewport(0, 0, getWidth(), getHeight());
     gl.glMatrixMode(gl.GL_PROJECTION());
@@ -352,6 +545,9 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     gl.glTranslatef(0.375f, 0.375f, 0.0f);
   }
 
+  /**
+	 * Update viewport.
+	 */
   private void updateViewport() {
     viewportBuffer.clear();
     gl.glGetIntegerv(gl.GL_VIEWPORT(), viewportBuffer);
@@ -360,24 +556,52 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     log.fine("Updated viewport: width: " + viewportWidth + ", height: " + viewportHeight);
   }
 
+  /**
+	 * Creates the blank image data for atlas.
+	 *
+	 * @param atlasTextureId the atlas texture id
+	 * @return the byte buffer
+	 */
   @Nonnull
   private ByteBuffer createBlankImageDataForAtlas(final int atlasTextureId) {
     return createBlankImageData(getAtlasWidth(atlasTextureId), getAtlasHeight(atlasTextureId));
   }
 
+  /**
+	 * Creates the blank image data.
+	 *
+	 * @param textureWidth  the texture width
+	 * @param textureHeight the texture height
+	 * @return the byte buffer
+	 */
   @Nonnull
   private ByteBuffer createBlankImageData(final int textureWidth, final int textureHeight) {
     return this.bufferFactory.createNativeOrderedByteBuffer(textureWidth * textureHeight * 4);
   }
 
+  /**
+	 * Gets the atlas width.
+	 *
+	 * @param atlasTextureId the atlas texture id
+	 * @return the atlas width
+	 */
   private int getAtlasWidth(final int atlasTextureId) {
     return atlasWidths.get(atlasTextureId);
   }
 
+  /**
+	 * Gets the atlas height.
+	 *
+	 * @param atlasTextureId the atlas texture id
+	 * @return the atlas height
+	 */
   private int getAtlasHeight(final int atlasTextureId) {
     return atlasHeights.get(atlasTextureId);
   }
 
+  /**
+	 * Delete batches.
+	 */
   private void deleteBatches() {
     for (Batch batch : batches) {
       batchPool.free(batch);
@@ -385,17 +609,35 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     batches.clear();
   }
 
+  /**
+	 * Clear gl color buffer with black.
+	 */
   private void clearGlColorBufferWithBlack() {
     gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     gl.glClear(gl.GL_COLOR_BUFFER_BIT());
   }
 
+  /**
+	 * Creates the atlas texture internal.
+	 *
+	 * @param width  the width
+	 * @param height the height
+	 * @return the int
+	 * @throws Exception the exception
+	 */
   private int createAtlasTextureInternal(final int width, final int height) throws Exception {
     int atlasTextureId = createGlTexture(createBlankImageData(width, height), width, height);
     saveAtlasSize(atlasTextureId, width, height);
     return atlasTextureId;
   }
 
+  /**
+	 * Texture creation failed.
+	 *
+	 * @param textureWidth  the texture width
+	 * @param textureHeight the texture height
+	 * @param exception     the exception
+	 */
   private void textureCreationFailed(
           final int textureWidth,
           final int textureHeight,
@@ -404,6 +646,15 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
             exception);
   }
 
+  /**
+	 * Creates the gl texture.
+	 *
+	 * @param imageData     the image data
+	 * @param textureWidth  the texture width
+	 * @param textureHeight the texture height
+	 * @return the int
+	 * @throws Exception the exception
+	 */
   private int createGlTexture(
           @Nullable final ByteBuffer imageData,
           final int textureWidth,
@@ -416,10 +667,22 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     return glTextureId;
   }
 
+  /**
+	 * Bind gl texture.
+	 *
+	 * @param textureId the texture id
+	 */
   private void bindGlTexture(final int textureId) {
     gl.glBindTexture(gl.GL_TEXTURE_2D(), textureId);
   }
 
+  /**
+	 * Update currently bound gl texture.
+	 *
+	 * @param imageData the image data
+	 * @param width     the width
+	 * @param height    the height
+	 */
   private void updateCurrentlyBoundGlTexture(@Nullable final ByteBuffer imageData, final int width, final int height) {
     if (imageData == null) {
       log.warning("Attempted to update currently bound OpenGL texture with null image data!");
@@ -438,6 +701,15 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     CheckGL.checkGLError(gl);
   }
 
+  /**
+	 * Update currently bound gl texture.
+	 *
+	 * @param imageData        the image data
+	 * @param subTextureX      the sub texture X
+	 * @param subTextureY      the sub texture Y
+	 * @param subTextureWidth  the sub texture width
+	 * @param subTextureHeight the sub texture height
+	 */
   private void updateCurrentlyBoundGlTexture(
           @Nullable final ByteBuffer imageData,
           final int subTextureX,
@@ -461,6 +733,11 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     CheckGL.checkGLError(gl);
   }
 
+  /**
+	 * Sets the currently bound gl texture filtering quality.
+	 *
+	 * @param isHighQuality the new currently bound gl texture filtering quality
+	 */
   private void setCurrentlyBoundGlTextureFilteringQuality(final boolean isHighQuality) {
     if (isHighQuality) {
       gl.glTexParameterf(gl.GL_TEXTURE_2D(), gl.GL_TEXTURE_MIN_FILTER(), gl.GL_LINEAR());
@@ -472,11 +749,23 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     CheckGL.checkGLError(gl);
   }
 
+  /**
+	 * Save atlas size.
+	 *
+	 * @param atlasTextureId the atlas texture id
+	 * @param atlasWidth     the atlas width
+	 * @param atlasHeight    the atlas height
+	 */
   private void saveAtlasSize(final int atlasTextureId, final int atlasWidth, final int atlasHeight) {
     atlasWidths.put(atlasTextureId, atlasWidth);
     atlasHeights.put(atlasTextureId, atlasHeight);
   }
 
+  /**
+	 * Creates the texture id.
+	 *
+	 * @return the int
+	 */
   private int createTextureId() {
     singleTextureIdBuffer.clear();
     gl.glGenTextures(1, singleTextureIdBuffer);
@@ -484,6 +773,15 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     return singleTextureIdBuffer.get(0);
   }
 
+  /**
+	 * Creates the non atlas texture internal.
+	 *
+	 * @param imageData the image data
+	 * @param width     the width
+	 * @param height    the height
+	 * @return the int
+	 * @throws Exception the exception
+	 */
   private int createNonAtlasTextureInternal(@Nullable final ByteBuffer imageData, final int width, final int height)
           throws Exception {
     int textureId = createGlTexture(imageData, width, height);
@@ -491,6 +789,11 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     return textureId;
   }
 
+  /**
+	 * Delete non atlas texture internal.
+	 *
+	 * @param nonAtlasTextureId the non atlas texture id
+	 */
   private void deleteNonAtlasTextureInternal(final int nonAtlasTextureId) {
     singleTextureIdBuffer.clear();
     singleTextureIdBuffer.put(0, nonAtlasTextureId);
@@ -499,10 +802,32 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     nonAtlasTextureIds.remove(nonAtlasTextureId);
   }
 
+  /**
+	 * Texture deletion failed.
+	 *
+	 * @param textureId the texture id
+	 * @param exception the exception
+	 */
   private void textureDeletionFailed(final int textureId, final Exception exception) {
     log.log(Level.WARNING, "Failed to delete texture width id: " + textureId + ".", exception);
   }
 
+  /**
+	 * Adds the quad to current batch.
+	 *
+	 * @param x             the x
+	 * @param y             the y
+	 * @param width         the width
+	 * @param height        the height
+	 * @param color1        the color 1
+	 * @param color2        the color 2
+	 * @param color3        the color 3
+	 * @param color4        the color 4
+	 * @param textureX      the texture X
+	 * @param textureY      the texture Y
+	 * @param textureWidth  the texture width
+	 * @param textureHeight the texture height
+	 */
   private void addQuadToCurrentBatch(
           final float x,
           final float y,
@@ -532,38 +857,69 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
             textureHeight);
   }
 
+  /**
+	 * Update current batch.
+	 *
+	 * @param textureId the texture id
+	 */
   private void updateCurrentBatch(final int textureId) {
     if (shouldBeginBatch()) {
       beginBatch(getCurrentBlendMode(), textureId);
     }
   }
 
+  /**
+	 * Gets the current blend mode.
+	 *
+	 * @return the current blend mode
+	 */
   @Nonnull
   private BlendMode getCurrentBlendMode() {
     assert currentBatch != null;
     return currentBatch.getBlendMode();
   }
 
+  /**
+	 * Should begin batch.
+	 *
+	 * @return true, if successful
+	 */
   private boolean shouldBeginBatch() {
     assert currentBatch != null;
     return !currentBatch.canAddQuad();
   }
 
+  /**
+	 * Creates the new batch.
+	 *
+	 * @return the batch
+	 */
   @Nonnull
   private Batch createNewBatch() {
     return batchPool.allocate();
   }
 
+  /**
+	 * Adds the batch.
+	 *
+	 * @param batch the batch
+	 */
   private void addBatch (@Nonnull final Batch batch) {
     batches.add(batch);
   }
 
+  /**
+	 * Render batches.
+	 */
   private void renderBatches() {
     for (Batch batch : batches) {
       batch.render();
     }
   }
 
+  /**
+	 * Begin rendering.
+	 */
   private void beginRendering() {
     gl.glEnable(gl.GL_TEXTURE_2D());
     gl.glEnable(gl.GL_BLEND());
@@ -572,6 +928,9 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     gl.glEnableClientState(gl.GL_TEXTURE_COORD_ARRAY());
   }
 
+  /**
+	 * End rendering.
+	 */
   private void endRendering() {
     gl.glDisableClientState(gl.GL_TEXTURE_COORD_ARRAY());
     gl.glDisableClientState(gl.GL_COLOR_ARRAY());
@@ -580,20 +939,45 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     gl.glDisable(gl.GL_TEXTURE_2D());
   }
 
+  /**
+	 * Gets the total batches rendered.
+	 *
+	 * @return the total batches rendered
+	 */
   private int getTotalBatchesRendered() {
     return batches.size();
   }
 
+  /**
+	 * Exists cursor.
+	 *
+	 * @param filename the filename
+	 * @return true, if successful
+	 */
   private boolean existsCursor(@Nonnull final String filename) {
     return cursorCache.containsKey(filename);
   }
 
+  /**
+	 * Gets the cursor.
+	 *
+	 * @param filename the filename
+	 * @return the cursor
+	 */
   @Nonnull
   private MouseCursor getCursor(@Nonnull final String filename) {
     assert cursorCache.containsKey(filename);
     return cursorCache.get(filename);
   }
 
+  /**
+	 * Creates the cursor.
+	 *
+	 * @param filename the filename
+	 * @param hotspotX the hotspot X
+	 * @param hotspotY the hotspot Y
+	 * @return the mouse cursor
+	 */
   @Nullable
   private MouseCursor createCursor (final String filename, final int hotspotX, final int hotspotY) {
     try {
@@ -606,6 +990,12 @@ public class BatchRenderBackendInternal implements BatchRenderBackend {
     }
   }
 
+  /**
+	 * Creates the image from file.
+	 *
+	 * @param filename the filename
+	 * @return the image
+	 */
   @Nonnull
   private Image createImageFromFile(@Nonnull final String filename) {
     ImageLoader loader = ImageLoaderFactory.createImageLoader(filename);

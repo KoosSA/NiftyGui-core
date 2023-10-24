@@ -73,6 +73,11 @@ public class LayoutPart {
     return boxConstraints;
   }
 
+  /**
+	 * To string.
+	 *
+	 * @return the string
+	 */
   @Override
   @Nonnull
   public String toString() {

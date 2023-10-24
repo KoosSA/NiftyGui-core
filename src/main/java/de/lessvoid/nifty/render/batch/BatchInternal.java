@@ -19,8 +19,6 @@ import de.lessvoid.nifty.tools.Color;
  * the most backwards-compatible because it doesn't use any functions beyond OpenGL 1.1. It is suitable for both mobile
  * & desktop devices.
  *
- * {@inheritDoc}
- *
  * @author void256
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
  */
